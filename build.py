@@ -50,7 +50,7 @@ def read_json(path):
 
 # ---------- アフィリエイトリンク ----------
 def amazon_link(title):
-    q = urllib.parse.quote_plus(title + " Blu-ray")
+    q = urllib.parse.quote_plus(title)
     url = "https://www.amazon.co.jp/s?k=" + q
     if CFG.get("amazon_tag"):
         url += "&tag=" + CFG["amazon_tag"]
@@ -71,15 +71,20 @@ def yahoo_link(title):
             (y["a_id"], y["p_id"], y["pc_id"], y["pl_id"], urllib.parse.quote(dest, safe="")))
 
 def shop_buttons(title):
-    btns = ['<a class="btn amz" href="%s" target="_blank" rel="nofollow sponsored noopener">Amazon</a>' % esc(amazon_link(title)),
-            '<a class="btn rkt" href="%s" target="_blank" rel="nofollow sponsored noopener">楽天</a>' % esc(rakuten_link(title))]
+    def a(cls, url, label, style=""):
+        return '<a class="btn %s" %shref="%s" target="_blank" rel="nofollow sponsored noopener">%s</a>' % (
+            cls, ('style="%s" ' % style) if style else "", esc(url), label)
+    shops = [a("amz", amazon_link(title), "Amazon"), a("rkt", rakuten_link(title), "楽天")]
     if yahoo_link(title):
-        btns.append('<a class="btn yho" href="%s" target="_blank" rel="nofollow sponsored noopener">Yahoo!</a>' % esc(yahoo_link(title)))
-    for sv in CFG.get("streaming", []):
-        if sv.get("url"):
-            btns.append('<a class="btn" style="background:%s" href="%s" target="_blank" rel="nofollow sponsored noopener">%s</a>' % (
-                esc(sv.get("color") or "#444"), esc(sv["url"]), esc(sv["name"])))
-    return '<div class="shop">%s</div>' % "".join(btns)
+        shops.append(a("yho", yahoo_link(title), "Yahoo!"))
+    html_ = ('<div class="shop"><span class="shop-lb">Blu-ray・原作・グッズを探す</span>'
+             '<div class="shop-btns">%s</div></div>' % "".join(shops))
+    vods = [a("vod", sv["url"], esc(sv["name"]), "--bc:%s" % esc(sv.get("color") or "#888"))
+            for sv in CFG.get("streaming", []) if sv.get("url")]
+    if vods:
+        html_ += ('<div class="shop"><span class="shop-lb">配信で観る（無料体験あり）</span>'
+                  '<div class="shop-btns">%s</div></div>' % "".join(vods))
+    return html_
 
 # ---------- ページ枠 ----------
 NAV = [("index.html", "トップ"), ("now-japan.html", "国内いま人気"), ("now-world.html", "世界いま人気"),
@@ -320,18 +325,21 @@ write("privacy.html", page("プライバシーポリシー", """<h1>プライバ
 # ---------- CSS ----------
 write("style.css", """
 :root{--bg:#0f1115;--card:#171a21;--tx:#e8e8ea;--mu:#9aa0ab;--ac:#ff6b9d;--line:#262a33}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.8}
 a{color:var(--ac)}header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--card)}
 .logo{font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--tx)}nav{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.9rem}nav a{text-decoration:none;color:var(--mu)}nav a:hover{color:var(--ac)}
 .pr{font-size:.75rem;color:var(--mu);margin:6px 16px}main{max-width:860px;margin:0 auto;padding:8px 16px 40px}
-h1{font-size:1.5rem;margin:16px 0 8px}h2{font-size:1.2rem;margin:28px 0 8px;border-left:4px solid var(--ac);padding-left:8px}.lead{color:var(--mu);font-size:.95rem}
-ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+h1{font-size:1.5rem;margin:16px 0 8px}h2{font-size:1.2rem;margin:40px 0 12px;border-left:4px solid var(--ac);padding-left:8px}.lead{color:var(--mu);font-size:.95rem;margin:0 0 20px}
+ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--line)}
 .rk{flex:0 0 2.2em;font-size:1.4rem;font-weight:800;color:var(--ac);text-align:right}ol.rank li:nth-child(-n+3) .rk{color:#ffd166}
 .cv{flex:0 0 72px;width:72px;height:102px;object-fit:cover;border-radius:6px;background:#222}.noimg{background:linear-gradient(135deg,#262a33,#1a1d24)}
 .cvs{display:inline-block;width:28px;height:40px;object-fit:cover;border-radius:3px;vertical-align:middle;margin-right:6px;background:#222}
-.body{flex:1;min-width:0}.tt{font-weight:700;font-size:1.05rem}.sub,.meta{font-size:.82rem;color:var(--mu)}
-.shop{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.btn{font-size:.78rem;padding:4px 10px;border-radius:999px;text-decoration:none;color:#fff;background:#444}
-.btn.amz{background:#e47911}.btn.rkt{background:#bf0000}.btn.yho{background:#ff0033}.btn.unx{background:#1b1f66}.btn.dmm{background:#0a74da}
+.body{flex:1;min-width:0}.tt{font-weight:700;font-size:1.05rem;line-height:1.5;margin-bottom:4px}.sub,.meta{font-size:.82rem;color:var(--mu);line-height:1.7}
+.shop{margin-top:12px}.shop-lb{display:block;font-size:.72rem;color:var(--mu);margin-bottom:4px;letter-spacing:.02em}
+.shop-btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{--bc:#888;font-size:.75rem;padding:3px 12px;border-radius:999px;text-decoration:none;background:#000;color:var(--bc);border:1px solid var(--bc);transition:background .15s}
+.btn:hover{background:#1a1a1a}
+.btn.amz{--bc:#ff9900}.btn.rkt{--bc:#ff4d4d}.btn.yho{--bc:#ff4d6d}
 .hero{padding:24px 0 8px}.hero h1{font-size:1.8rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}.card h2{margin:0 0 8px;font-size:1.05rem;border:0;padding:0}.card h2 a{text-decoration:none}
 .card ol{list-style:none;padding:0;margin:0}.card li{padding:3px 0;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center}.card li span:last-child{overflow:hidden;text-overflow:ellipsis}.card .rk{display:inline-block;width:1.6em;font-size:1rem;margin-right:6px}
