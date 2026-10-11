@@ -101,6 +101,11 @@ def page(title, body, desc="", path_depth=0):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>%s | %s</title>
 <meta name="description" content="%s">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="%s">
+<meta property="og:title" content="%s">
+<meta property="og:image" content="%sthumbnail.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="%sstyle.css">
 </head><body>
 <header><a class="logo" href="%sindex.html">%s</a><nav>%s</nav></header>
@@ -110,7 +115,7 @@ def page(title, body, desc="", path_depth=0):
 <p>データ: AniList / Netflix Tudum 公式Top10 / JustWatch / Filmarks をもとに集計。作品画像は AniList より。最終更新 %s</p>
 <p><a href="%sabout.html">このサイトについて</a> ・ <a href="%sprivacy.html">プライバシーポリシー</a> ・ <a href="%s">お問い合わせ</a></p>
 <p>&copy; %s</p>
-</footer></body></html>""" % (esc(title), esc(site), esc(desc or title), rel, rel, esc(site), nav, body, TODAY,
+</footer></body></html>""" % (esc(title), esc(site), esc(desc or title), esc(site), esc(title), esc(CFG["site_url"]), rel, rel, esc(site).replace("推し", "<b>推し</b>", 1), nav, body, TODAY,
                               rel, rel, esc(contact), esc(site))
 
 def write(name, content):
@@ -287,12 +292,16 @@ for s, rows in by_svc.items():
     svc_cards += '<div class="svc"><h3>%s</h3><ol>%s</ol></div>' % (
         esc(s), "".join('<li>%s<span>%s</span></li>' % (img(cover(r.get("title_ja"), None, r["title"]), FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"]), "cvs"), esc(FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"]))) for r in [x for x in rows if s == "Disney+" or (x["title"] not in EXCLUDE and x.get("title_ja") not in EXCLUDE)][:3]))
 
-body = """<section class="hero"><h1>%s</h1>
-<p>世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>
+HERO_IMG = os.path.exists(os.path.join(OUT, "thumbnail.jpg"))
+body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
+<img src="thumbnail.jpg" alt="推しアニメランキング｜世界27か国・国内12サービスの配信ランキングと歴代評価から、いま観るべきアニメがわかる" width="1200" height="630">
+<p class="vh">世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""" if HERO_IMG else
+"""<section class="hero"><h1>%s</h1>
+<p>世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""") + """
 <div class="grid">%s%s%s%s</div>
 <h2>配信サービス別 世界TOP3</h2><div class="svcgrid">%s</div>
 <h2>探す</h2><p><a href="genre.html">ジャンル別</a> ・ <a href="decade.html">年代別</a></p>
-""" % (esc(CFG["site_name"]),
+""") % (esc(CFG["site_name"]),
        mini(now_items(now_j), "now-japan.html", "国内いま人気"),
        mini(now_items(now_w), "now-world.html", "世界いま人気"),
        mini(nf_items(nf_g), "netflix.html", "Netflix 世界"),
@@ -326,8 +335,8 @@ write("privacy.html", page("プライバシーポリシー", """<h1>プライバ
 write("style.css", """
 :root{--bg:#0f1115;--card:#171a21;--tx:#e8e8ea;--mu:#9aa0ab;--ac:#ff6b9d;--line:#262a33}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.8}
-a{color:var(--ac)}header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--card)}
-.logo{font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--tx)}nav{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.9rem}nav a{text-decoration:none;color:var(--mu)}nav a:hover{color:var(--ac)}
+a{color:var(--ac)}header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;padding:16px 20px;border-bottom:1px solid var(--line);background:var(--card)}
+.logo{font-weight:800;font-size:1.75rem;letter-spacing:.02em;line-height:1.3;text-decoration:none;color:var(--tx)}.logo b{color:var(--ac)}nav{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.9rem}nav a{text-decoration:none;color:var(--mu)}nav a:hover{color:var(--ac)}
 .pr{font-size:.75rem;color:var(--mu);margin:6px 16px}main{max-width:860px;margin:0 auto;padding:8px 16px 40px}
 h1{font-size:1.5rem;margin:16px 0 8px}h2{font-size:1.2rem;margin:40px 0 12px;border-left:4px solid var(--ac);padding-left:8px}.lead{color:var(--mu);font-size:.95rem;margin:0 0 20px}
 ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--line)}
@@ -340,7 +349,8 @@ ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padd
 .btn{--bc:#888;font-size:.75rem;padding:3px 12px;border-radius:999px;text-decoration:none;background:#000;color:var(--bc);border:1px solid var(--bc);transition:background .15s}
 .btn:hover{background:#1a1a1a}
 .btn.amz{--bc:#ff9900}.btn.rkt{--bc:#ff4d4d}.btn.yho{--bc:#ff4d6d}
-.hero{padding:24px 0 8px}.hero h1{font-size:1.8rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.hero{padding:24px 0 8px}.hero h1{font-size:1.8rem}.hero-img{padding:20px 0 12px}.hero-img img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}.card h2{margin:0 0 8px;font-size:1.05rem;border:0;padding:0}.card h2 a{text-decoration:none}
 .card ol{list-style:none;padding:0;margin:0}.card li{padding:3px 0;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center}.card li span:last-child{overflow:hidden;text-overflow:ellipsis}.card .rk{display:inline-block;width:1.6em;font-size:1rem;margin-right:6px}
 .more{font-size:.85rem}.svcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}.svc{background:var(--card);border-radius:10px;padding:8px 12px;font-size:.85rem}
