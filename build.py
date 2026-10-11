@@ -297,7 +297,9 @@ import shutil
 if os.path.isdir(os.path.join(HERE, "assets", "svc")):
     shutil.copytree(os.path.join(HERE, "assets", "svc"), os.path.join(OUT, "svc"), dirs_exist_ok=True)
 svc_cards = ""
+HIDE_SVC = {"Apple TV+"}  # アニメ作品がほぼ無いので表示しない（2026-10-12 ユーザー指定）
 for s, rows in by_svc.items():
+    if s in HIDE_SVC: continue
     ic = SVC_ICON.get(s)
     head = ('<img class="svc-ic" src="svc/%s.png" alt="" width="28" height="28">' % ic if ic else "") + esc(s)
     picks = [x for x in rows if s == "Disney+" or (x["title"] not in EXCLUDE and x.get("title_ja") not in EXCLUDE)][:5]
