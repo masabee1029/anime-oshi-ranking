@@ -13,5 +13,5 @@ git add -A && git commit -m "update" && git push
 `affiliate.json` に各 ASP の ID を入れて `python3 build.py` を実行すると全リンクが差し替わる。
 - `amazon_tag`: Amazon アソシエイトのトラッキング ID（例: masabee-22）
 - `rakuten_affiliate_id`: 楽天アフィリエイト ID
-- `moshimo_unext_url` / `moshimo_dmmtv_url`: もしもアフィリエイトで発行した U-NEXT / DMM TV の紹介リンク
+- `streaming`: 配信サービスの紹介リンクの一覧（name・url・color）。url を入れたものだけボタンが出る
 - `contact_url`: お問い合わせフォーム（Google フォーム等）の URL

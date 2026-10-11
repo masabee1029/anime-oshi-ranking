@@ -21,6 +21,22 @@ GENRE_JA = {
     "Mahou Shoujo": "魔法少女", "Ecchi": None, "Hentai": None,
 }
 
+import re
+COVERS = json.load(open(os.path.join(HERE, "covers.json"), encoding="utf-8")) if os.path.exists(os.path.join(HERE, "covers.json")) else {"by_id": {}, "by_title": {}}
+def norm(t):
+    return re.sub(r"[\s　:：・!！?？\-－~～「」『』()（）]", "", (t or "")).lower()
+def cover(title=None, anilist_id=None, *alts):
+    if anilist_id and str(anilist_id) in COVERS["by_id"]:
+        return COVERS["by_id"][str(anilist_id)]
+    for t in (title,) + alts:
+        u = COVERS["by_title"].get(norm(t))
+        if u: return u
+    return None
+def img(url, title, cls="cv"):
+    if url:
+        return '<img class="%s" src="%s" alt="%s" loading="lazy">' % (cls, esc(url), esc(title))
+    return '<div class="%s noimg"></div>' % cls
+
 def esc(s):
     return html.escape(str(s if s is not None else ""))
 
@@ -50,10 +66,10 @@ def rakuten_link(title):
 def shop_buttons(title):
     btns = ['<a class="btn amz" href="%s" target="_blank" rel="nofollow sponsored noopener">Amazon</a>' % esc(amazon_link(title)),
             '<a class="btn rkt" href="%s" target="_blank" rel="nofollow sponsored noopener">楽天</a>' % esc(rakuten_link(title))]
-    if CFG.get("moshimo_unext_url"):
-        btns.append('<a class="btn unx" href="%s" target="_blank" rel="nofollow sponsored noopener">U-NEXTで観る</a>' % esc(CFG["moshimo_unext_url"]))
-    if CFG.get("moshimo_dmmtv_url"):
-        btns.append('<a class="btn dmm" href="%s" target="_blank" rel="nofollow sponsored noopener">DMM TVで観る</a>' % esc(CFG["moshimo_dmmtv_url"]))
+    for sv in CFG.get("streaming", []):
+        if sv.get("url"):
+            btns.append('<a class="btn" style="background:%s" href="%s" target="_blank" rel="nofollow sponsored noopener">%s</a>' % (
+                esc(sv.get("color") or "#444"), esc(sv["url"]), esc(sv["name"])))
     return '<div class="shop">%s</div>' % "".join(btns)
 
 # ---------- ページ枠 ----------
@@ -77,7 +93,7 @@ def page(title, body, desc="", path_depth=0):
 <p class="pr">本サイトはアフィリエイト広告（Amazonアソシエイト・楽天アフィリエイト等）を利用しています。</p>
 <main>%s</main>
 <footer>
-<p>データ: AniList / Netflix Tudum 公式Top10 / JustWatch / Filmarks をもとに集計。最終更新 %s</p>
+<p>データ: AniList / Netflix Tudum 公式Top10 / JustWatch / Filmarks をもとに集計。作品画像は AniList より。最終更新 %s</p>
 <p><a href="%sabout.html">このサイトについて</a> ・ <a href="%sprivacy.html">プライバシーポリシー</a> ・ <a href="%s">お問い合わせ</a></p>
 <p>&copy; %s</p>
 </footer></body></html>""" % (esc(title), esc(site), esc(desc or title), rel, rel, esc(site), nav, body, TODAY,
@@ -93,9 +109,9 @@ def rank_list(items, show_shop=True):
     """items: list of dict(rank,title,sub,meta)"""
     rows = []
     for it in items:
-        rows.append('<li><span class="rk">%s</span><div class="body"><div class="tt">%s</div>'
+        rows.append('<li><span class="rk">%s</span>%s<div class="body"><div class="tt">%s</div>'
                     '<div class="sub">%s</div>%s%s</div></li>' % (
-                        esc(it["rank"]), esc(it["title"]), esc(it.get("sub", "")),
+                        esc(it["rank"]), img(it.get("img"), it["title"]), esc(it["title"]), esc(it.get("sub", "")),
                         ('<div class="meta">%s</div>' % esc(it["meta"])) if it.get("meta") else "",
                         shop_buttons(it["title"]) if show_shop else ""))
     return '<ol class="rank">%s</ol>' % "".join(rows)
@@ -126,12 +142,22 @@ def is_adult(r):
 world = [r for r in world if not is_adult(r)]
 
 # ---------- 国内いま人気 ----------
+# 日本のアニメではない作品（JustWatch の制作国表記で混入するもの）
+EXCLUDE = {"ザ・スーパーマリオギャラクシー・ムービー", "The Legend of Korra",
+           "Miraculous: Les aventures de Ladybug et Chat Noir", "Golden Axe",
+           "The Super Mario Bros. Movie", "Zootopia 2", "Spider-Man"}
+# 表記ゆれの修正
+FIX_TITLE = {"そうそうのフリーレン": "葬送のフリーレン"}
+
 def now_items(rows, n=30):
     out = []
-    for r in rows[:n]:
+    for r in rows:
+        if len(out) >= n: break
         t = r.get("title_ja") or r.get("title")
         if r.get("original_title") and r.get("title"):
             t = r["title"]
+        if t in EXCLUDE or r.get("title") in EXCLUDE or r.get("title_ja") in EXCLUDE: continue
+        t = FIX_TITLE.get(t, t)
         sub = []
         if r.get("countries_in_top30"): sub.append("%s か国でTOP30入り" % r["countries_in_top30"])
         if r.get("top1_countries") and r["top1_countries"] != "0": sub.append("%s か国で1位" % r["top1_countries"])
@@ -139,7 +165,8 @@ def now_items(rows, n=30):
         if r.get("netflix_views"):
             try: sub.append("Netflix累計 %s万回再生" % format(int(float(r["netflix_views"])) // 10000, ","))
             except ValueError: pass
-        out.append({"rank": r["rank"], "title": t, "sub": " / ".join(sub)})
+        out.append({"rank": len(out) + 1, "title": t, "sub": " / ".join(sub),
+                    "img": cover(t, None, r.get("title"), r.get("title_ja"), r.get("original_title"))})
     return out
 
 body = """<h1>国内いま人気のアニメ TOP30（全配信サービス合算）</h1>
@@ -148,7 +175,7 @@ body = """<h1>国内いま人気のアニメ TOP30（全配信サービス合算
 <h2>Filmarks で話題のアニメ</h2>
 <p class="lead">レビューサイト Filmarks の「話題のアニメ」。数字は5点満点の平均評価。</p>
 %s""" % (esc(snap), rank_list(now_items(now_j)),
-         rank_list([{"rank": r["rank"], "title": r["title"], "sub": "評価 %s / 5.0" % r["score_5"]} for r in flm[:20]]))
+         rank_list([{"rank": r["rank"], "title": r["title"], "sub": "評価 %s / 5.0" % r["score_5"], "img": cover(r["title"])} for r in flm[:20]]))
 write("now-japan.html", page("国内いま人気のアニメ TOP30", body, "日本の配信サービス全体で今月人気のアニメランキング"))
 
 body = """<h1>世界いま人気のアニメ TOP30（27か国・全配信合算）</h1>
@@ -162,7 +189,8 @@ def anilist_items(rows, n=100):
     for i, r in enumerate(rows[:n], 1):
         sub = "評価 %s点 / %s / %s年 %s" % (r.get("average_score") or r.get("mean_score"), r.get("format"),
                                          r.get("season_year"), r.get("studio") or "")
-        out.append({"rank": r.get("rank") or i, "title": jp_title(r), "sub": sub, "meta": genres_ja(r.get("genres"))})
+        out.append({"rank": r.get("rank") or i, "title": jp_title(r), "sub": sub, "meta": genres_ja(r.get("genres")),
+                    "img": cover(jp_title(r), r.get("anilist_id"), r.get("title_romaji"), r.get("title_english"))})
     return out
 
 body = """<h1>歴代アニメ 世界評価ランキング TOP100</h1>
@@ -177,7 +205,8 @@ def nf_items(rows, n=30, views=True):
         sub = ["TOP10入り %s週" % r["weeks"], "最高 %s位" % r["best"]]
         if views and r.get("views"):
             sub.append("累計 %s万回再生" % format(int(float(r["views"])) // 10000, ","))
-        out.append({"rank": r["rank"], "title": r.get("anime_title_ja") or r["show_title"], "sub": " / ".join(sub)})
+        t = r.get("anime_title_ja") or r["show_title"]
+        out.append({"rank": r["rank"], "title": t, "sub": " / ".join(sub), "img": cover(t, None, r["show_title"])})
     return out
 
 body = """<h1>Netflix アニメランキング</h1>
@@ -236,13 +265,13 @@ write("decade.html", page("年代別おすすめアニメ", "<h1>年代別おす
 
 # ---------- トップ ----------
 def mini(items, href, title):
-    lis = "".join('<li><span class="rk">%s</span>%s</li>' % (esc(i["rank"]), esc(i["title"])) for i in items[:5])
+    lis = "".join('<li><span class="rk">%s</span>%s<span>%s</span></li>' % (esc(i["rank"]), img(i.get("img"), i["title"], "cvs"), esc(i["title"])) for i in items[:5])
     return '<section class="card"><h2><a href="%s">%s</a></h2><ol>%s</ol><a class="more" href="%s">続きを見る →</a></section>' % (href, esc(title), lis, href)
 
 svc_cards = ""
 for s, rows in by_svc.items():
     svc_cards += '<div class="svc"><h3>%s</h3><ol>%s</ol></div>' % (
-        esc(s), "".join('<li>%s</li>' % esc(r.get("title_ja") or r["title"]) for r in rows[:3]))
+        esc(s), "".join('<li>%s<span>%s</span></li>' % (img(cover(r.get("title_ja"), None, r["title"]), FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"]), "cvs"), esc(FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"]))) for r in [x for x in rows if x["title"] not in EXCLUDE and x.get("title_ja") not in EXCLUDE][:3]))
 
 body = """<section class="hero"><h1>%s</h1>
 <p>世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>
@@ -289,14 +318,16 @@ a{color:var(--ac)}header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 
 h1{font-size:1.5rem;margin:16px 0 8px}h2{font-size:1.2rem;margin:28px 0 8px;border-left:4px solid var(--ac);padding-left:8px}.lead{color:var(--mu);font-size:.95rem}
 ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
 .rk{flex:0 0 2.2em;font-size:1.4rem;font-weight:800;color:var(--ac);text-align:right}ol.rank li:nth-child(-n+3) .rk{color:#ffd166}
+.cv{flex:0 0 72px;width:72px;height:102px;object-fit:cover;border-radius:6px;background:#222}.noimg{background:linear-gradient(135deg,#262a33,#1a1d24)}
+.cvs{display:inline-block;width:28px;height:40px;object-fit:cover;border-radius:3px;vertical-align:middle;margin-right:6px;background:#222}
 .body{flex:1;min-width:0}.tt{font-weight:700;font-size:1.05rem}.sub,.meta{font-size:.82rem;color:var(--mu)}
 .shop{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.btn{font-size:.78rem;padding:4px 10px;border-radius:999px;text-decoration:none;color:#fff;background:#444}
 .btn.amz{background:#e47911}.btn.rkt{background:#bf0000}.btn.unx{background:#1b1f66}.btn.dmm{background:#0a74da}
 .hero{padding:24px 0 8px}.hero h1{font-size:1.8rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}.card h2{margin:0 0 8px;font-size:1.05rem;border:0;padding:0}.card h2 a{text-decoration:none}
-.card ol{list-style:none;padding:0;margin:0}.card li{padding:3px 0;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card .rk{display:inline-block;width:1.6em;font-size:1rem;margin-right:6px}
+.card ol{list-style:none;padding:0;margin:0}.card li{padding:3px 0;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center}.card li span:last-child{overflow:hidden;text-overflow:ellipsis}.card .rk{display:inline-block;width:1.6em;font-size:1rem;margin-right:6px}
 .more{font-size:.85rem}.svcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}.svc{background:var(--card);border-radius:10px;padding:8px 12px;font-size:.85rem}
-.svc h3{margin:0 0 4px;font-size:.95rem}.svc ol{margin:0;padding-left:1.4em}ul.links{columns:2;padding-left:1.2em}
+.svc h3{margin:0 0 4px;font-size:.95rem}.svc ol{margin:0;padding-left:1.4em}.svc li{display:flex;align-items:center;white-space:nowrap;overflow:hidden}.svc li span{overflow:hidden;text-overflow:ellipsis}ul.links{columns:2;padding-left:1.2em}
 footer{border-top:1px solid var(--line);padding:16px;font-size:.78rem;color:var(--mu);text-align:center}
 """)
 # GitHub Pages 用

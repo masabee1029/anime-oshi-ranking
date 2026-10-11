@@ -1,10 +1,21 @@
 {
   "_comment": "ASP登録後にここを埋めて python3 build.py を実行すると全リンクが差し替わる",
-  "amazon_tag": "",
-  "rakuten_affiliate_id": "",
-  "moshimo_unext_url": "",
-  "moshimo_dmmtv_url": "",
+  "amazon_tag": "masabee00001-22",
+  "rakuten_affiliate_id": "5867408e.a723d753.5867408f.9cd38db5",
   "site_url": "https://masabee1029.github.io/anime-oshi-ranking/",
   "site_name": "推しアニメランキング",
-  "contact_url": ""
+  "contact_url": "",
+  "_streaming_comment": "配信サービスの紹介リンク。name=ボタン名, url=もしも等で発行したリンク。並び順どおりに表示。urlが空のものは出さない",
+  "streaming": [
+    {
+      "name": "DMM TVで観る",
+      "url": "",
+      "color": "#0a74da"
+    },
+    {
+      "name": "U-NEXTで観る",
+      "url": "",
+      "color": "#1b1f66"
+    }
+  ]
 }
