@@ -74,11 +74,18 @@ for fn, cols in (("world_allservices_ranking.csv", ("title_ja", "title")),
     for r in csv.DictReader(open(os.path.join(ST, fn), encoding="utf-8")):
         if fn.startswith("netflix_anime_ranking_by_country") and r.get("country") != "JP": continue
         add(*[r.get(c) for c in cols])
+for svc_name in ("abema", "dmmtv", "tver", "bandai"):
+    path = os.path.join(ST, "%s_anime_ranking.csv" % svc_name)
+    if os.path.exists(path):
+        for r in csv.DictReader(open(path, encoding="utf-8")): add(r.get("title"))
+for r in csv.DictReader(open(os.path.join(ST, "justwatch_anime_by_country_service.csv"), encoding="utf-8")):
+    add(r.get("original_title"))
 print("titles to search", len(titles))
 QS = """query($s:String){Page(perPage:1){media(search:$s,type:ANIME,isAdult:false){id coverImage{large} title{native romaji english}}}}"""
 MAX_SEARCH = 120  # 1 回の実行で検索する上限（残りは次回）
 for n, t in enumerate(titles[:MAX_SEARCH], 1):
-    s = re.sub(r"(第?\d+期|Season \d+|シーズン\d+|第\d+クール|\(\d{4}\)|劇場版|TVアニメ)", " ", t).strip() or t
+    s = re.sub(r"[【\[（(「『].*?[】\]）)」』]", " ", t)
+    s = re.sub(r"(第?\s*\d+\s*(期|章|クール)|\d+(st|nd|rd|th) Season|Season \d+|シーズン\d+|全\s*\d+\s*章|劇場版|TVアニメ)", " ", s).strip(" 　") or t
     d = gql(QS, {"s": s})
     ms = (d.get("data") or {}).get("Page", {}).get("media", []) or []
     if ms:

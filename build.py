@@ -25,11 +25,19 @@ import re
 COVERS = json.load(open(os.path.join(HERE, "covers.json"), encoding="utf-8")) if os.path.exists(os.path.join(HERE, "covers.json")) else {"by_id": {}, "by_title": {}}
 def norm(t):
     return re.sub(r"[\s　:：・!！?？\-－~～「」『』()（）]", "", (t or "")).lower()
+def strip_extra(t):
+    """【規制解除版】（日本語吹替版）第4期 2nd Season 全7章 などの付け足しを外す"""
+    t = re.sub(r"[【\[（(「『].*?[】\]）)」』]", " ", t or "")
+    t = re.sub(r"(第\s*\d+\s*(期|章|クール|シーズン)|\d+(st|nd|rd|th)\s*Season|Season\s*\d+|全\s*\d+\s*章|劇場版)", " ", t)
+    return t.strip(" 　")
 def cover(title=None, anilist_id=None, *alts):
     if anilist_id and str(anilist_id) in COVERS["by_id"]:
         return COVERS["by_id"][str(anilist_id)]
     for t in (title,) + alts:
         u = COVERS["by_title"].get(norm(t))
+        if u: return u
+    for t in (title,) + alts:
+        u = COVERS["by_title"].get(norm(strip_extra(t)))
         if u: return u
     return None
 def img(url, title, cls="cv"):
@@ -88,7 +96,7 @@ def shop_buttons(title):
 
 # ---------- ページ枠 ----------
 NAV = [("index.html", "トップ"), ("now-japan.html", "国内いま人気"), ("now-world.html", "世界いま人気"),
-       ("best-world.html", "歴代・世界評価"), ("netflix.html", "Netflix"), ("genre.html", "ジャンル別"),
+       ("best-world.html", "歴代・世界評価"), ("netflix.html", "Netflix"), ("services.html", "配信サービス別"), ("country.html", "国別"), ("genre.html", "ジャンル別"),
        ("year.html", "年別")]
 
 def page(title, body, desc="", path_depth=0):
@@ -164,7 +172,10 @@ world = [r for r in world if not is_adult(r)]
 # 日本のアニメではない作品（JustWatch の制作国表記で混入するもの）。Disney+ の欄だけは海外作品も表示する（2026-10-11 ユーザー指定）
 EXCLUDE = {"ザ・スーパーマリオギャラクシー・ムービー", "The Legend of Korra",
            "Miraculous: Les aventures de Ladybug et Chat Noir", "Golden Axe",
-           "The Super Mario Bros. Movie", "Zootopia 2", "Spider-Man"}
+           "The Super Mario Bros. Movie", "Zootopia 2", "Spider-Man",
+           "The Super Mario Galaxy Movie", "スーパーマン", "Superman", "ThunderCats", "The Secret Saturdays",
+           "The Bad Guys 2", "Trolls Band Together", "Sonic the Hedgehog 3", "The Boss Baby: Family Business",
+           "Kung Fu Panda 4", "Il était une fois... la vie"}
 # 表記ゆれの修正
 FIX_TITLE = {"そうそうのフリーレン": "葬送のフリーレン"}
 
@@ -236,6 +247,126 @@ body = """<h1>Netflix アニメランキング</h1>
 <p class="lead">日本の Netflix 週間TOP10に入った週数の多い順。</p>
 %s""" % (rank_list(nf_items(nf_g)), rank_list(nf_items(nf_c, views=False)))
 write("netflix.html", page("Netflix アニメランキング 世界・日本", body, "Netflix公式Top10に基づくアニメの世界・日本ランキング"))
+
+
+# ---------- 配信サービス別・国別 ----------
+jw = read_csv(os.path.join(ST, "justwatch_anime_by_country_service.csv"))
+JA_MAP = {}
+for r in now_w + svc:
+    JA_MAP.setdefault(r["title"], r.get("title_ja") or r["title"])
+COUNTRY_JA = {"AE": "アラブ首長国連邦", "AR": "アルゼンチン", "AU": "オーストラリア", "BR": "ブラジル", "CA": "カナダ",
+              "DE": "ドイツ", "ES": "スペイン", "FR": "フランス", "GB": "イギリス", "HK": "香港", "ID": "インドネシア",
+              "IN": "インド", "IT": "イタリア", "JP": "日本", "KR": "韓国", "MX": "メキシコ", "MY": "マレーシア",
+              "NL": "オランダ", "PH": "フィリピン", "PL": "ポーランド", "SA": "サウジアラビア", "SE": "スウェーデン",
+              "SG": "シンガポール", "TH": "タイ", "TR": "トルコ", "TW": "台湾", "US": "アメリカ"}
+REGION = [("アジア", ["JP", "KR", "TW", "HK", "TH", "ID", "MY", "SG", "PH", "IN"]),
+          ("北米・中南米", ["US", "CA", "MX", "BR", "AR"]),
+          ("ヨーロッパ", ["GB", "FR", "DE", "ES", "IT", "NL", "SE", "PL", "TR"]),
+          ("中東・オセアニア", ["AE", "SA", "AU"])]
+
+def jw_title(r):
+    key = r["original_title"] or r["title"]
+    if r["country"] == "JP":
+        t = r["title"]
+        if not re.search(r"[\u3040-\u30ff\u4e00-\u9fff]", t):
+            t = JA_MAP.get(key, t)
+    else:
+        t = JA_MAP.get(key) or (r["original_title"] if re.search(r"[\u3040-\u30ff]", r["original_title"] or "") else r["title"])
+    return FIX_TITLE.get(t, t)
+
+def jw_items(rows, n=30, allow_foreign=False):
+    out = []
+    for r in sorted(rows, key=lambda r: int(r["rank"])):
+        if len(out) >= n: break
+        t = jw_title(r)
+        if not allow_foreign and (t in EXCLUDE or r["title"] in EXCLUDE or r["original_title"] in EXCLUDE): continue
+        sub = ("%s年" % r["year"]) if r.get("year") else ""
+        out.append({"rank": len(out) + 1, "title": t, "sub": sub,
+                    "img": cover(t, None, r["original_title"], r["title"], JA_MAP.get(r["original_title"] or r["title"]))})
+    return out
+
+def simple_items(rows, n=30):
+    out = []
+    for r in rows[:n]:
+        t = FIX_TITLE.get(r["title"], r["title"])
+        out.append({"rank": len(out) + 1, "title": t, "sub": "", "img": cover(t)})
+    return out
+
+# 世界（27か国合算）のサービス
+WORLD_SVC = [("nfx", "Netflix"), ("amp", "Amazon Prime Video"), ("dnp", "Disney+"), ("cru", "Crunchyroll"),
+             ("hlu", "Hulu"), ("mxx", "HBO Max")]
+# 国内のサービス: (id, 表示名, データの取り方)
+JP_SVC = [("nfx", "Netflix", ("jw", "Netflix")), ("amp", "Amazon Prime Video", ("jw", "Amazon Prime Video")),
+          ("dnp", "Disney+", ("jw", "Disney+")), ("hlu", "Hulu", ("jw", "Hulu")),
+          ("unext", "U-NEXT", ("jw", "U-NEXT")), ("danime", "dアニメストア", ("jw", "dアニメストア（Amazon チャンネル）")),
+          ("fod", "FOD", ("jw", "FOD")), ("abema", "ABEMA", ("csv", "abema")), ("dmmtv", "DMM TV", ("csv", "dmmtv")),
+          ("tver", "TVer", ("csv", "tver")), ("bandai", "バンダイチャンネル", ("csv", "bandai"))]
+
+def jp_rows(how):
+    kind, key = how
+    if kind == "jw":
+        return jw_items([r for r in jw if r["country"] == "JP" and r["service"] == key], 30, key == "Disney+")
+    path = os.path.join(ST, "%s_anime_ranking.csv" % key)
+    return simple_items(read_csv(path)) if os.path.exists(path) else []
+
+SVC_ICON_FILE = {"nfx": "nfx", "amp": "amp", "dnp": "dnp", "cru": "cru", "hlu": "hlu", "mxx": "mxx",
+                 "unext": "unext", "abema": "abema", "tver": "tver", "fod": "fod"}
+hub_world, hub_jp = [], []
+jp_map = {sid: (name, how) for sid, name, how in JP_SVC}
+for sid, name in WORLD_SVC:
+    rows = [r for r in svc if r["service"] == name]
+    world_list = []
+    for r in rows:
+        t = FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"])
+        if sid != "dnp" and (t in EXCLUDE or r["title"] in EXCLUDE): continue
+        if len(world_list) >= 30: break
+        world_list.append({"rank": len(world_list) + 1, "title": t,
+                           "sub": "%s か国でTOP30入り" % r["countries_in_top30"], "img": cover(r.get("title_ja"), None, r["title"])})
+    body = "<h1>%s アニメランキング</h1>" % esc(name)
+    body += "<h2>世界 TOP%d（27か国合算）</h2><p class=\"lead\">各国の%sアニメランキングを点数化（1位=30点…30位=1点）して合計。</p>%s" % (
+        len(world_list), esc(name), rank_list(world_list))
+    if sid in jp_map:
+        jl = jp_rows(jp_map[sid][1])
+        if jl: body += "<h2>日本 TOP%d</h2>%s" % (len(jl), rank_list(jl))
+    write("service/%s.html" % sid, page("%s アニメランキング 世界・日本" % name, body, "%sで人気のアニメランキング（世界27か国合算・日本）" % name, 1))
+    hub_world.append((sid, name, world_list[:3]))
+for sid, name, how in JP_SVC:
+    if sid in dict(WORLD_SVC): 
+        hub_jp.append((sid, name, jp_rows(how)[:3])); continue
+    jl = jp_rows(how)
+    if not jl: continue
+    body = "<h1>%s アニメランキング</h1><h2>日本 TOP%d</h2>%s" % (esc(name), len(jl), rank_list(jl))
+    write("service/%s.html" % sid, page("%s アニメランキング" % name, body, "%sで人気のアニメランキング" % name, 1))
+    hub_jp.append((sid, name, jl[:3]))
+
+def hub_card(sid, name, top):
+    icon = SVC_ICON_FILE.get(sid)
+    h = ('<img class="svc-ic" src="svc/%s.png" alt="" width="28" height="28">' % icon if icon else '<span class="svc-ic txt">%s</span>' % esc(name[:1])) + esc(name)
+    lis = "".join('<li><span class="rk">%d</span>%s<span class="nm">%s</span></li>' % (i["rank"], img(i.get("img"), i["title"], "cvs"), esc(i["title"])) for i in top)
+    return '<a class="svc svc-link" href="service/%s.html"><h3>%s</h3><ol>%s</ol><span class="more">ランキングを見る →</span></a>' % (sid, h, lis)
+
+body = ("<h1>配信サービス別アニメランキング</h1><p class=\"lead\">各配信サービスで、いま人気のアニメ。毎月更新（集計日 %s）。</p>" % esc(snap) +
+        "<h2>世界（27か国合算）</h2><div class=\"svcgrid\">%s</div>" % "".join(hub_card(*x) for x in hub_world) +
+        "<h2>日本国内</h2><div class=\"svcgrid\">%s</div>" % "".join(hub_card(*x) for x in hub_jp))
+write("services.html", page("配信サービス別アニメランキング", body, "Netflix・Prime Video・U-NEXT・dアニメストア・ABEMA など配信サービスごとのアニメ人気ランキング"))
+
+# 国別（全配信サービス合計）
+country_cards = []
+for region, codes in REGION:
+    cards = []
+    for cc in codes:
+        rows = [r for r in jw if r["country"] == cc and r["service_id"] == "ALL"]
+        if not rows: continue
+        items = jw_items(rows, 30)
+        cname = COUNTRY_JA.get(cc, cc)
+        body = ("<h1>%sで人気のアニメ TOP%d（全配信サービス合計）</h1><p class=\"lead\">%sの配信サービス全体で、いま人気のアニメ（JustWatch 集計、%s）。</p>%s" % (
+            esc(cname), len(items), esc(cname), esc(snap), rank_list(items)))
+        write("country/%s.html" % cc.lower(), page("%sで人気のアニメランキング" % cname, body, "%sの配信サービス全体で人気のアニメTOP%d" % (cname, len(items)), 1))
+        lis = "".join('<li><span class="rk">%d</span>%s<span class="nm">%s</span></li>' % (i["rank"], img(i.get("img"), i["title"], "cvs"), esc(i["title"])) for i in items[:3])
+        cards.append('<a class="svc svc-link" href="country/%s.html"><h3>%s</h3><ol>%s</ol><span class="more">TOP30を見る →</span></a>' % (cc.lower(), esc(cname), lis))
+    country_cards.append("<h2>%s</h2><div class=\"svcgrid\">%s</div>" % (region, "".join(cards)))
+body = ("<h1>国別アニメランキング（全配信サービス合計）</h1><p class=\"lead\">世界27か国で、それぞれの国の配信サービス全体を合わせたアニメ人気ランキング（集計日 %s）。</p>" % esc(snap)) + "".join(country_cards)
+write("country.html", page("国別アニメランキング", body, "世界27か国の配信サービス全体で人気のアニメランキング"))
 
 # ---------- サービス別（トップに要約） ----------
 by_svc = collections.OrderedDict()
@@ -315,8 +446,8 @@ body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
 """<section class="hero"><h1>%s</h1>
 <p>世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""") + """
 <div class="grid">%s%s%s%s</div>
-<h2>配信サービス別 世界TOP5</h2><div class="svcgrid">%s</div>
-<h2>探す</h2><p class="find"><a href="genre.html">ジャンル別のおすすめ →</a></p><p class="find"><a href="year.html">年別のおすすめ（1970年〜）→</a></p>
+<h2>配信サービス別 世界TOP5 <a class="h2more" href="services.html">すべてのサービス →</a></h2><div class="svcgrid">%s</div>
+<h2>探す</h2><p class="find"><a href="genre.html">ジャンル別のおすすめ →</a></p><p class="find"><a href="year.html">年別のおすすめ（1970年〜）→</a></p><p class="find"><a href="services.html">配信サービス別ランキング（13サービス）→</a></p><p class="find"><a href="country.html">国別ランキング（27か国）→</a></p>
 """) % (esc(CFG["site_name"]),
        mini(now_items(now_j), "now-japan.html", "国内いま人気"),
        mini(now_items(now_w), "now-world.html", "世界いま人気"),
@@ -332,6 +463,7 @@ write("about.html", page("このサイトについて", """<h1>このサイト�
 <ul><li>AniList（世界最大級のアニメデータベース）: 歴代評価・ジャンル・年別</li>
 <li>Netflix Tudum 公式 Top 10: 週間ランキング・再生回数</li>
 <li>JustWatch: 各国・各配信サービスの人気ランキング</li>
+<li>ABEMA・DMM TV・TVer・バンダイチャンネル: 各サービスのランキング画面</li>
 <li>Filmarks: 話題のアニメ・5段階評価</li></ul>
 <p>配信サービスのアイコンは JustWatch より。</p>
 <h2>運営者</h2><p>Masabee（YouTube: <a href="https://www.youtube.com/@Masabee1029" target="_blank" rel="noopener">@Masabee1029</a>）</p>
@@ -372,6 +504,7 @@ ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padd
 .card ol{list-style:none;padding:0;margin:0}.card li{padding:6px 0;font-size:.92rem;line-height:1.5;display:flex;align-items:center;gap:2px}.nm{flex:1;min-width:0;overflow-wrap:anywhere}.card .rk{display:inline-block;width:1.6em;font-size:1rem;margin-right:4px;flex:0 0 auto}.cvs{flex:0 0 auto}
 .more{display:inline-block;margin-top:8px;font-size:.85rem}.svcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.svc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:.88rem}
 .svc h3{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:1rem}.svc-ic{width:28px;height:28px;border-radius:7px}.svc ol{list-style:none;margin:0;padding:0}.svc li{display:flex;align-items:center;gap:2px;padding:5px 0;line-height:1.5}.svc .rk{display:inline-block;width:1.6em;font-size:.95rem;margin-right:4px;flex:0 0 auto}
+.svc-link{display:block;text-decoration:none;color:var(--tx)}.svc-link:hover{border-color:var(--ac)}.svc-ic.txt{display:inline-flex;align-items:center;justify-content:center;background:#333;color:#fff;font-size:.8rem}.h2more{font-size:.8rem;font-weight:400;margin-left:8px}
 .find{margin:6px 0}.find a{font-size:1rem}.pn{display:flex;justify-content:space-between;font-size:.9rem;margin:12px 0}
 .yrow{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);align-items:baseline}.ydec{flex:0 0 5em;font-weight:700;color:var(--mu)}.ylinks{display:flex;flex-wrap:wrap;gap:6px 14px}
 footer{border-top:1px solid var(--line);padding:16px;font-size:.78rem;color:var(--mu);text-align:center}
