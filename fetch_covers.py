@@ -4,7 +4,7 @@
 - anilist_id があるもの: id_in で 50 件ずつまとめて取得
 - 配信ランキングなど id のないもの: タイトル検索（キャッシュ済みは飛ばす）
 """
-import csv, json, os, re, time, urllib.request, urllib.error
+import csv, json, os, re, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.expanduser("~/knowledge-os/raw/anime")
@@ -17,20 +17,20 @@ HDR = {"Content-Type": "application/json", "Accept": "application/json",
 cache = json.load(open(CACHE, encoding="utf-8")) if os.path.exists(CACHE) else {"by_id": {}, "by_title": {}}
 
 def gql(query, variables):
-    body = json.dumps({"query": query, "variables": variables}).encode()
-    for attempt in range(6):
-        req = urllib.request.Request(URL, data=body, headers=HDR)
+    """curl で AniList に問い合わせる（Python の urllib はこの Mac で極端に遅いことがあるため）"""
+    import subprocess
+    body = json.dumps({"query": query, "variables": variables})
+    for attempt in range(4):
+        r = subprocess.run(["curl", "-s", "-m", "30", "-w", "\n%{http_code}", "-H", "Content-Type: application/json",
+                            "-H", "Accept: application/json", "-A", HDR["User-Agent"], "-d", body, URL],
+                           capture_output=True, text=True)
+        payload, _, code = r.stdout.rpartition("\n")
+        if code == "429":
+            if attempt >= 2: raise SystemExit("AniList の回数制限が続くため打ち切り（次回の実行で続きから取得）")
+            time.sleep(65); continue
         try:
-            with urllib.request.urlopen(req, timeout=60) as r:
-                if int(r.headers.get("X-RateLimit-Remaining", "10")) < 3:
-                    time.sleep(10)
-                return json.load(r)
-        except urllib.error.HTTPError as e:
-            if e.code == 429:
-                if attempt >= 2: raise SystemExit("AniList の回数制限が続くため打ち切り（次回の実行で続きから取得）")
-                time.sleep(min(int(e.headers.get("Retry-After", "60")), 65)); continue
-            if e.code == 404:
-                return {}
+            return json.loads(payload)
+        except ValueError:
             time.sleep(5)
     return {}
 
@@ -43,7 +43,7 @@ for fn in ("world_top.csv", "japan_top.csv", "seasonal_1970_2026.csv"):
     for r in csv.DictReader(open(os.path.join(DATA, fn), encoding="utf-8")):
         if fn.startswith("seasonal"):
             try:
-                if int(r.get("popularity") or 0) < 5000: continue
+                if int(r.get("popularity") or 0) < (500 if int(r.get("year") or 0) < 1990 else 2000): continue
             except ValueError: continue
         if r.get("anilist_id"): ids.add(int(r["anilist_id"]))
 todo = sorted(i for i in ids if str(i) not in cache["by_id"])

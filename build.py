@@ -89,7 +89,7 @@ def shop_buttons(title):
 # ---------- ページ枠 ----------
 NAV = [("index.html", "トップ"), ("now-japan.html", "国内いま人気"), ("now-world.html", "世界いま人気"),
        ("best-world.html", "歴代・世界評価"), ("netflix.html", "Netflix"), ("genre.html", "ジャンル別"),
-       ("decade.html", "年代別")]
+       ("year.html", "年別")]
 
 def page(title, body, desc="", path_depth=0):
     rel = "../" * path_depth
@@ -109,10 +109,10 @@ def page(title, body, desc="", path_depth=0):
 <link rel="stylesheet" href="%sstyle.css">
 </head><body>
 <header><a class="logo" href="%sindex.html">%s</a><nav>%s</nav></header>
-<p class="pr">本サイトはアフィリエイト広告（Amazonアソシエイト・楽天アフィリエイト等）を利用しています。</p>
 <main>%s</main>
 <footer>
 <p>データ: AniList / Netflix Tudum 公式Top10 / JustWatch / Filmarks をもとに集計。作品画像は AniList より。最終更新 %s</p>
+<p>本サイトはアフィリエイト広告（Amazonアソシエイト・楽天アフィリエイト等）を利用しています。</p>
 <p><a href="%sabout.html">このサイトについて</a> ・ <a href="%sprivacy.html">プライバシーポリシー</a> ・ <a href="%s">お問い合わせ</a></p>
 <p>&copy; %s</p>
 </footer></body></html>""" % (esc(title), esc(site), esc(desc or title), esc(site), esc(title), esc(CFG["site_url"]), rel, rel, esc(site).replace("推し", "<b>推し</b>", 1), nav, body, TODAY,
@@ -259,38 +259,52 @@ for g, rows in sorted(genre_map.items(), key=lambda kv: -len(kv[1])):
     write(fn, page("%s アニメ おすすめランキング" % name, b, "%sジャンルのおすすめアニメTOP30" % name, 1))
 write("genre.html", page("ジャンル別おすすめアニメ", "<h1>ジャンル別おすすめアニメ</h1><ul class=\"links\">%s</ul>" % "".join(links)))
 
-# ---------- 年代別 ----------
-dec = collections.defaultdict(dict)
+# ---------- 年別 ----------
+by_year = collections.defaultdict(dict)
 for r in seasonal:
     if is_adult(r) or not r.get("average_score"): continue
     try:
-        y = int(r["year"]); sc = int(r["average_score"]); pop = int(r["popularity"] or 0)
+        y = int(r["year"]); pop = int(r["popularity"] or 0)
     except ValueError: continue
-    if pop < 5000: continue
-    d = (y // 10) * 10
-    key = r["anilist_id"]
-    if key not in dec[d]:
-        dec[d][key] = r
-links = []
-for d in sorted(dec):
-    rows = sorted(dec[d].values(), key=lambda r: (-int(r["average_score"]), -int(r["popularity"] or 0)))[:30]
+    if pop < (500 if y < 1990 else 2000): continue   # 古い年は作品数が少ないので基準を下げる
+    if r["anilist_id"] not in by_year[y]:
+        by_year[y][r["anilist_id"]] = r
+year_links = collections.OrderedDict()
+for y in sorted(by_year):
+    rows = sorted(by_year[y].values(), key=lambda r: (-int(r["average_score"]), -int(r["popularity"] or 0)))[:30]
     if len(rows) < 5: continue
-    fn = "decade/%ds.html" % d
-    links.append('<li><a href="%s">%d年代のおすすめアニメ</a></li>' % (fn, d))
-    b = "<h1>%d年代 おすすめアニメ TOP%d</h1><p class=\"lead\">%d年代に放送・公開された作品を世界評価順に。</p>%s" % (
-        d, len(rows), d, rank_list([dict(it, rank=i) for i, it in enumerate(anilist_items(rows, 30), 1)]))
-    write(fn, page("%d年代 おすすめアニメ" % d, b, "%d年代の名作アニメランキング" % d, 1))
-write("decade.html", page("年代別おすすめアニメ", "<h1>年代別おすすめアニメ</h1><ul class=\"links\">%s</ul>" % "".join(links)))
+    fn = "year/%d.html" % y
+    year_links.setdefault((y // 10) * 10, []).append('<a href="%s">%d年</a>' % (fn, y))
+    prev_next = '<p class="pn">%s%s</p>' % (
+        ('<a href="%d.html">← %d年</a>' % (y - 1, y - 1)) if (y - 1) in by_year else "",
+        ('<a href="%d.html">%d年 →</a>' % (y + 1, y + 1)) if (y + 1) in by_year else "")
+    b = "<h1>%d年のおすすめアニメ TOP%d</h1><p class=\"lead\">%d年に放送・公開された作品を世界評価（AniList スコア）順に。</p>%s%s%s" % (
+        y, len(rows), y, prev_next, rank_list([dict(it, rank=i) for i, it in enumerate(anilist_items(rows, 30), 1)]), prev_next)
+    write(fn, page("%d年のおすすめアニメ" % y, b, "%d年に放送されたアニメのおすすめランキングTOP%d" % (y, len(rows)), 1))
+ydiv = "".join('<div class="yrow"><span class="ydec">%d年代</span><div class="ylinks">%s</div></div>' % (d, "".join(v))
+               for d, v in sorted(year_links.items(), reverse=True))
+write("year.html", page("年別おすすめアニメ", "<h1>年別おすすめアニメ</h1><p class=\"lead\">1970年から今年まで、その年に放送・公開されたアニメを世界評価順に紹介します。</p>%s" % ydiv,
+                        "1970年から今年まで、年ごとのおすすめアニメランキング"))
 
 # ---------- トップ ----------
 def mini(items, href, title):
-    lis = "".join('<li><span class="rk">%s</span>%s<span>%s</span></li>' % (esc(i["rank"]), img(i.get("img"), i["title"], "cvs"), esc(i["title"])) for i in items[:5])
+    lis = "".join('<li><span class="rk">%s</span>%s<span class="nm">%s</span></li>' % (esc(i["rank"]), img(i.get("img"), i["title"], "cvs"), esc(i["title"])) for i in items[:5])
     return '<section class="card"><h2><a href="%s">%s</a></h2><ol>%s</ol><a class="more" href="%s">続きを見る →</a></section>' % (href, esc(title), lis, href)
 
+SVC_ICON = {"Netflix": "nfx", "Amazon Prime Video": "amp", "Disney+": "dnp", "Crunchyroll": "cru",
+            "Hulu": "hlu", "HBO Max": "mxx", "Apple TV+": "atp"}
+import shutil
+if os.path.isdir(os.path.join(HERE, "assets", "svc")):
+    shutil.copytree(os.path.join(HERE, "assets", "svc"), os.path.join(OUT, "svc"), dirs_exist_ok=True)
 svc_cards = ""
 for s, rows in by_svc.items():
+    ic = SVC_ICON.get(s)
+    head = ('<img class="svc-ic" src="svc/%s.png" alt="" width="28" height="28">' % ic if ic else "") + esc(s)
+    picks = [x for x in rows if s == "Disney+" or (x["title"] not in EXCLUDE and x.get("title_ja") not in EXCLUDE)][:5]
+    def nm(r): return FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"])
     svc_cards += '<div class="svc"><h3>%s</h3><ol>%s</ol></div>' % (
-        esc(s), "".join('<li>%s<span>%s</span></li>' % (img(cover(r.get("title_ja"), None, r["title"]), FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"]), "cvs"), esc(FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"]))) for r in [x for x in rows if s == "Disney+" or (x["title"] not in EXCLUDE and x.get("title_ja") not in EXCLUDE)][:3]))
+        head, "".join('<li><span class="rk">%d</span>%s<span class="nm">%s</span></li>' % (
+            n, img(cover(r.get("title_ja"), None, r["title"]), nm(r), "cvs"), esc(nm(r))) for n, r in enumerate(picks, 1)))
 
 HERO_IMG = os.path.exists(os.path.join(OUT, "thumbnail.jpg"))
 body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
@@ -299,8 +313,8 @@ body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
 """<section class="hero"><h1>%s</h1>
 <p>世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""") + """
 <div class="grid">%s%s%s%s</div>
-<h2>配信サービス別 世界TOP3</h2><div class="svcgrid">%s</div>
-<h2>探す</h2><p><a href="genre.html">ジャンル別</a> ・ <a href="decade.html">年代別</a></p>
+<h2>配信サービス別 世界TOP5</h2><div class="svcgrid">%s</div>
+<h2>探す</h2><p class="find"><a href="genre.html">ジャンル別のおすすめ →</a></p><p class="find"><a href="year.html">年別のおすすめ（1970年〜）→</a></p>
 """) % (esc(CFG["site_name"]),
        mini(now_items(now_j), "now-japan.html", "国内いま人気"),
        mini(now_items(now_w), "now-world.html", "世界いま人気"),
@@ -313,10 +327,11 @@ write("index.html", page("トップ", body, "配信ランキングと歴代評�
 write("about.html", page("このサイトについて", """<h1>このサイトについて</h1>
 <p>「%s」は、世界と日本の配信ランキング・レビューサイトの評価データを毎月集計し、おすすめアニメを紹介する個人運営サイトです。</p>
 <h2>データの出典</h2>
-<ul><li>AniList（世界最大級のアニメデータベース）: 歴代評価・ジャンル・年代</li>
+<ul><li>AniList（世界最大級のアニメデータベース）: 歴代評価・ジャンル・年別</li>
 <li>Netflix Tudum 公式 Top 10: 週間ランキング・再生回数</li>
 <li>JustWatch: 各国・各配信サービスの人気ランキング</li>
 <li>Filmarks: 話題のアニメ・5段階評価</li></ul>
+<p>配信サービスのアイコンは JustWatch より。</p>
 <h2>運営者</h2><p>Masabee（YouTube: <a href="https://www.youtube.com/@Masabee1029" target="_blank" rel="noopener">@Masabee1029</a>）</p>
 <h2>お問い合わせ</h2><p>%s</p>
 <h2>広告について</h2><p>当サイトは Amazon.co.jp アソシエイト、楽天アフィリエイト、もしもアフィリエイト（Yahoo!ショッピング等）のアフィリエイトプログラムに参加しています。リンク先での購入・契約により当サイトに紹介料が支払われることがありますが、ランキングの順位は収益によって変わりません。</p>
@@ -350,11 +365,13 @@ ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padd
 .btn:hover{background:#1a1a1a}
 .btn.amz{--bc:#ff9900}.btn.rkt{--bc:#ff4d4d}.btn.yho{--bc:#ff4d6d}
 .hero{padding:24px 0 8px}.hero h1{font-size:1.8rem}.hero-img{padding:20px 0 12px}.hero-img img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
-.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}@media(max-width:640px){.grid{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}.card h2{margin:0 0 8px;font-size:1.05rem;border:0;padding:0}.card h2 a{text-decoration:none}
-.card ol{list-style:none;padding:0;margin:0}.card li{padding:3px 0;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center}.card li span:last-child{overflow:hidden;text-overflow:ellipsis}.card .rk{display:inline-block;width:1.6em;font-size:1rem;margin-right:6px}
-.more{font-size:.85rem}.svcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}.svc{background:var(--card);border-radius:10px;padding:8px 12px;font-size:.85rem}
-.svc h3{margin:0 0 4px;font-size:.95rem}.svc ol{margin:0;padding-left:1.4em}.svc li{display:flex;align-items:center;white-space:nowrap;overflow:hidden}.svc li span{overflow:hidden;text-overflow:ellipsis}ul.links{columns:2;padding-left:1.2em}
+.card ol{list-style:none;padding:0;margin:0}.card li{padding:6px 0;font-size:.92rem;line-height:1.5;display:flex;align-items:center;gap:2px}.nm{flex:1;min-width:0;overflow-wrap:anywhere}.card .rk{display:inline-block;width:1.6em;font-size:1rem;margin-right:4px;flex:0 0 auto}.cvs{flex:0 0 auto}
+.more{display:inline-block;margin-top:8px;font-size:.85rem}.svcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.svc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:.88rem}
+.svc h3{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:1rem}.svc-ic{width:28px;height:28px;border-radius:7px}.svc ol{list-style:none;margin:0;padding:0}.svc li{display:flex;align-items:center;gap:2px;padding:5px 0;line-height:1.5}.svc .rk{display:inline-block;width:1.6em;font-size:.95rem;margin-right:4px;flex:0 0 auto}
+.find{margin:6px 0}.find a{font-size:1rem}.pn{display:flex;justify-content:space-between;font-size:.9rem;margin:12px 0}
+.yrow{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);align-items:baseline}.ydec{flex:0 0 5em;font-weight:700;color:var(--mu)}.ylinks{display:flex;flex-wrap:wrap;gap:6px 14px}
 footer{border-top:1px solid var(--line);padding:16px;font-size:.78rem;color:var(--mu);text-align:center}
 """)
 # GitHub Pages 用
