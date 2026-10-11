@@ -142,7 +142,7 @@ def is_adult(r):
 world = [r for r in world if not is_adult(r)]
 
 # ---------- 国内いま人気 ----------
-# 日本のアニメではない作品（JustWatch の制作国表記で混入するもの）
+# 日本のアニメではない作品（JustWatch の制作国表記で混入するもの）。Disney+ の欄だけは海外作品も表示する（2026-10-11 ユーザー指定）
 EXCLUDE = {"ザ・スーパーマリオギャラクシー・ムービー", "The Legend of Korra",
            "Miraculous: Les aventures de Ladybug et Chat Noir", "Golden Axe",
            "The Super Mario Bros. Movie", "Zootopia 2", "Spider-Man"}
@@ -271,7 +271,7 @@ def mini(items, href, title):
 svc_cards = ""
 for s, rows in by_svc.items():
     svc_cards += '<div class="svc"><h3>%s</h3><ol>%s</ol></div>' % (
-        esc(s), "".join('<li>%s<span>%s</span></li>' % (img(cover(r.get("title_ja"), None, r["title"]), FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"]), "cvs"), esc(FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"]))) for r in [x for x in rows if x["title"] not in EXCLUDE and x.get("title_ja") not in EXCLUDE][:3]))
+        esc(s), "".join('<li>%s<span>%s</span></li>' % (img(cover(r.get("title_ja"), None, r["title"]), FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"]), "cvs"), esc(FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"]))) for r in [x for x in rows if s == "Disney+" or (x["title"] not in EXCLUDE and x.get("title_ja") not in EXCLUDE)][:3]))
 
 body = """<section class="hero"><h1>%s</h1>
 <p>世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>
