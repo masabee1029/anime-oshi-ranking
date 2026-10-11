@@ -40,10 +40,20 @@ def cover(title=None, anilist_id=None, *alts):
         u = COVERS["by_title"].get(norm(strip_extra(t)))
         if u: return u
     return None
+import hashlib
+TILE_COLORS = [("#ff6b9d", "#7a2e5c"), ("#ffd166", "#8a5a12"), ("#6ea8ff", "#25407a"), ("#7ee0b5", "#1f6b52"),
+               ("#c39bff", "#4e2f86"), ("#ff9f6b", "#8a3d1c"), ("#5fd4e8", "#1a5f6e"), ("#ff7a7a", "#7a2323")]
+def tile(title, cls):
+    """作品の絵の代わりに、題名の頭文字を使ったオリジナルの色タイル"""
+    t = re.sub(r"^[\s「『【（(\[]+", "", title or "?")
+    ch = t[:1] if t else "?"
+    h = int(hashlib.md5((title or "").encode("utf-8")).hexdigest(), 16) % len(TILE_COLORS)
+    c1, c2 = TILE_COLORS[h]
+    return '<div class="%s tile" style="background:linear-gradient(140deg,%s,%s)" aria-hidden="true"><span>%s</span></div>' % (cls, c1, c2, esc(ch))
 def img(url, title, cls="cv"):
-    if url:
+    if url and CFG.get("use_anilist_covers"):
         return '<img class="%s" src="%s" alt="%s" loading="lazy">' % (cls, esc(url), esc(title))
-    return '<div class="%s noimg"></div>' % cls
+    return tile(title, cls)
 
 def esc(s):
     return html.escape(str(s if s is not None else ""))
@@ -119,7 +129,7 @@ def page(title, body, desc="", path_depth=0):
 <header><a class="logo" href="%sindex.html">%s</a><nav>%s</nav></header>
 <main>%s</main>
 <footer>
-<p>データ: AniList / Netflix Tudum 公式Top10 / JustWatch / Filmarks をもとに集計。作品画像は AniList より。最終更新 %s</p>
+<p>データ: AniList / Netflix Tudum 公式Top10 / JustWatch / Filmarks をもとに集計。最終更新 %s</p>
 <p>本サイトはアフィリエイト広告（Amazonアソシエイト・楽天アフィリエイト等）を利用しています。</p>
 <p><a href="%sabout.html">このサイトについて</a> ・ <a href="%sprivacy.html">プライバシーポリシー</a> ・ <a href="%s">お問い合わせ</a></p>
 <p>&copy; %s</p>
@@ -491,6 +501,7 @@ h1{font-size:1.5rem;margin:16px 0 8px}h2{font-size:1.2rem;margin:40px 0 12px;bor
 ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--line)}
 .rk{flex:0 0 2.2em;font-size:1.4rem;font-weight:800;color:var(--ac);text-align:right}ol.rank li:nth-child(-n+3) .rk{color:#ffd166}
 .cv{flex:0 0 72px;width:72px;height:102px;object-fit:cover;border-radius:6px;background:#222}.noimg{background:linear-gradient(135deg,#262a33,#1a1d24)}
+.tile{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;text-shadow:0 1px 3px rgba(0,0,0,.35)}.cv.tile span{font-size:2rem}.cvs.tile{display:inline-flex}.cvs.tile span{font-size:.85rem}
 .cvs{display:inline-block;width:28px;height:40px;object-fit:cover;border-radius:3px;vertical-align:middle;margin-right:6px;background:#222}
 .body{flex:1;min-width:0}.tt{font-weight:700;font-size:1.05rem;line-height:1.5;margin-bottom:4px}.sub,.meta{font-size:.82rem;color:var(--mu);line-height:1.7}
 .shop{margin-top:12px}.shop-lb{display:block;font-size:.72rem;color:var(--mu);margin-bottom:4px;letter-spacing:.02em}

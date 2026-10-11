@@ -24,5 +24,7 @@
     "pc_id": "1925",
     "pl_id": "18502"
   },
-  "_moshimo_yahoo_comment": "もしも経由 Yahoo!ショッピングのどこでもリンク。SNS・YouTube への掲載は不可（サイトのみ）"
+  "_moshimo_yahoo_comment": "もしも経由 Yahoo!ショッピングのどこでもリンク。SNS・YouTube への掲載は不可（サイトのみ）",
+  "use_anilist_covers": false,
+  "_use_anilist_covers_comment": "AniList の作品画像を表示するか。著作権の整理（2026-10-12）により false。true に戻すと画像が出る"
 }
