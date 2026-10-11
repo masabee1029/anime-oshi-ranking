@@ -1,0 +1,18 @@
+
+:root{--bg:#0f1115;--card:#171a21;--tx:#e8e8ea;--mu:#9aa0ab;--ac:#ff6b9d;--line:#262a33}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.6}
+a{color:var(--ac)}header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--card)}
+.logo{font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--tx)}nav{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.9rem}nav a{text-decoration:none;color:var(--mu)}nav a:hover{color:var(--ac)}
+.pr{font-size:.75rem;color:var(--mu);margin:6px 16px}main{max-width:860px;margin:0 auto;padding:8px 16px 40px}
+h1{font-size:1.5rem;margin:16px 0 8px}h2{font-size:1.2rem;margin:28px 0 8px;border-left:4px solid var(--ac);padding-left:8px}.lead{color:var(--mu);font-size:.95rem}
+ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.rk{flex:0 0 2.2em;font-size:1.4rem;font-weight:800;color:var(--ac);text-align:right}ol.rank li:nth-child(-n+3) .rk{color:#ffd166}
+.body{flex:1;min-width:0}.tt{font-weight:700;font-size:1.05rem}.sub,.meta{font-size:.82rem;color:var(--mu)}
+.shop{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.btn{font-size:.78rem;padding:4px 10px;border-radius:999px;text-decoration:none;color:#fff;background:#444}
+.btn.amz{background:#e47911}.btn.rkt{background:#bf0000}.btn.unx{background:#1b1f66}.btn.dmm{background:#0a74da}
+.hero{padding:24px 0 8px}.hero h1{font-size:1.8rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}.card h2{margin:0 0 8px;font-size:1.05rem;border:0;padding:0}.card h2 a{text-decoration:none}
+.card ol{list-style:none;padding:0;margin:0}.card li{padding:3px 0;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card .rk{display:inline-block;width:1.6em;font-size:1rem;margin-right:6px}
+.more{font-size:.85rem}.svcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}.svc{background:var(--card);border-radius:10px;padding:8px 12px;font-size:.85rem}
+.svc h3{margin:0 0 4px;font-size:.95rem}.svc ol{margin:0;padding-left:1.4em}ul.links{columns:2;padding-left:1.2em}
+footer{border-top:1px solid var(--line);padding:16px;font-size:.78rem;color:var(--mu);text-align:center}
