@@ -63,9 +63,18 @@ def rakuten_link(title):
                 "/?pc=" + urllib.parse.quote(search, safe=""))
     return search
 
+def yahoo_link(title):
+    y = CFG.get("moshimo_yahoo")
+    if not y: return None
+    dest = "https://shopping.yahoo.co.jp/search?p=" + urllib.parse.quote(title)
+    return ("https://af.moshimo.com/af/c/click?a_id=%s&p_id=%s&pc_id=%s&pl_id=%s&url=%s" %
+            (y["a_id"], y["p_id"], y["pc_id"], y["pl_id"], urllib.parse.quote(dest, safe="")))
+
 def shop_buttons(title):
     btns = ['<a class="btn amz" href="%s" target="_blank" rel="nofollow sponsored noopener">Amazon</a>' % esc(amazon_link(title)),
             '<a class="btn rkt" href="%s" target="_blank" rel="nofollow sponsored noopener">楽天</a>' % esc(rakuten_link(title))]
+    if yahoo_link(title):
+        btns.append('<a class="btn yho" href="%s" target="_blank" rel="nofollow sponsored noopener">Yahoo!</a>' % esc(yahoo_link(title)))
     for sv in CFG.get("streaming", []):
         if sv.get("url"):
             btns.append('<a class="btn" style="background:%s" href="%s" target="_blank" rel="nofollow sponsored noopener">%s</a>' % (
@@ -296,7 +305,7 @@ write("about.html", page("このサイトについて", """<h1>このサイト�
 <li>Filmarks: 話題のアニメ・5段階評価</li></ul>
 <h2>運営者</h2><p>Masabee（YouTube: <a href="https://www.youtube.com/@Masabee1029" target="_blank" rel="noopener">@Masabee1029</a>）</p>
 <h2>お問い合わせ</h2><p>%s</p>
-<h2>広告について</h2><p>当サイトは Amazon.co.jp アソシエイト、楽天アフィリエイト、もしもアフィリエイト等のアフィリエイトプログラムに参加しています。リンク先での購入・契約により当サイトに紹介料が支払われることがありますが、ランキングの順位は収益によって変わりません。</p>
+<h2>広告について</h2><p>当サイトは Amazon.co.jp アソシエイト、楽天アフィリエイト、もしもアフィリエイト（Yahoo!ショッピング等）のアフィリエイトプログラムに参加しています。リンク先での購入・契約により当サイトに紹介料が支払われることがありますが、ランキングの順位は収益によって変わりません。</p>
 """ % (esc(CFG["site_name"]), ('<a href="%s">お問い合わせフォーム</a>' % esc(CFG["contact_url"])) if CFG.get("contact_url") else "準備中（YouTube チャンネルのコメント欄からご連絡ください）")))
 
 write("privacy.html", page("プライバシーポリシー", """<h1>プライバシーポリシー</h1>
@@ -322,7 +331,7 @@ ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:12px;padd
 .cvs{display:inline-block;width:28px;height:40px;object-fit:cover;border-radius:3px;vertical-align:middle;margin-right:6px;background:#222}
 .body{flex:1;min-width:0}.tt{font-weight:700;font-size:1.05rem}.sub,.meta{font-size:.82rem;color:var(--mu)}
 .shop{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.btn{font-size:.78rem;padding:4px 10px;border-radius:999px;text-decoration:none;color:#fff;background:#444}
-.btn.amz{background:#e47911}.btn.rkt{background:#bf0000}.btn.unx{background:#1b1f66}.btn.dmm{background:#0a74da}
+.btn.amz{background:#e47911}.btn.rkt{background:#bf0000}.btn.yho{background:#ff0033}.btn.unx{background:#1b1f66}.btn.dmm{background:#0a74da}
 .hero{padding:24px 0 8px}.hero h1{font-size:1.8rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}.card h2{margin:0 0 8px;font-size:1.05rem;border:0;padding:0}.card h2 a{text-decoration:none}
 .card ol{list-style:none;padding:0;margin:0}.card li{padding:3px 0;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center}.card li span:last-child{overflow:hidden;text-overflow:ellipsis}.card .rk{display:inline-block;width:1.6em;font-size:1rem;margin-right:6px}
