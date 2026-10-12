@@ -115,6 +115,11 @@ GA_TAG = ("""<script async src="https://www.googletagmanager.com/gtag/js?id=%s">
 """ % (GA_ID, GA_ID)) if re.fullmatch(r"G-[A-Z0-9]+", GA_ID) else ""
 
 BANNERS = set(f[:-4] for f in os.listdir(os.path.join(HERE, "assets", "banner")) if f.endswith(".jpg")) if os.path.isdir(os.path.join(HERE, "assets", "banner")) else set()
+# ページのサムネイルはユーザー提供の画像（2026-10-13）。今季アニメの画像は「2026年秋」と書かれているので、その季節の間だけ使う
+SEASON_BANNER_FOR = "2026年秋"
+_COUR = {1: "冬", 2: "冬", 3: "冬", 4: "春", 5: "春", 6: "春", 7: "夏", 8: "夏", 9: "夏", 10: "秋", 11: "秋", 12: "秋"}
+if "%d年%s" % (datetime.date.today().year, _COUR[datetime.date.today().month]) != SEASON_BANNER_FOR:
+    BANNERS.discard("season")
 def page(title, body, desc="", path_depth=0, banner=None, hero=False):
     """banner: ページ用サムネイル名（assets/banner/<name>.jpg）。hero=True でページ上部にも表示"""
     rel = "../" * path_depth
