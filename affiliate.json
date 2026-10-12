@@ -26,5 +26,7 @@
   },
   "_moshimo_yahoo_comment": "もしも経由 Yahoo!ショッピングのどこでもリンク。SNS・YouTube への掲載は不可（サイトのみ）",
   "use_anilist_covers": false,
-  "_use_anilist_covers_comment": "AniList の作品画像を表示するか。著作権の整理（2026-10-12）により false。true に戻すと画像が出る"
+  "_use_anilist_covers_comment": "AniList の作品画像を表示するか。著作権の整理（2026-10-12）により false。true に戻すと画像が出る",
+  "google_site_verification": "",
+  "_google_site_verification_comment": "Google Search Console の「HTML タグ」で出る content=\"...\" の中身を入れると全ページに確認タグが入る"
 }

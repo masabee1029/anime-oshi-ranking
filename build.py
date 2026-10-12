@@ -105,7 +105,7 @@ def shop_buttons(title):
     return html_
 
 # ---------- ページ枠 ----------
-NAV = [("index.html", "トップ"), ("now-japan.html", "国内いま人気"), ("now-world.html", "世界いま人気"),
+NAV = [("index.html", "トップ"), ("season.html", "今季アニメ"), ("now-japan.html", "国内いま人気"), ("now-world.html", "世界いま人気"),
        ("best-world.html", "歴代・世界評価"), ("netflix.html", "Netflix"), ("services.html", "配信サービス別"), ("country.html", "国別"), ("genre.html", "ジャンル別"),
        ("year.html", "年別")]
 
@@ -124,7 +124,7 @@ def page(title, body, desc="", path_depth=0):
 <meta property="og:title" content="%s">
 <meta property="og:image" content="%sthumbnail.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="%sstyle.css">
+%s<link rel="stylesheet" href="%sstyle.css">
 </head><body>
 <header><a class="logo" href="%sindex.html">%s</a><nav>%s</nav></header>
 <main>%s</main>
@@ -133,23 +133,107 @@ def page(title, body, desc="", path_depth=0):
 <p>本サイトはアフィリエイト広告（Amazonアソシエイト・楽天アフィリエイト等）を利用しています。</p>
 <p><a href="%sabout.html">このサイトについて</a> ・ <a href="%sprivacy.html">プライバシーポリシー</a> ・ <a href="%s">お問い合わせ</a></p>
 <p>&copy; %s</p>
-</footer></body></html>""" % (esc(title), esc(site), esc(desc or title), esc(site), esc(title), esc(CFG["site_url"]), rel, rel, esc(site).replace("推し", "<b>推し</b>", 1), nav, body, TODAY,
+</footer></body></html>""" % (esc(title), esc(site), esc(desc or title), esc(site), esc(title), esc(CFG["site_url"]),
+       ('<meta name="google-site-verification" content="%s">\n' % esc(CFG["google_site_verification"])) if CFG.get("google_site_verification") else "",
+       rel, rel, esc(site).replace("推し", "<b>推し</b>", 1), nav, body, TODAY,
                               rel, rel, esc(contact), esc(site))
 
+PAGES = collections.OrderedDict()
 def write(name, content):
-    p = os.path.join(OUT, name)
-    os.makedirs(os.path.dirname(p), exist_ok=True)
-    with open(p, "w", encoding="utf-8") as f:
-        f.write(content)
+    """いったん溜めて、最後に作品名を個別ページへのリンクに変えてから書き出す"""
+    PAGES[name] = content
 
-def rank_list(items, show_shop=True):
-    """items: list of dict(rank,title,sub,meta)"""
+def flush():
+    pat = re.compile("\x00L([0-9a-f]+)\x00(.*?)\x00E", re.S)
+    for name, content in PAGES.items():
+        rel = "../" * name.count("/")
+        def sub(m):
+            k, text = m.group(1), m.group(2)
+            if k in TITLE_PAGES:
+                return '<a class="tl" href="%sanime/%s.html">%s</a>' % (rel, k, text)
+            return text
+        content = pat.sub(sub, content)
+        p = os.path.join(OUT, name)
+        os.makedirs(os.path.dirname(p), exist_ok=True)
+        with open(p, "w", encoding="utf-8") as f:
+            f.write(content)
+
+# ---------- 作品の記録（個別ページ用） ----------
+def tkey(title):
+    return hashlib.md5(norm(FIX_TITLE.get(title, title)).encode("utf-8")).hexdigest()[:10]
+TITLE_DB = collections.OrderedDict()   # key -> {"title", "apps": [(label, rank, href, sub)], "alts": set()}
+TITLE_PAGES = set()
+def register(title, label, rank, href, sub="", alts=()):
+    k = tkey(title)
+    d = TITLE_DB.setdefault(k, {"title": title, "apps": [], "alts": set()})
+    if not any(a[0] == label for a in d["apps"]):
+        d["apps"].append((label, rank, href, sub))
+    d["alts"].update(a for a in alts if a)
+    TITLE_PAGES.add(k)
+def tlink(title):
+    """作品名に目印を付ける（個別ページがあれば最後にリンクになる）"""
+    return "\x00L%s\x00%s\x00E" % (tkey(title), esc(title))
+
+KAKUGEN = read_json(os.path.join(HERE, "kakugen.json")) if os.path.exists(os.path.join(HERE, "kakugen.json")) else {}
+WATCH = read_json(os.path.join(HERE, "watch.json")) if os.path.exists(os.path.join(HERE, "watch.json")) else {}
+def kg_norm(t):
+    t = re.sub(r"^(新劇場版|劇場版|映画)\s*", "", t or "")
+    t = re.sub(r"[「」『』【】〈〉\s　:：・!！?？\-－~～()（）]", "", t)
+    return t.lower()
+KG_KEYS = sorted(((kg_norm(k), v) for k, v in KAKUGEN.items() if not k.startswith("_")), key=lambda kv: -len(kv[0]))
+def kakugen(title):
+    """作品名の頭が一致する一番長いキーの格言（続編・劇場版にも当たる）"""
+    t = kg_norm(FIX_TITLE.get(title, title))
+    for k, v in KG_KEYS:
+        if len(k) >= 2 and t.startswith(k):
+            return v
+    return None
+
+# ---------- 順位の変動（前回の記録と比べる） ----------
+HIST = os.path.join(ST, "history")
+def prev_rows(fname, cur_date):
+    """cur_date より前で、fname を含む一番新しい記録を返す。無ければ None"""
+    if not os.path.isdir(HIST): return None
+    for d in sorted(os.listdir(HIST), reverse=True):
+        if d < cur_date and os.path.exists(os.path.join(HIST, d, fname)):
+            return read_csv(os.path.join(HIST, d, fname))
+    return None
+def prev_map(fname, cur_date, keyfn, filt=lambda r: True):
+    rows = prev_rows(fname, cur_date)
+    if rows is None: return None
+    out = {}
+    for r in rows:
+        if filt(r):
+            try: out.setdefault(keyfn(r), int(r["rank"]))
+            except (ValueError, KeyError): pass
+    return out
+def chg_badge(cur, key, prev):
+    if prev is None: return ""
+    if key not in prev: return '<span class="chg new">NEW</span>'
+    d = prev[key] - int(cur)
+    if d > 0: return '<span class="chg up">↑%d</span>' % d
+    if d < 0: return '<span class="chg dn">↓%d</span>' % -d
+    return '<span class="chg eq">→</span>'
+
+def watch_line(title):
+    w = WATCH.get(tkey(title))
+    if not w or not w.get("flatrate"): return ""
+    names = w["flatrate"]
+    return '<div class="watch">見放題%s: %s%s</div>' % ("（シリーズ）" if w.get("series") else "", esc("・".join(names[:4])), " ほか" if len(names) > 4 else "")
+
+def rank_list(items, show_shop=True, label=None, href=None):
+    """items: list of dict(rank,title,sub,meta,chg)。label を渡すと作品の個別ページに記録する"""
     rows = []
     for it in items:
-        rows.append('<li><span class="rk">%s</span>%s<div class="body"><div class="tt">%s</div>'
-                    '<div class="sub">%s</div>%s%s</div></li>' % (
-                        esc(it["rank"]), img(it.get("img"), it["title"]), esc(it["title"]), esc(it.get("sub", "")),
+        if label:
+            register(it["title"], label, it["rank"], href, it.get("sub", ""), it.get("alts", ()))
+        kg = kakugen(it["title"])
+        rows.append('<li><span class="rk">%s%s</span>%s<div class="body"><div class="tt">%s</div>'
+                    '<div class="sub">%s</div>%s%s%s%s</div></li>' % (
+                        esc(it["rank"]), it.get("chg", ""), img(it.get("img"), it["title"]), tlink(it["title"]), esc(it.get("sub", "")),
                         ('<div class="meta">%s</div>' % esc(it["meta"])) if it.get("meta") else "",
+                        ('<div class="kg">%s</div>' % esc(kg)) if kg else "",
+                        watch_line(it["title"]),
                         shop_buttons(it["title"]) if show_shop else ""))
     return '<ol class="rank">%s</ol>' % "".join(rows)
 
@@ -173,6 +257,13 @@ nf_c = [r for r in read_csv(os.path.join(ST, "netflix_anime_ranking_by_country.c
 flm = read_csv(os.path.join(ST, "filmarks_trend_anime.csv"))
 svc = read_csv(os.path.join(ST, "world_by_service_ranking.csv"))
 snap = now_w[0]["snapshot_date"] if now_w else TODAY
+PREV_J = prev_map("japan_allservices_ranking.csv", snap, lambda r: r["title"])
+PREV_W = prev_map("world_allservices_ranking.csv", snap, lambda r: r["title"])
+PREV_F = prev_map("filmarks_trend_anime.csv", snap, lambda r: r["title"])
+PREV_NG = prev_map("netflix_anime_ranking_global.csv", snap, lambda r: r["show_title"])
+PREV_NJ = prev_map("netflix_anime_ranking_by_country.csv", snap, lambda r: r["show_title"], lambda r: r["country"] == "JP")
+PREV_SVC = prev_map("world_by_service_ranking.csv", snap, lambda r: (r["service"], r["title"]))
+PREV_JW = prev_map("justwatch_anime_by_country_service.csv", snap, lambda r: (r["country"], r["service"], r["original_title"] or r["title"]))
 
 def is_adult(r):
     return "Hentai" in (r.get("genres") or "")
@@ -185,11 +276,11 @@ EXCLUDE = {"ザ・スーパーマリオギャラクシー・ムービー", "The 
            "The Super Mario Bros. Movie", "Zootopia 2", "Spider-Man",
            "The Super Mario Galaxy Movie", "スーパーマン", "Superman", "ThunderCats", "The Secret Saturdays",
            "The Bad Guys 2", "Trolls Band Together", "Sonic the Hedgehog 3", "The Boss Baby: Family Business",
-           "Kung Fu Panda 4", "Il était une fois... la vie"}
+           "Kung Fu Panda 4", "Il était une fois... la vie", "Transformers"}
 # 表記ゆれの修正
 FIX_TITLE = {"そうそうのフリーレン": "葬送のフリーレン"}
 
-def now_items(rows, n=30):
+def now_items(rows, n=30, prev=None):
     out = []
     for r in rows:
         if len(out) >= n: break
@@ -206,7 +297,9 @@ def now_items(rows, n=30):
             try: sub.append("Netflix累計 %s万回再生" % format(int(float(r["netflix_views"])) // 10000, ","))
             except ValueError: pass
         out.append({"rank": len(out) + 1, "title": t, "sub": " / ".join(sub),
-                    "img": cover(t, None, r.get("title"), r.get("title_ja"), r.get("original_title"))})
+                    "img": cover(t, None, r.get("title"), r.get("title_ja"), r.get("original_title")),
+                    "chg": chg_badge(r["rank"], r.get("title"), prev),
+                    "alts": (r.get("title"), r.get("title_ja"), r.get("original_title"))})
     return out
 
 body = """<h1>国内いま人気のアニメ TOP30（全配信サービス合算）</h1>
@@ -214,13 +307,14 @@ body = """<h1>国内いま人気のアニメ TOP30（全配信サービス合算
 %s
 <h2>Filmarks で話題のアニメ</h2>
 <p class="lead">レビューサイト Filmarks の「話題のアニメ」。数字は5点満点の平均評価。</p>
-%s""" % (esc(snap), rank_list(now_items(now_j)),
-         rank_list([{"rank": r["rank"], "title": r["title"], "sub": "評価 %s / 5.0" % r["score_5"], "img": cover(r["title"])} for r in flm[:20]]))
+%s""" % (esc(snap), rank_list(now_items(now_j, prev=PREV_J), label="国内いま人気（全配信合算）", href="now-japan.html"),
+         rank_list([{"rank": r["rank"], "title": r["title"], "sub": "評価 %s / 5.0" % r["score_5"], "img": cover(r["title"]),
+                     "chg": chg_badge(r["rank"], r["title"], PREV_F)} for r in flm[:20]], label="Filmarks 話題のアニメ", href="now-japan.html"))
 write("now-japan.html", page("国内いま人気のアニメ TOP30", body, "日本の配信サービス全体で今月人気のアニメランキング"))
 
 body = """<h1>世界いま人気のアニメ TOP30（27か国・全配信合算）</h1>
 <p class="lead">世界27か国の Netflix・Prime Video・Disney+・Crunchyroll・Hulu・HBO Max・Apple TV+ のランキングを合算（集計日 %s）。</p>
-%s""" % (esc(snap), rank_list(now_items(now_w)))
+%s""" % (esc(snap), rank_list(now_items(now_w, prev=PREV_W), label="世界いま人気（27か国合算）", href="now-world.html"))
 write("now-world.html", page("世界いま人気のアニメ TOP30", body, "世界27か国の配信ランキングを合算した今月のアニメ人気TOP30"))
 
 # ---------- 歴代・世界評価 ----------
@@ -230,23 +324,25 @@ def anilist_items(rows, n=100):
         sub = "評価 %s点 / %s / %s年 %s" % (r.get("average_score") or r.get("mean_score"), r.get("format"),
                                          r.get("season_year"), r.get("studio") or "")
         out.append({"rank": r.get("rank") or i, "title": jp_title(r), "sub": sub, "meta": genres_ja(r.get("genres")),
-                    "img": cover(jp_title(r), r.get("anilist_id"), r.get("title_romaji"), r.get("title_english"))})
+                    "img": cover(jp_title(r), r.get("anilist_id"), r.get("title_romaji"), r.get("title_english")),
+                    "alts": (r.get("title_romaji"), r.get("title_english"))})
     return out
 
 body = """<h1>歴代アニメ 世界評価ランキング TOP100</h1>
 <p class="lead">世界最大級のアニメデータベース AniList の平均スコア順。海外ファンからの評価の高さを示します。</p>
-%s""" % rank_list(anilist_items(world))
+%s""" % rank_list(anilist_items(world), label="歴代・世界評価", href="best-world.html")
 write("best-world.html", page("歴代アニメ 世界評価ランキング TOP100", body, "AniList 平均スコアによる歴代アニメ世界評価TOP100"))
 
 # ---------- Netflix ----------
-def nf_items(rows, n=30, views=True):
+def nf_items(rows, n=30, views=True, prev=None):
     out = []
     for r in rows[:n]:
         sub = ["TOP10入り %s週" % r["weeks"], "最高 %s位" % r["best"]]
         if views and r.get("views"):
             sub.append("累計 %s万回再生" % format(int(float(r["views"])) // 10000, ","))
         t = r.get("anime_title_ja") or r["show_title"]
-        out.append({"rank": r["rank"], "title": t, "sub": " / ".join(sub), "img": cover(t, None, r["show_title"])})
+        out.append({"rank": r["rank"], "title": t, "sub": " / ".join(sub), "img": cover(t, None, r["show_title"]),
+                    "chg": chg_badge(r["rank"], r["show_title"], prev), "alts": (r["show_title"],)})
     return out
 
 body = """<h1>Netflix アニメランキング</h1>
@@ -255,7 +351,8 @@ body = """<h1>Netflix アニメランキング</h1>
 %s
 <h2>日本 TOP30</h2>
 <p class="lead">日本の Netflix 週間TOP10に入った週数の多い順。</p>
-%s""" % (rank_list(nf_items(nf_g)), rank_list(nf_items(nf_c, views=False)))
+%s""" % (rank_list(nf_items(nf_g, prev=PREV_NG), label="Netflix 世界", href="netflix.html"),
+         rank_list(nf_items(nf_c, views=False, prev=PREV_NJ), label="Netflix 日本", href="netflix.html"))
 write("netflix.html", page("Netflix アニメランキング 世界・日本", body, "Netflix公式Top10に基づくアニメの世界・日本ランキング"))
 
 
@@ -285,6 +382,7 @@ def jw_title(r):
     return FIX_TITLE.get(t, t)
 
 def jw_items(rows, n=30, allow_foreign=False):
+    # 変動は raw の順位で比べる
     out = []
     for r in sorted(rows, key=lambda r: int(r["rank"])):
         if len(out) >= n: break
@@ -292,14 +390,17 @@ def jw_items(rows, n=30, allow_foreign=False):
         if not allow_foreign and (t in EXCLUDE or r["title"] in EXCLUDE or r["original_title"] in EXCLUDE): continue
         sub = ("%s年" % r["year"]) if r.get("year") else ""
         out.append({"rank": len(out) + 1, "title": t, "sub": sub,
-                    "img": cover(t, None, r["original_title"], r["title"], JA_MAP.get(r["original_title"] or r["title"]))})
+                    "img": cover(t, None, r["original_title"], r["title"], JA_MAP.get(r["original_title"] or r["title"])),
+                    "chg": chg_badge(r["rank"], (r["country"], r["service"], r["original_title"] or r["title"]), PREV_JW),
+                    "alts": (r["original_title"], r["title"])})
     return out
 
-def simple_items(rows, n=30):
+def simple_items(rows, n=30, fname=None):
+    prev = prev_map(fname, rows[0]["snapshot_date"], lambda r: r["title"]) if (fname and rows) else None
     out = []
     for r in rows[:n]:
         t = FIX_TITLE.get(r["title"], r["title"])
-        out.append({"rank": len(out) + 1, "title": t, "sub": "", "img": cover(t)})
+        out.append({"rank": len(out) + 1, "title": t, "sub": "", "img": cover(t), "chg": chg_badge(r["rank"], r["title"], prev)})
     return out
 
 # 世界（27か国合算）のサービス
@@ -317,7 +418,7 @@ def jp_rows(how):
     if kind == "jw":
         return jw_items([r for r in jw if r["country"] == "JP" and r["service"] == key], 30, key == "Disney+")
     path = os.path.join(ST, "%s_anime_ranking.csv" % key)
-    return simple_items(read_csv(path)) if os.path.exists(path) else []
+    return simple_items(read_csv(path), fname="%s_anime_ranking.csv" % key) if os.path.exists(path) else []
 
 SVC_ICON_FILE = {"nfx": "nfx", "amp": "amp", "dnp": "dnp", "cru": "cru", "hlu": "hlu", "mxx": "mxx",
                  "unext": "unext", "abema": "abema", "tver": "tver", "fod": "fod"}
@@ -331,13 +432,14 @@ for sid, name in WORLD_SVC:
         if sid != "dnp" and (t in EXCLUDE or r["title"] in EXCLUDE): continue
         if len(world_list) >= 30: break
         world_list.append({"rank": len(world_list) + 1, "title": t,
-                           "sub": "%s か国でTOP30入り" % r["countries_in_top30"], "img": cover(r.get("title_ja"), None, r["title"])})
+                           "sub": "%s か国でTOP30入り" % r["countries_in_top30"], "img": cover(r.get("title_ja"), None, r["title"]),
+                           "chg": chg_badge(r["rank"], (name, r["title"]), PREV_SVC), "alts": (r["title"],)})
     body = "<h1>%s アニメランキング</h1>" % esc(name)
     body += "<h2>世界 TOP%d（27か国合算）</h2><p class=\"lead\">各国の%sアニメランキングを点数化（1位=30点…30位=1点）して合計。</p>%s" % (
-        len(world_list), esc(name), rank_list(world_list))
+        len(world_list), esc(name), rank_list(world_list, label="%s 世界" % name, href="service/%s.html" % sid))
     if sid in jp_map:
         jl = jp_rows(jp_map[sid][1])
-        if jl: body += "<h2>日本 TOP%d</h2>%s" % (len(jl), rank_list(jl))
+        if jl: body += "<h2>日本 TOP%d</h2>%s" % (len(jl), rank_list(jl, label="%s 日本" % name, href="service/%s.html" % sid))
     write("service/%s.html" % sid, page("%s アニメランキング 世界・日本" % name, body, "%sで人気のアニメランキング（世界27か国合算・日本）" % name, 1))
     hub_world.append((sid, name, world_list[:3]))
 for sid, name, how in JP_SVC:
@@ -345,7 +447,7 @@ for sid, name, how in JP_SVC:
         hub_jp.append((sid, name, jp_rows(how)[:3])); continue
     jl = jp_rows(how)
     if not jl: continue
-    body = "<h1>%s アニメランキング</h1><h2>日本 TOP%d</h2>%s" % (esc(name), len(jl), rank_list(jl))
+    body = "<h1>%s アニメランキング</h1><h2>日本 TOP%d</h2>%s" % (esc(name), len(jl), rank_list(jl, label="%s 日本" % name, href="service/%s.html" % sid))
     write("service/%s.html" % sid, page("%s アニメランキング" % name, body, "%sで人気のアニメランキング" % name, 1))
     hub_jp.append((sid, name, jl[:3]))
 
@@ -370,7 +472,7 @@ for region, codes in REGION:
         items = jw_items(rows, 30)
         cname = COUNTRY_JA.get(cc, cc)
         body = ("<h1>%sで人気のアニメ TOP%d（全配信サービス合計）</h1><p class=\"lead\">%sの配信サービス全体で、いま人気のアニメ（JustWatch 集計、%s）。</p>%s" % (
-            esc(cname), len(items), esc(cname), esc(snap), rank_list(items)))
+            esc(cname), len(items), esc(cname), esc(snap), rank_list(items, label="%s（全配信合計）" % cname, href="country/%s.html" % cc.lower())))
         write("country/%s.html" % cc.lower(), page("%sで人気のアニメランキング" % cname, body, "%sの配信サービス全体で人気のアニメTOP%d" % (cname, len(items)), 1))
         lis = "".join('<li><span class="rk">%d</span>%s<span class="nm">%s</span></li>' % (i["rank"], img(i.get("img"), i["title"], "cvs"), esc(i["title"])) for i in items[:3])
         cards.append('<a class="svc svc-link" href="country/%s.html"><h3>%s</h3><ol>%s</ol><span class="more">TOP30を見る →</span></a>' % (cc.lower(), esc(cname), lis))
@@ -427,9 +529,43 @@ ydiv = "".join('<div class="yrow"><span class="ydec">%d年代</span><div class="
 write("year.html", page("年別おすすめアニメ", "<h1>年別おすすめアニメ</h1><p class=\"lead\">1970年から今年まで、その年に放送・公開されたアニメを世界評価順に紹介します。</p>%s" % ydiv,
                         "1970年から今年まで、年ごとのおすすめアニメランキング"))
 
+# ---------- 今季アニメ特集 ----------
+COUR = {1: "冬", 2: "冬", 3: "冬", 4: "春", 5: "春", 6: "春", 7: "夏", 8: "夏", 9: "夏", 10: "秋", 11: "秋", 12: "秋"}
+_t = datetime.date.today()
+SEASON_Y, SEASON_C = _t.year, COUR[_t.month]
+def season_rows(y, c):
+    rows = [r for r in seasonal if r["year"] == str(y) and r["cour"] == c and not is_adult(r)]
+    return sorted(rows, key=lambda r: int(r["rank_popularity"] or 999))
+cur_rows = season_rows(SEASON_Y, SEASON_C)
+if not cur_rows:   # データがまだ無ければ一番新しいクール
+    last = seasonal[-1]; SEASON_Y, SEASON_C = int(last["year"]), last["cour"]; cur_rows = season_rows(SEASON_Y, SEASON_C)
+flm_set = {norm(strip_extra(r["title"])) for r in flm}
+def season_items(rows, n=30):
+    out = []
+    for r in rows[:n]:
+        t = jp_title(r)
+        sub = ["%s" % (r.get("format") or "")]
+        if r.get("studio"): sub.append(r["studio"])
+        if r.get("average_score"): sub.append("評価 %s点" % r["average_score"])
+        hot = norm(strip_extra(t)) in flm_set
+        out.append({"rank": len(out) + 1, "title": t, "sub": " / ".join(x for x in sub if x) + (" / Filmarks で話題" if hot else ""),
+                    "meta": genres_ja(r.get("genres")), "img": cover(t, r.get("anilist_id")),
+                    "alts": (r.get("title_romaji"), r.get("title_english"))})
+    return out
+season_label = "%d年%sアニメ" % (SEASON_Y, SEASON_C)
+prev_c = {"冬": ("秋", -1), "春": ("冬", 0), "夏": ("春", 0), "秋": ("夏", 0)}[SEASON_C]
+prev_rows_s = season_rows(SEASON_Y + prev_c[1], prev_c[0])
+body = ("<h1>%s 人気ランキング TOP30</h1><p class=\"lead\">今期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。"
+        "「Filmarks で話題」は国内のレビューサイトでも話題になっている作品です。</p>%s" % (
+            esc(season_label), SEASON_Y, SEASON_C, rank_list(season_items(cur_rows), label=season_label, href="season.html")))
+if prev_rows_s:
+    body += "<h2>前期（%d年%s）の人気 TOP10</h2>%s" % (SEASON_Y + prev_c[1], prev_c[0],
+             rank_list(season_items(prev_rows_s, 10), label="%d年%sアニメ" % (SEASON_Y + prev_c[1], prev_c[0]), href="season.html"))
+write("season.html", page("%s 人気ランキング" % season_label, body, "%sの人気ランキング。今期いちばん注目されているアニメがわかる" % season_label))
+
 # ---------- トップ ----------
 def mini(items, href, title):
-    lis = "".join('<li><span class="rk">%s</span>%s<span class="nm">%s</span></li>' % (esc(i["rank"]), img(i.get("img"), i["title"], "cvs"), esc(i["title"])) for i in items[:5])
+    lis = "".join('<li><span class="rk">%s</span>%s<span class="nm">%s%s</span></li>' % (esc(i["rank"]), img(i.get("img"), i["title"], "cvs"), tlink(i["title"]), i.get("chg", "")) for i in items[:5])
     return '<section class="card"><h2><a href="%s">%s</a></h2><ol>%s</ol><a class="more" href="%s">続きを見る →</a></section>' % (href, esc(title), lis, href)
 
 SVC_ICON = {"Netflix": "nfx", "Amazon Prime Video": "amp", "Disney+": "dnp", "Crunchyroll": "cru",
@@ -447,7 +583,7 @@ for s, rows in by_svc.items():
     def nm(r): return FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"])
     svc_cards += '<div class="svc"><h3>%s</h3><ol>%s</ol></div>' % (
         head, "".join('<li><span class="rk">%d</span>%s<span class="nm">%s</span></li>' % (
-            n, img(cover(r.get("title_ja"), None, r["title"]), nm(r), "cvs"), esc(nm(r))) for n, r in enumerate(picks, 1)))
+            n, img(cover(r.get("title_ja"), None, r["title"]), nm(r), "cvs"), tlink(nm(r))) for n, r in enumerate(picks, 1)))
 
 HERO_IMG = os.path.exists(os.path.join(OUT, "thumbnail.jpg"))
 body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
@@ -455,16 +591,71 @@ body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
 <p class="vh">世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""" if HERO_IMG else
 """<section class="hero"><h1>%s</h1>
 <p>世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""") + """
-<div class="grid">%s%s%s%s</div>
+<div class="grid">%s%s%s%s%s%s</div>
 <h2>配信サービス別 世界TOP5 <a class="h2more" href="services.html">すべてのサービス →</a></h2><div class="svcgrid">%s</div>
-<h2>探す</h2><p class="find"><a href="genre.html">ジャンル別のおすすめ →</a></p><p class="find"><a href="year.html">年別のおすすめ（1970年〜）→</a></p><p class="find"><a href="services.html">配信サービス別ランキング（13サービス）→</a></p><p class="find"><a href="country.html">国別ランキング（27か国）→</a></p>
+<h2>探す</h2><p class="find"><a href="season.html">%s 人気ランキング →</a></p><p class="find"><a href="genre.html">ジャンル別のおすすめ →</a></p><p class="find"><a href="year.html">年別のおすすめ（1970年〜）→</a></p><p class="find"><a href="services.html">配信サービス別ランキング（13サービス）→</a></p><p class="find"><a href="country.html">国別ランキング（27か国）→</a></p>
 """) % (esc(CFG["site_name"]),
-       mini(now_items(now_j), "now-japan.html", "国内いま人気"),
-       mini(now_items(now_w), "now-world.html", "世界いま人気"),
+       mini(season_items(cur_rows), "season.html", season_label),
+       mini(now_items(now_j, prev=PREV_J), "now-japan.html", "国内いま人気"),
+       mini(now_items(now_w, prev=PREV_W), "now-world.html", "世界いま人気"),
        mini(nf_items(nf_g), "netflix.html", "Netflix 世界"),
        mini(anilist_items(world), "best-world.html", "歴代・世界評価"),
-       svc_cards)
+       mini([{"rank": r["rank"], "title": r["title"], "chg": chg_badge(r["rank"], r["title"], PREV_F)} for r in flm], "now-japan.html", "Filmarks 話題"),
+       svc_cards, esc(season_label))
 write("index.html", page("トップ", body, "配信ランキングと歴代評価でえらぶ、いま観るべきおすすめアニメ"))
+
+# ---------- 作品の個別ページ ----------
+META = {}
+for r in world + read_json(os.path.join(DATA, "japan_top.json")) + seasonal:
+    for k in ("title_native", "title_romaji", "title_english"):
+        if r.get(k): META.setdefault(norm(r[k]), r)
+def meta_for(d):
+    for t in [d["title"]] + sorted(d["alts"]):
+        m = META.get(norm(t)) or META.get(norm(strip_extra(t)))
+        if m: return m
+    return None
+SVC_FROM_RANK = {"ABEMA 日本": "ABEMA", "DMM TV 日本": "DMM TV", "TVer 日本": "TVer", "バンダイチャンネル 日本": "バンダイチャンネル"}
+index_out = []
+for k, d in TITLE_DB.items():
+    t = d["title"]; m = meta_for(d)
+    year = (m.get("season_year") or m.get("year")) if m else ""
+    index_out.append({"key": k, "title": t, "alts": sorted(d["alts"]), "year": year})
+    info = []
+    if m:
+        if year: info.append(("放送・公開", "%s年" % year))
+        if m.get("format"): info.append(("形式", m["format"]))
+        if m.get("episodes") and m.get("format") != "MOVIE": info.append(("話数", "%s話" % m["episodes"]))
+        if m.get("genres"): info.append(("ジャンル", genres_ja(m["genres"])))
+        if m.get("studio"): info.append(("制作", m["studio"]))
+        if m.get("average_score"): info.append(("世界評価", "%s点（AniList）" % m["average_score"]))
+    kg = kakugen(t)
+    w = WATCH.get(k) or {}
+    extra = [v for lab, v in SVC_FROM_RANK.items() if any(a[0] == lab for a in d["apps"])]
+    flat = list(dict.fromkeys((w.get("flatrate") or []) + extra))
+    rent = w.get("rent_buy") or []
+    free = w.get("free") or []
+    watch = ""
+    if flat or rent or free:
+        rows_ = []
+        if flat: rows_.append('<div class="wrow"><span class="wlb">見放題</span>%s</div>' % "".join('<span class="chip">%s</span>' % esc(x) for x in flat))
+        if free: rows_.append('<div class="wrow"><span class="wlb">無料</span>%s</div>' % "".join('<span class="chip">%s</span>' % esc(x) for x in free))
+        if rent: rows_.append('<div class="wrow"><span class="wlb">レンタル・購入</span>%s</div>' % "".join('<span class="chip">%s</span>' % esc(x) for x in rent))
+        series_note = ("「%s」シリーズ全体の配信状況です。この作品（続編・劇場版）が含まれるかは各サービスで確認してください。" % esc(w["series"])) if w.get("series") else ""
+        watch = ('<h2>どこで観られる？（日本）</h2>%s<p class="note">%sJustWatch と各サービスのランキングから集計（%s 時点）。配信状況は変わることがあるので、最新は各サービスで確認してください。</p>'
+                 % ("".join(rows_), series_note, esc(w.get("date") or snap)))
+    else:
+        watch = '<h2>どこで観られる？（日本）</h2><p class="note">日本の配信状況はまだ確認できていません。</p>'
+    apps = "".join('<tr><td><a href="../%s">%s</a></td><td class="r">%s位</td><td class="s">%s</td></tr>' % (esc(h), esc(lab), esc(rk), esc(sb))
+                   for lab, rk, h, sb in sorted(d["apps"], key=lambda a: int(a[1]) if str(a[1]).isdigit() else 99))
+    body = ('<p class="crumb"><a href="../index.html">トップ</a> › 作品</p><h1 class="wt">%s</h1>' % esc(t) +
+            (('<blockquote class="kgq"><span class="kgl">ひとこと格言（当サイトオリジナル）</span>%s</blockquote>' % esc(kg)) if kg else "") +
+            (('<table class="info">%s</table>' % "".join('<tr><th>%s</th><td>%s</td></tr>' % (esc(a), esc(b)) for a, b in info)) if info else "") +
+            watch +
+            '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps +
+            '<h2>Blu-ray・原作・グッズ</h2>' + shop_buttons(t))
+    desc = "%sはどこで観られる？配信サービス・ランキング順位・%sまとめ" % (t, "格言・" if kg else "")
+    write("anime/%s.html" % k, page("%sはどこで観られる？配信・ランキングまとめ" % t, body, desc, 1))
+json.dump(index_out, open(os.path.join(HERE, "titles_index.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 # ---------- 固定ページ ----------
 write("about.html", page("このサイトについて", """<h1>このサイトについて</h1>
@@ -519,7 +710,24 @@ ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padd
 .find{margin:6px 0}.find a{font-size:1rem}.pn{display:flex;justify-content:space-between;font-size:.9rem;margin:12px 0}
 .yrow{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);align-items:baseline}.ydec{flex:0 0 5em;font-weight:700;color:var(--mu)}.ylinks{display:flex;flex-wrap:wrap;gap:6px 14px}
 footer{border-top:1px solid var(--line);padding:16px;font-size:.78rem;color:var(--mu);text-align:center}
+a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hover{color:var(--ac)}
+.chg{display:block;font-size:.65rem;font-weight:700;line-height:1.2;margin-top:2px}.card .chg,.svc .chg{display:inline;margin-left:6px}.chg.up{color:#5fd38d}.chg.dn{color:#8a8f99}.chg.eq{color:#8a8f99}.chg.new{color:#ffd166}
+.kg{font-size:.85rem;color:#ffd9e6;margin:4px 0 2px;padding-left:10px;border-left:2px solid var(--ac)}
+.watch{font-size:.8rem;color:#bfe6cf;margin-top:4px}
+.crumb{font-size:.8rem;color:var(--mu);margin:12px 0 0}.wt{font-size:1.7rem;line-height:1.4}
+.kgq{margin:16px 0 24px;padding:16px 20px;background:var(--card);border-left:4px solid var(--ac);border-radius:8px;font-size:1.15rem;font-weight:700}.kgl{display:block;font-size:.72rem;font-weight:400;color:var(--mu);margin-bottom:4px}
+.info{border-collapse:collapse;width:100%;font-size:.9rem}.info th{text-align:left;color:var(--mu);font-weight:400;width:7em;padding:6px 0;vertical-align:top}.info td{padding:6px 0}.info tr{border-bottom:1px solid var(--line)}
+.wrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.wlb{flex:0 0 8em;font-size:.8rem;color:var(--mu)}.chip{font-size:.82rem;padding:3px 12px;border-radius:999px;border:1px solid #3a8f63;color:#bfe6cf}
+.note{font-size:.75rem;color:var(--mu)}
+.apps{border-collapse:collapse;width:100%;font-size:.9rem}.apps td{padding:7px 4px;border-bottom:1px solid var(--line)}.apps .r{font-weight:700;color:var(--ac);white-space:nowrap}.apps .s{color:var(--mu);font-size:.8rem}
 """)
 # GitHub Pages 用
 write(".nojekyll", "")
+# ---------- サイトマップ・robots ----------
+base = CFG["site_url"].rstrip("/") + "/"
+urls = [n for n in PAGES if n.endswith(".html")]
+write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+      "".join("<url><loc>%s%s</loc><lastmod>%s</lastmod></url>\n" % (base, "" if n == "index.html" else n, TODAY) for n in urls) + "</urlset>\n")
+write("robots.txt", "User-agent: *\nAllow: /\nSitemap: %ssitemap.xml\n" % base)
+flush()
 print("generated", len([f for _, _, fs in os.walk(OUT) for f in fs]), "files in docs/")
