@@ -29,6 +29,6 @@
   "_use_anilist_covers_comment": "AniList の作品画像を表示するか。著作権の整理（2026-10-12）により false。true に戻すと画像が出る",
   "google_site_verification": "",
   "_google_site_verification_comment": "Google Search Console の「HTML タグ」で出る content=\"...\" の中身を入れると全ページに確認タグが入る",
-  "ga_measurement_id": "",
+  "ga_measurement_id": "G-EHWF25C1RB",
   "_ga_measurement_id_comment": "Google アナリティクス 4 の測定 ID（G-XXXXXXX）。入れると全ページに計測タグが入り、プライバシーポリシーも「利用しています」に変わる"
 }
