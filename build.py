@@ -105,7 +105,7 @@ def shop_buttons(title):
     return html_
 
 # ---------- ページ枠 ----------
-NAV = [("index.html", "トップ"), ("season.html", "今季アニメ"), ("now-japan.html", "国内いま人気"), ("now-world.html", "世界いま人気"),
+NAV = [("index.html", "トップ"), ("season.html", "今季アニメ"), ("prev-season.html", "前季アニメ"), ("seasons.html", "シーズン別"), ("now-japan.html", "国内いま人気"), ("now-world.html", "世界いま人気"),
        ("best-world.html", "歴代・世界評価"), ("netflix.html", "Netflix"), ("services.html", "配信サービス別"), ("country.html", "国別"), ("genre.html", "ジャンル別"),
        ("year.html", "年別")]
 
@@ -546,6 +546,10 @@ ydiv = "".join('<div class="yrow"><span class="ydec">%d年代</span><div class="
 write("year.html", page("年別おすすめアニメ", "<h1>年別おすすめアニメ</h1><p class=\"lead\">1970年から今年まで、その年に放送・公開されたアニメを世界評価順に紹介します。</p>%s" % ydiv,
                         "1970年から今年まで、年ごとのおすすめアニメランキング", banner="year", hero=True))
 
+def mini(items, href, title):
+    lis = "".join('<li><span class="rk">%s</span>%s<span class="nm">%s%s</span></li>' % (esc(i["rank"]), img(i.get("img"), i["title"], "cvs"), tlink(i["title"]), i.get("chg", "")) for i in items[:5])
+    return '<section class="card"><h2><a href="%s">%s</a></h2><ol>%s</ol><a class="more" href="%s">続きを見る →</a></section>' % (href, esc(title), lis, href)
+
 # ---------- 今季アニメ特集 ----------
 COUR = {1: "冬", 2: "冬", 3: "冬", 4: "春", 5: "春", 6: "春", 7: "夏", 8: "夏", 9: "夏", 10: "秋", 11: "秋", 12: "秋"}
 _t = datetime.date.today()
@@ -572,7 +576,7 @@ def season_items(rows, n=30, hot_flag=True):
 season_label = "%d年%sアニメ" % (SEASON_Y, SEASON_C)
 COUR_EN = {"冬": "winter", "春": "spring", "夏": "summer", "秋": "fall"}
 COUR_ORDER = ["冬", "春", "夏", "秋"]
-ARCHIVE_FROM = (2026, "秋")   # このシーズンから、季節ごとの保存ページを作る（2026-10-13 ユーザー指定）
+ARCHIVE_FROM = (1970, "冬")   # データのある全シーズンの保存ページを作る（2026-10-13 ユーザー指定でまとめページを追加）
 def season_slug(y, c): return "%d-%s" % (y, COUR_EN[c])
 def seasons_since(start, end):
     y, c = start; out = []
@@ -583,42 +587,63 @@ def seasons_since(start, end):
         c = COUR_ORDER[i]
     return out
 ARCHIVE = [sc for sc in seasons_since(ARCHIVE_FROM, (SEASON_Y, SEASON_C)) if season_rows(*sc)]
+_pc = {"冬": ("秋", -1), "春": ("冬", 0), "夏": ("春", 0), "秋": ("夏", 0)}[SEASON_C]
+PREV_Y, PREV_C = SEASON_Y + _pc[1], _pc[0]
+prev_label = "%d年%sアニメ" % (PREV_Y, PREV_C)
 
-def season_body(y, c, current):
+def season_body(y, c, kind):
+    """kind: current（今季）/ prev（前季）/ archive（それより前）"""
     rows = season_rows(y, c)
     lab = "%d年%sアニメ" % (y, c)
-    lead = ("今期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。「Filmarks で話題」は国内のレビューサイトでも話題になっている作品です。" % (y, c)
-            if current else "%d年%sクールに放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べた記録です。" % (y, c))
-    b = "<h1>%s 人気ランキング TOP30</h1><p class=\"lead\">%s</p>%s" % (esc(lab), lead,
-         rank_list(season_items(rows, hot_flag=current), label=lab, href="season/%s.html" % season_slug(y, c)))
-    pc = {"冬": ("秋", -1), "春": ("冬", 0), "夏": ("春", 0), "秋": ("夏", 0)}[c]
-    prows = season_rows(y + pc[1], pc[0])
-    if current and prows:
-        b += "<h2>前期（%d年%s）の人気 TOP10</h2>%s" % (y + pc[1], pc[0],
-             rank_list(season_items(prows, 10, hot_flag=False), label="%d年%sアニメ" % (y + pc[1], pc[0]), href="season.html"))
-    return b
+    lead = {"current": "今期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。「Filmarks で話題」は国内のレビューサイトでも話題になっている作品です。" % (y, c),
+            "prev": "前期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。見逃した作品を配信でまとめて観るのにおすすめです。" % (y, c),
+            "archive": "%d年%sクールに放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べた記録です。" % (y, c)}[kind]
+    # 個別ページを作るのは今季・前季の作品だけ（過去の全シーズン分は数が多すぎるため）
+    label = lab if kind in ("current", "prev") else None
+    href = {"current": "season.html", "prev": "prev-season.html"}.get(kind)
+    return "<h1>%s 人気ランキング TOP30</h1><p class=\"lead\">%s</p>%s" % (esc(lab), lead,
+           rank_list(season_items(rows, hot_flag=(kind == "current")), label=label, href=href))
 
-def archive_links(rel, skip=None):
-    items = ['<a href="%sseason/%s.html">%d年%s</a>' % (rel, season_slug(y, c), y, c) for y, c in reversed(ARCHIVE) if (y, c) != skip]
-    return ('<h2>シーズンごとのランキング</h2><p class="ylinks">%s</p>' % "".join(items)) if items else ""
+def nav_cards(rel):
+    return ('<div class="snav"><a class="snav-c" href="%sseason.html"><span>今季</span>%s</a><a class="snav-c" href="%sprev-season.html"><span>前季</span>%s</a>'
+            '<a class="snav-c" href="%sseasons.html"><span>まとめ</span>1970年からの全シーズン</a></div>' % (rel, esc(season_label), rel, esc(prev_label), rel))
 
-# 今季（season.html）
-cur_banner = "season-" + season_slug(SEASON_Y, SEASON_C)
-body = season_body(SEASON_Y, SEASON_C, True) + archive_links("", (SEASON_Y, SEASON_C))
-write("season.html", page("%s 人気ランキング" % season_label, body, "%sの人気ランキング。今期いちばん注目されているアニメがわかる" % season_label,
-                          banner=cur_banner, hero=True))
-# 季節ごとの保存ページ（季節が変わっても残る）
+# 今季
+write("season.html", page("%s 人気ランキング" % season_label, season_body(SEASON_Y, SEASON_C, "current") + nav_cards(""),
+                          "%sの人気ランキング。今期いちばん注目されているアニメがわかる" % season_label,
+                          banner="season-" + season_slug(SEASON_Y, SEASON_C), hero=True))
+# 前季
+if season_rows(PREV_Y, PREV_C):
+    write("prev-season.html", page("%s 人気ランキング（前季）" % prev_label, season_body(PREV_Y, PREV_C, "prev") + nav_cards(""),
+                                   "%s（前季）の人気ランキングTOP30。見逃したアニメをまとめてチェック" % prev_label,
+                                   banner="season-" + season_slug(PREV_Y, PREV_C), hero=True))
+# 季節ごとの保存ページ
 for y, c in ARCHIVE:
+    kind = "current" if (y, c) == (SEASON_Y, SEASON_C) else ("prev" if (y, c) == (PREV_Y, PREV_C) else "archive")
     lab = "%d年%sアニメ" % (y, c)
-    cur = (y, c) == (SEASON_Y, SEASON_C)
-    body = ('<p class="crumb"><a href="../season.html">今季アニメ</a> › %d年%s</p>' % (y, c)) + season_body(y, c, cur) + archive_links("../", (y, c))
+    i = ARCHIVE.index((y, c))
+    pn = '<p class="pn">%s%s</p>' % (
+        ('<a href="%s.html">← %d年%s</a>' % (season_slug(*ARCHIVE[i - 1]), ARCHIVE[i - 1][0], ARCHIVE[i - 1][1])) if i > 0 else "<span></span>",
+        ('<a href="%s.html">%d年%s →</a>' % (season_slug(*ARCHIVE[i + 1]), ARCHIVE[i + 1][0], ARCHIVE[i + 1][1])) if i + 1 < len(ARCHIVE) else "")
+    body = ('<p class="crumb"><a href="../seasons.html">シーズン別</a> › %d年%s</p>' % (y, c)) + pn + season_body(y, c, kind) + pn + nav_cards("../")
     write("season/%s.html" % season_slug(y, c), page("%s 人気ランキング" % lab, body, "%sの人気ランキングTOP30" % lab, 1,
                                                      banner="season-" + season_slug(y, c), hero=True))
+# まとめページ
+by_y = collections.OrderedDict()
+for y, c in reversed(ARCHIVE):
+    by_y.setdefault(y, []).append(c)
+rows_html = "".join('<div class="yrow"><span class="ydec">%d年</span><div class="ylinks spl">%s</div></div>' % (
+    y, "".join('<a href="season/%s.html">%s</a>' % (season_slug(y, c), c) for c in COUR_ORDER if c in cs)) for y, cs in by_y.items())
+body = ("<h1>シーズン別アニメランキング</h1><p class=\"lead\">1970年から今期まで、クール（冬・春・夏・秋）ごとに放送が始まったアニメの人気ランキングをまとめました。</p>"
+        + '<div class="grid">%s%s</div>' % (mini(season_items(season_rows(SEASON_Y, SEASON_C)), "season.html", "今季：" + season_label),
+                                           mini(season_items(season_rows(PREV_Y, PREV_C), hot_flag=False), "prev-season.html", "前季：" + prev_label))
+        + "<h2>過去のシーズン</h2>" + rows_html)
+SEASONS_BODY = body
 
 # ---------- トップ ----------
-def mini(items, href, title):
-    lis = "".join('<li><span class="rk">%s</span>%s<span class="nm">%s%s</span></li>' % (esc(i["rank"]), img(i.get("img"), i["title"], "cvs"), tlink(i["title"]), i.get("chg", "")) for i in items[:5])
-    return '<section class="card"><h2><a href="%s">%s</a></h2><ol>%s</ol><a class="more" href="%s">続きを見る →</a></section>' % (href, esc(title), lis, href)
+
+
+write("seasons.html", page("シーズン別アニメランキング（1970年〜）", SEASONS_BODY, "1970年から今期まで、クールごとのアニメ人気ランキングまとめ", banner="seasons", hero=True))
 
 SVC_ICON = {"Netflix": "nfx", "Amazon Prime Video": "amp", "Disney+": "dnp", "Crunchyroll": "cru",
             "Hulu": "hlu", "HBO Max": "mxx", "Apple TV+": "atp"}
@@ -652,7 +677,7 @@ body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
 <p>世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""") + """
 <div class="grid">%s%s%s%s%s%s</div>
 <h2>配信サービス別 世界TOP5 <a class="h2more" href="services.html">すべてのサービス →</a></h2><div class="svcgrid">%s</div>
-<h2>探す</h2><p class="find"><a href="season.html">%s 人気ランキング →</a></p><p class="find"><a href="genre.html">ジャンル別のおすすめ →</a></p><p class="find"><a href="year.html">年別のおすすめ（1970年〜）→</a></p><p class="find"><a href="services.html">配信サービス別ランキング（13サービス）→</a></p><p class="find"><a href="country.html">国別ランキング（27か国）→</a></p>
+<h2>探す</h2><p class="find"><a href="season.html">%s 人気ランキング →</a></p><p class="find"><a href="prev-season.html">前季アニメ 人気ランキング →</a></p><p class="find"><a href="seasons.html">シーズン別ランキング（1970年〜）→</a></p><p class="find"><a href="genre.html">ジャンル別のおすすめ →</a></p><p class="find"><a href="year.html">年別のおすすめ（1970年〜）→</a></p><p class="find"><a href="services.html">配信サービス別ランキング（13サービス）→</a></p><p class="find"><a href="country.html">国別ランキング（27か国）→</a></p>
 """) % (esc(CFG["site_name"]),
        mini(season_items(cur_rows), "season.html", season_label),
        mini(now_items(now_j, prev=PREV_J), "now-japan.html", "国内いま人気"),
@@ -786,6 +811,9 @@ ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padd
 .more{display:inline-block;margin-top:8px;font-size:.85rem}.svcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.svc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:.88rem}
 .svc h3{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:1rem}.svc-ic{width:28px;height:28px;border-radius:7px}.svc ol{list-style:none;margin:0;padding:0}.svc li{display:flex;align-items:center;gap:2px;padding:5px 0;line-height:1.5}.svc .rk{display:inline-block;width:1.6em;font-size:.95rem;margin-right:4px;flex:0 0 auto}
 .svc-link{display:block;text-decoration:none;color:var(--tx)}.svc-link:hover{border-color:var(--ac)}.svc-ic.txt{display:inline-flex;align-items:center;justify-content:center;background:#333;color:#fff;font-size:.8rem}.h2more{font-size:.8rem;font-weight:400;margin-left:8px}
+.snav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:28px 0 8px}@media(max-width:640px){.snav{grid-template-columns:1fr}}
+.snav-c{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-decoration:none;color:var(--tx);font-weight:700}.snav-c:hover{border-color:var(--ac)}.snav-c span{display:block;font-size:.72rem;font-weight:400;color:var(--ac)}
+.spl a{display:inline-block;min-width:3.2em;text-align:center;padding:4px 12px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font-weight:700}.spl a:hover{border-color:var(--ac)}
 .find{margin:6px 0}.find a{font-size:1rem}.pn{display:flex;justify-content:space-between;font-size:.9rem;margin:12px 0}
 .yrow{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);align-items:baseline}.ydec{flex:0 0 5em;font-weight:700;color:var(--mu)}.ylinks{display:flex;flex-wrap:wrap;gap:6px 14px}
 footer{border-top:1px solid var(--line);padding:16px;font-size:.78rem;color:var(--mu);text-align:center}
