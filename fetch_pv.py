@@ -11,7 +11,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SECRETS = os.path.join(HERE, ".secrets.json")
 IDX = os.path.join(HERE, "titles_index.json")
 OUT = os.path.join(HERE, "pv.json")
-MAX_PER_RUN = 90
+MAX_PER_RUN = int(os.environ.get("PV_MAX", "90"))
 TODAY = datetime.date.today().isoformat()
 
 # 公式とみなすチャンネル（アニメの製作・配給・配信の公式）。ここに無くても「公式」「official」を含めば候補にする
@@ -24,7 +24,11 @@ OFFICIAL = ["アニプレックス", "Aniplex", "TOHO animation", "東宝", "KAD
             "Production I.G", "WIT STUDIO", "CloverWorks", "A-1 Pictures", "トライガー", "TRIGGER", "テレビ東京", "TBS", "日テレ",
             "フジテレビ", "ABEMA", "dアニメストア", "U-NEXT", "Prime Video", "アミューズ", "ムービック", "GENCO"]
 PV_WORDS = ["PV", "予告", "トレーラー", "Trailer", "trailer", "ティザー", "Teaser", "CM", "特報"]
-BAD_WORDS = ["切り抜き", "反応", "考察", "解説", "MAD", "AMV", "reaction", "Reaction", "まとめ", "歌ってみた", "弾いてみた"]
+BAD_WORDS = ["切り抜き", "反応", "考察", "解説", "MAD", "AMV", "reaction", "Reaction", "まとめ", "歌ってみた", "弾いてみた",
+             "実写", "ハリウッド", "MOBILE", "ドッカンバトル", "ゲーム", "アプリ", "発売告知", "発売記念", "巻発売", "文庫",
+             "Blu-ray", "DVD", "グッズ", "コラボ"]
+# アニメの PV だと分かる言葉（実写映画・小説・ゲームの PV を避けるため、どれか 1 つを必須にする）
+ANIME_WORDS = ["アニメ", "TV", "Anime", "ANIME", "劇場版", "放送", "ON AIR", "Season", "SEASON", "期", "クール"]
 
 def norm(t):
     return re.sub(r"[\s　:：・!！?？\-－~～「」『』()（）【】〈〉]", "", (t or "")).lower()
@@ -46,6 +50,7 @@ def choose(items, title):
         sn = it["snippet"]; vt = sn["title"]; ch = sn["channelTitle"]
         if any(b in vt for b in BAD_WORDS): continue
         if not any(w in vt for w in PV_WORDS): continue
+        if not any(w in vt for w in ANIME_WORDS): continue
         if core not in norm(vt): continue
         if not is_official(ch): continue
         return {"video_id": it["id"]["videoId"], "video_title": vt, "channel": ch,
@@ -58,6 +63,12 @@ key = json.load(open(SECRETS, encoding="utf-8")).get("youtube_api_key")
 if not key: raise SystemExit("youtube_api_key が空")
 idx = json.load(open(IDX, encoding="utf-8"))
 cache = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {}
+# 新しい基準に合わなくなった採用済みの動画は、探し直す対象に戻す
+for k, v in list(cache.items()):
+    if v.get("video_id"):
+        vt = v.get("video_title", "")
+        if any(b in vt for b in BAD_WORDS) or not any(w in vt for w in ANIME_WORDS):
+            del cache[k]
 todo = [it for it in idx if it["key"] not in cache][:MAX_PER_RUN]
 print("titles", len(idx), "done", len(cache), "this run", len(todo))
 for n, it in enumerate(todo, 1):
