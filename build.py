@@ -114,8 +114,13 @@ GA_TAG = ("""<script async src="https://www.googletagmanager.com/gtag/js?id=%s">
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','%s');</script>
 """ % (GA_ID, GA_ID)) if re.fullmatch(r"G-[A-Z0-9]+", GA_ID) else ""
 
-def page(title, body, desc="", path_depth=0):
+BANNERS = set(f[:-4] for f in os.listdir(os.path.join(HERE, "assets", "banner")) if f.endswith(".jpg")) if os.path.isdir(os.path.join(HERE, "assets", "banner")) else set()
+def page(title, body, desc="", path_depth=0, banner=None, hero=False):
+    """banner: ページ用サムネイル名（assets/banner/<name>.jpg）。hero=True でページ上部にも表示"""
     rel = "../" * path_depth
+    og_img = ("banner/%s.jpg" % banner) if banner in BANNERS else "thumbnail.jpg"
+    if hero and banner in BANNERS:
+        body = ('<p class="page-hero"><img src="%sbanner/%s.jpg" alt="%s" width="1200" height="630"></p>' % (rel, banner, esc(title))) + body
     nav = "".join('<a href="%s%s">%s</a>' % (rel, h, t) for h, t in NAV)
     site = CFG["site_name"]
     contact = CFG.get("contact_url") or (rel + "about.html")
@@ -127,7 +132,7 @@ def page(title, body, desc="", path_depth=0):
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="%s">
 <meta property="og:title" content="%s">
-<meta property="og:image" content="%sthumbnail.jpg">
+<meta property="og:image" content="%s%s">
 <meta name="twitter:card" content="summary_large_image">
 %s%s<link rel="stylesheet" href="%sstyle.css">
 </head><body>
@@ -138,7 +143,7 @@ def page(title, body, desc="", path_depth=0):
 <p>本サイトはアフィリエイト広告（Amazonアソシエイト・楽天アフィリエイト等）を利用しています。</p>
 <p><a href="%sabout.html">このサイトについて</a> ・ <a href="%sprivacy.html">プライバシーポリシー</a> ・ <a href="%s">お問い合わせ</a></p>
 <p>&copy; %s</p>
-</footer></body></html>""" % (esc(title), esc(site), esc(desc or title), esc(site), esc(title), esc(CFG["site_url"]),
+</footer></body></html>""" % (esc(title), esc(site), esc(desc or title), esc(site), esc(title), esc(CFG["site_url"]), og_img,
        ('<meta name="google-site-verification" content="%s">\n' % esc(CFG["google_site_verification"])) if CFG.get("google_site_verification") else "",
        GA_TAG, rel, rel, esc(site).replace("推し", "<b>推し</b>", 1), nav, body, TODAY,
                               rel, rel, esc(contact), esc(site))
@@ -321,12 +326,12 @@ body = """<h1>国内いま人気のアニメ TOP30（全配信サービス合算
 %s""" % (esc(snap), rank_list(now_items(now_j, prev=PREV_J), label="国内いま人気（全配信合算）", href="now-japan.html"),
          rank_list([{"rank": r["rank"], "title": r["title"], "sub": "評価 %s / 5.0" % r["score_5"], "img": cover(r["title"]),
                      "chg": chg_badge(r["rank"], r["title"], PREV_F)} for r in flm[:20]], label="Filmarks 話題のアニメ", href="now-japan.html"))
-write("now-japan.html", page("国内いま人気のアニメ TOP30", body, "日本の配信サービス全体で今月人気のアニメランキング"))
+write("now-japan.html", page("国内いま人気のアニメ TOP30", body, "日本の配信サービス全体で今月人気のアニメランキング", banner="now-japan", hero=True))
 
 body = """<h1>世界いま人気のアニメ TOP30（27か国・全配信合算）</h1>
 <p class="lead">世界27か国の Netflix・Prime Video・Disney+・Crunchyroll・Hulu・HBO Max・Apple TV+ のランキングを合算（集計日 %s）。</p>
 %s""" % (esc(snap), rank_list(now_items(now_w, prev=PREV_W), label="世界いま人気（27か国合算）", href="now-world.html"))
-write("now-world.html", page("世界いま人気のアニメ TOP30", body, "世界27か国の配信ランキングを合算した今月のアニメ人気TOP30"))
+write("now-world.html", page("世界いま人気のアニメ TOP30", body, "世界27か国の配信ランキングを合算した今月のアニメ人気TOP30", banner="now-world", hero=True))
 
 # ---------- 歴代・世界評価 ----------
 def anilist_items(rows, n=100):
@@ -342,7 +347,7 @@ def anilist_items(rows, n=100):
 body = """<h1>歴代アニメ 世界評価ランキング TOP100</h1>
 <p class="lead">世界最大級のアニメデータベース AniList の平均スコア順。海外ファンからの評価の高さを示します。</p>
 %s""" % rank_list(anilist_items(world), label="歴代・世界評価", href="best-world.html")
-write("best-world.html", page("歴代アニメ 世界評価ランキング TOP100", body, "AniList 平均スコアによる歴代アニメ世界評価TOP100"))
+write("best-world.html", page("歴代アニメ 世界評価ランキング TOP100", body, "AniList 平均スコアによる歴代アニメ世界評価TOP100", banner="best-world", hero=True))
 
 # ---------- Netflix ----------
 def nf_items(rows, n=30, views=True, prev=None):
@@ -364,7 +369,7 @@ body = """<h1>Netflix アニメランキング</h1>
 <p class="lead">日本の Netflix 週間TOP10に入った週数の多い順。</p>
 %s""" % (rank_list(nf_items(nf_g, prev=PREV_NG), label="Netflix 世界", href="netflix.html"),
          rank_list(nf_items(nf_c, views=False, prev=PREV_NJ), label="Netflix 日本", href="netflix.html"))
-write("netflix.html", page("Netflix アニメランキング 世界・日本", body, "Netflix公式Top10に基づくアニメの世界・日本ランキング"))
+write("netflix.html", page("Netflix アニメランキング 世界・日本", body, "Netflix公式Top10に基づくアニメの世界・日本ランキング", banner="netflix", hero=True))
 
 
 # ---------- 配信サービス別・国別 ----------
@@ -451,7 +456,7 @@ for sid, name in WORLD_SVC:
     if sid in jp_map:
         jl = jp_rows(jp_map[sid][1])
         if jl: body += "<h2>日本 TOP%d</h2>%s" % (len(jl), rank_list(jl, label="%s 日本" % name, href="service/%s.html" % sid))
-    write("service/%s.html" % sid, page("%s アニメランキング 世界・日本" % name, body, "%sで人気のアニメランキング（世界27か国合算・日本）" % name, 1))
+    write("service/%s.html" % sid, page("%s アニメランキング 世界・日本" % name, body, "%sで人気のアニメランキング（世界27か国合算・日本）" % name, 1, banner="services"))
     hub_world.append((sid, name, world_list[:3]))
 for sid, name, how in JP_SVC:
     if sid in dict(WORLD_SVC): 
@@ -459,7 +464,7 @@ for sid, name, how in JP_SVC:
     jl = jp_rows(how)
     if not jl: continue
     body = "<h1>%s アニメランキング</h1><h2>日本 TOP%d</h2>%s" % (esc(name), len(jl), rank_list(jl, label="%s 日本" % name, href="service/%s.html" % sid))
-    write("service/%s.html" % sid, page("%s アニメランキング" % name, body, "%sで人気のアニメランキング" % name, 1))
+    write("service/%s.html" % sid, page("%s アニメランキング" % name, body, "%sで人気のアニメランキング" % name, 1, banner="services"))
     hub_jp.append((sid, name, jl[:3]))
 
 def hub_card(sid, name, top):
@@ -471,7 +476,7 @@ def hub_card(sid, name, top):
 body = ("<h1>配信サービス別アニメランキング</h1><p class=\"lead\">各配信サービスで、いま人気のアニメ。毎月更新（集計日 %s）。</p>" % esc(snap) +
         "<h2>世界（27か国合算）</h2><div class=\"svcgrid\">%s</div>" % "".join(hub_card(*x) for x in hub_world) +
         "<h2>日本国内</h2><div class=\"svcgrid\">%s</div>" % "".join(hub_card(*x) for x in hub_jp))
-write("services.html", page("配信サービス別アニメランキング", body, "Netflix・Prime Video・U-NEXT・dアニメストア・ABEMA など配信サービスごとのアニメ人気ランキング"))
+write("services.html", page("配信サービス別アニメランキング", body, "Netflix・Prime Video・U-NEXT・dアニメストア・ABEMA など配信サービスごとのアニメ人気ランキング", banner="services", hero=True))
 
 # 国別（全配信サービス合計）
 country_cards = []
@@ -484,12 +489,12 @@ for region, codes in REGION:
         cname = COUNTRY_JA.get(cc, cc)
         body = ("<h1>%sで人気のアニメ TOP%d（全配信サービス合計）</h1><p class=\"lead\">%sの配信サービス全体で、いま人気のアニメ（JustWatch 集計、%s）。</p>%s" % (
             esc(cname), len(items), esc(cname), esc(snap), rank_list(items, label="%s（全配信合計）" % cname, href="country/%s.html" % cc.lower())))
-        write("country/%s.html" % cc.lower(), page("%sで人気のアニメランキング" % cname, body, "%sの配信サービス全体で人気のアニメTOP%d" % (cname, len(items)), 1))
+        write("country/%s.html" % cc.lower(), page("%sで人気のアニメランキング" % cname, body, "%sの配信サービス全体で人気のアニメTOP%d" % (cname, len(items)), 1, banner="country"))
         lis = "".join('<li><span class="rk">%d</span>%s<span class="nm">%s</span></li>' % (i["rank"], img(i.get("img"), i["title"], "cvs"), esc(i["title"])) for i in items[:3])
         cards.append('<a class="svc svc-link" href="country/%s.html"><h3>%s</h3><ol>%s</ol><span class="more">TOP30を見る →</span></a>' % (cc.lower(), esc(cname), lis))
     country_cards.append("<h2>%s</h2><div class=\"svcgrid\">%s</div>" % (region, "".join(cards)))
 body = ("<h1>国別アニメランキング（全配信サービス合計）</h1><p class=\"lead\">世界27か国で、それぞれの国の配信サービス全体を合わせたアニメ人気ランキング（集計日 %s）。</p>" % esc(snap)) + "".join(country_cards)
-write("country.html", page("国別アニメランキング", body, "世界27か国の配信サービス全体で人気のアニメランキング"))
+write("country.html", page("国別アニメランキング", body, "世界27か国の配信サービス全体で人気のアニメランキング", banner="country", hero=True))
 
 # ---------- サービス別（トップに要約） ----------
 by_svc = collections.OrderedDict()
@@ -510,8 +515,8 @@ for g, rows in sorted(genre_map.items(), key=lambda kv: -len(kv[1])):
     links.append('<li><a href="%s">%s（%d作品）</a></li>' % (fn, esc(name), len(rows)))
     b = "<h1>%s アニメ おすすめランキング TOP30</h1><p class=\"lead\">世界評価（AniList スコア）順の%sジャンル TOP30。</p>%s" % (
         esc(name), esc(name), rank_list([dict(it, rank=i) for i, it in enumerate(anilist_items(rows, 30), 1)]))
-    write(fn, page("%s アニメ おすすめランキング" % name, b, "%sジャンルのおすすめアニメTOP30" % name, 1))
-write("genre.html", page("ジャンル別おすすめアニメ", "<h1>ジャンル別おすすめアニメ</h1><ul class=\"links\">%s</ul>" % "".join(links)))
+    write(fn, page("%s アニメ おすすめランキング" % name, b, "%sジャンルのおすすめアニメTOP30" % name, 1, banner="genre"))
+write("genre.html", page("ジャンル別おすすめアニメ", "<h1>ジャンル別おすすめアニメ</h1><ul class=\"links\">%s</ul>" % "".join(links), banner="genre", hero=True))
 
 # ---------- 年別 ----------
 by_year = collections.defaultdict(dict)
@@ -534,11 +539,11 @@ for y in sorted(by_year):
         ('<a href="%d.html">%d年 →</a>' % (y + 1, y + 1)) if (y + 1) in by_year else "")
     b = "<h1>%d年のおすすめアニメ TOP%d</h1><p class=\"lead\">%d年に放送・公開された作品を世界評価（AniList スコア）順に。</p>%s%s%s" % (
         y, len(rows), y, prev_next, rank_list([dict(it, rank=i) for i, it in enumerate(anilist_items(rows, 30), 1)]), prev_next)
-    write(fn, page("%d年のおすすめアニメ" % y, b, "%d年に放送されたアニメのおすすめランキングTOP%d" % (y, len(rows)), 1))
+    write(fn, page("%d年のおすすめアニメ" % y, b, "%d年に放送されたアニメのおすすめランキングTOP%d" % (y, len(rows)), 1, banner="year"))
 ydiv = "".join('<div class="yrow"><span class="ydec">%d年代</span><div class="ylinks">%s</div></div>' % (d, "".join(v))
                for d, v in sorted(year_links.items(), reverse=True))
 write("year.html", page("年別おすすめアニメ", "<h1>年別おすすめアニメ</h1><p class=\"lead\">1970年から今年まで、その年に放送・公開されたアニメを世界評価順に紹介します。</p>%s" % ydiv,
-                        "1970年から今年まで、年ごとのおすすめアニメランキング"))
+                        "1970年から今年まで、年ごとのおすすめアニメランキング", banner="year", hero=True))
 
 # ---------- 今季アニメ特集 ----------
 COUR = {1: "冬", 2: "冬", 3: "冬", 4: "春", 5: "春", 6: "春", 7: "夏", 8: "夏", 9: "夏", 10: "秋", 11: "秋", 12: "秋"}
@@ -572,7 +577,7 @@ body = ("<h1>%s 人気ランキング TOP30</h1><p class=\"lead\">今期（%d年
 if prev_rows_s:
     body += "<h2>前期（%d年%s）の人気 TOP10</h2>%s" % (SEASON_Y + prev_c[1], prev_c[0],
              rank_list(season_items(prev_rows_s, 10), label="%d年%sアニメ" % (SEASON_Y + prev_c[1], prev_c[0]), href="season.html"))
-write("season.html", page("%s 人気ランキング" % season_label, body, "%sの人気ランキング。今期いちばん注目されているアニメがわかる" % season_label))
+write("season.html", page("%s 人気ランキング" % season_label, body, "%sの人気ランキング。今期いちばん注目されているアニメがわかる" % season_label, banner="season", hero=True))
 
 # ---------- トップ ----------
 def mini(items, href, title):
@@ -584,6 +589,10 @@ SVC_ICON = {"Netflix": "nfx", "Amazon Prime Video": "amp", "Disney+": "dnp", "Cr
 import shutil
 if os.path.isdir(os.path.join(HERE, "assets", "svc")):
     shutil.copytree(os.path.join(HERE, "assets", "svc"), os.path.join(OUT, "svc"), dirs_exist_ok=True)
+if os.path.isdir(os.path.join(HERE, "assets", "banner")):   # ページごとのサムネイル
+    os.makedirs(os.path.join(OUT, "banner"), exist_ok=True)
+    for f in os.listdir(os.path.join(HERE, "assets", "banner")):
+        if f.endswith(".jpg"): shutil.copy(os.path.join(HERE, "assets", "banner", f), os.path.join(OUT, "banner", f))
 if os.path.isdir(os.path.join(HERE, "assets", "root")):   # Search Console の確認ファイルなど、サイト直下に置くもの
     for f in os.listdir(os.path.join(HERE, "assets", "root")):
         shutil.copy(os.path.join(HERE, "assets", "root", f), os.path.join(OUT, f))
@@ -734,6 +743,7 @@ ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padd
 .btn:hover{background:#1a1a1a}
 .btn.amz{--bc:#ff9900}.btn.rkt{--bc:#ff4d4d}.btn.yho{--bc:#ff4d6d}
 .hero{padding:24px 0 8px}.hero h1{font-size:1.8rem}.hero-img{padding:20px 0 12px}.hero-img img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
+.page-hero{margin:16px 0 4px}.page-hero img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}@media(max-width:640px){.grid{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}.card h2{margin:0 0 8px;font-size:1.05rem;border:0;padding:0}.card h2 a{text-decoration:none}
 .card ol{list-style:none;padding:0;margin:0}.card li{padding:6px 0;font-size:.92rem;line-height:1.5;display:flex;align-items:center;gap:2px}.nm{flex:1;min-width:0;overflow-wrap:anywhere}.card .rk{display:inline-block;width:1.6em;font-size:1rem;margin-right:4px;flex:0 0 auto}.cvs{flex:0 0 auto}
