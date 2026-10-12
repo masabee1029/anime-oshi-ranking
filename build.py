@@ -573,6 +573,9 @@ SVC_ICON = {"Netflix": "nfx", "Amazon Prime Video": "amp", "Disney+": "dnp", "Cr
 import shutil
 if os.path.isdir(os.path.join(HERE, "assets", "svc")):
     shutil.copytree(os.path.join(HERE, "assets", "svc"), os.path.join(OUT, "svc"), dirs_exist_ok=True)
+if os.path.isdir(os.path.join(HERE, "assets", "root")):   # Search Console の確認ファイルなど、サイト直下に置くもの
+    for f in os.listdir(os.path.join(HERE, "assets", "root")):
+        shutil.copy(os.path.join(HERE, "assets", "root", f), os.path.join(OUT, f))
 svc_cards = ""
 HIDE_SVC = {"Apple TV+"}  # アニメ作品がほぼ無いので表示しない（2026-10-12 ユーザー指定）
 for s, rows in by_svc.items():
