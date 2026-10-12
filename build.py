@@ -196,6 +196,8 @@ def kakugen(title):
             return v
     return None
 def quote_html(kg, cls):
+    if kg.get("original"):
+        return '<div class="%s orig">%s<span class="kgw">— 当サイトオリジナル</span></div>' % (cls, esc(kg["q"]))
     return '<div class="%s">「%s」<span class="kgw">— %s</span></div>' % (cls, esc(kg["q"]), esc(kg["who"]))
 
 # ---------- 順位の変動（前回の記録と比べる） ----------
@@ -673,7 +675,9 @@ for k, d in TITLE_DB.items():
     apps = "".join('<tr><td><a href="../%s">%s</a></td><td class="r">%s位</td><td class="s">%s</td></tr>' % (esc(h), esc(lab), esc(rk), esc(sb))
                    for lab, rk, h, sb in sorted(d["apps"], key=lambda a: int(a[1]) if str(a[1]).isdigit() else 99))
     body = ('<p class="crumb"><a href="../index.html">トップ</a> › 作品</p><h1 class="wt">%s</h1>' % esc(t) +
-            (('<blockquote class="kgq"><span class="kgl">作中の名言</span>「%s」<span class="kgw">— %s『%s』より</span></blockquote>' % (esc(kg["q"]), esc(kg["who"]), esc(t))) if kg else "") +
+            ((('<blockquote class="kgq orig"><span class="kgl">ひとこと格言（当サイトオリジナル・作中のセリフではありません）</span>%s</blockquote>' % esc(kg["q"]))
+              if kg.get("original") else
+              ('<blockquote class="kgq"><span class="kgl">作中の名言</span>「%s」<span class="kgw">— %s『%s』より</span></blockquote>' % (esc(kg["q"]), esc(kg["who"]), esc(t)))) if kg else "") +
             (('<table class="info">%s</table>' % "".join('<tr><th>%s</th><td>%s</td></tr>' % (esc(a), esc(b)) for a, b in info)) if info else "") +
             watch + pv_block(k) +
             '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps +
@@ -741,6 +745,7 @@ ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padd
 footer{border-top:1px solid var(--line);padding:16px;font-size:.78rem;color:var(--mu);text-align:center}
 a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hover{color:var(--ac)}
 .chg{display:block;font-size:.65rem;font-weight:700;line-height:1.2;margin-top:2px}.card .chg,.svc .chg{display:inline;margin-left:6px}.chg.up{color:#5fd38d}.chg.dn{color:#8a8f99}.chg.eq{color:#8a8f99}.chg.new{color:#ffd166}
+.kg.orig{color:#e6dcc8;border-left-color:#c9a86a}.kgq.orig{border-left-color:#c9a86a}
 .kg{font-size:.85rem;color:#ffd9e6;margin:4px 0 2px;padding-left:10px;border-left:2px solid var(--ac)}
 .watch{font-size:.8rem;color:#bfe6cf;margin-top:4px}
 .crumb{font-size:.8rem;color:var(--mu);margin:12px 0 0}.wt{font-size:1.7rem;line-height:1.4}
