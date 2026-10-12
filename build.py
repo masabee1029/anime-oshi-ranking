@@ -181,6 +181,7 @@ def tlink(title):
 
 KAKUGEN = read_json(os.path.join(HERE, "kakugen.json")) if os.path.exists(os.path.join(HERE, "kakugen.json")) else {}
 WATCH = read_json(os.path.join(HERE, "watch.json")) if os.path.exists(os.path.join(HERE, "watch.json")) else {}
+PV = read_json(os.path.join(HERE, "pv.json")) if os.path.exists(os.path.join(HERE, "pv.json")) else {}
 def kg_norm(t):
     t = re.sub(r"^(新劇場版|劇場版|映画)\s*", "", t or "")
     t = re.sub(r"[「」『』【】〈〉\s　:：・!！?？\-－~～()（）]", "", t)
@@ -613,6 +614,19 @@ body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
 write("index.html", page("トップ", body, "配信ランキングと歴代評価でえらぶ、いま観るべきおすすめアニメ"))
 
 # ---------- 作品の個別ページ ----------
+def pv_block(k):
+    """公式 YouTube の PV。クリックするまで YouTube を読み込まない（表示を軽く、Cookie も送らない）"""
+    v = PV.get(k) or {}
+    if not v.get("video_id"): return ""
+    vid = esc(v["video_id"])
+    return ('<h2>公式 PV（YouTube）</h2><div class="pv" data-id="%s"><button class="pv-btn" type="button" aria-label="PV を再生">'
+            '<span class="pv-play">▶</span><span class="pv-t">%s</span></button></div>'
+            '<p class="note">出典: YouTube「%s」公式チャンネル（%s 公開）。再生ボタンを押すと YouTube の動画を読み込みます。</p>'
+            '<script>document.querySelectorAll(".pv").forEach(function(b){b.querySelector("button").onclick=function(){'
+            'b.innerHTML=\'<iframe src="https://www.youtube-nocookie.com/embed/\'+b.dataset.id+\'?autoplay=1&rel=0" title="公式PV" '
+            'allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>\';};});</script>'
+            % (vid, esc(v.get("video_title", "")), esc(v.get("channel", "")), esc(v.get("published", ""))))
+
 META = {}
 for r in world + read_json(os.path.join(DATA, "japan_top.json")) + seasonal:
     for k in ("title_native", "title_romaji", "title_english"):
@@ -658,7 +672,7 @@ for k, d in TITLE_DB.items():
     body = ('<p class="crumb"><a href="../index.html">トップ</a> › 作品</p><h1 class="wt">%s</h1>' % esc(t) +
             (('<blockquote class="kgq"><span class="kgl">ひとこと格言（当サイトオリジナル）</span>%s</blockquote>' % esc(kg)) if kg else "") +
             (('<table class="info">%s</table>' % "".join('<tr><th>%s</th><td>%s</td></tr>' % (esc(a), esc(b)) for a, b in info)) if info else "") +
-            watch +
+            watch + pv_block(k) +
             '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps +
             '<h2>Blu-ray・原作・グッズ</h2>' + shop_buttons(t))
     desc = "%sはどこで観られる？配信サービス・ランキング順位・%sまとめ" % (t, "格言・" if kg else "")
@@ -731,6 +745,11 @@ a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hov
 .info{border-collapse:collapse;width:100%;font-size:.9rem}.info th{text-align:left;color:var(--mu);font-weight:400;width:7em;padding:6px 0;vertical-align:top}.info td{padding:6px 0}.info tr{border-bottom:1px solid var(--line)}
 .wrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.wlb{flex:0 0 8em;font-size:.8rem;color:var(--mu)}.chip{font-size:.82rem;padding:3px 12px;border-radius:999px;border:1px solid #3a8f63;color:#bfe6cf}
 .note{font-size:.75rem;color:var(--mu)}
+.pv{position:relative;width:100%;aspect-ratio:16/9;background:linear-gradient(140deg,#2a1830,#101420);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.pv iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.pv-btn{all:unset;cursor:pointer;position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff;text-align:center;padding:16px}
+.pv-play{width:72px;height:72px;border-radius:50%;border:2px solid var(--ac);display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:var(--ac)}
+.pv-btn:hover .pv-play{background:var(--ac);color:#fff}.pv-t{font-size:.9rem;color:var(--mu);max-width:90%}
 .apps{border-collapse:collapse;width:100%;font-size:.9rem}.apps td{padding:7px 4px;border-bottom:1px solid var(--line)}.apps .r{font-weight:700;color:var(--ac);white-space:nowrap}.apps .s{color:var(--mu);font-size:.8rem}
 """)
 # GitHub Pages 用
