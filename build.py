@@ -109,6 +109,11 @@ NAV = [("index.html", "トップ"), ("season.html", "今季アニメ"), ("now-ja
        ("best-world.html", "歴代・世界評価"), ("netflix.html", "Netflix"), ("services.html", "配信サービス別"), ("country.html", "国別"), ("genre.html", "ジャンル別"),
        ("year.html", "年別")]
 
+GA_ID = (CFG.get("ga_measurement_id") or "").strip()
+GA_TAG = ("""<script async src="https://www.googletagmanager.com/gtag/js?id=%s"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','%s');</script>
+""" % (GA_ID, GA_ID)) if re.fullmatch(r"G-[A-Z0-9]+", GA_ID) else ""
+
 def page(title, body, desc="", path_depth=0):
     rel = "../" * path_depth
     nav = "".join('<a href="%s%s">%s</a>' % (rel, h, t) for h, t in NAV)
@@ -124,7 +129,7 @@ def page(title, body, desc="", path_depth=0):
 <meta property="og:title" content="%s">
 <meta property="og:image" content="%sthumbnail.jpg">
 <meta name="twitter:card" content="summary_large_image">
-%s<link rel="stylesheet" href="%sstyle.css">
+%s%s<link rel="stylesheet" href="%sstyle.css">
 </head><body>
 <header><a class="logo" href="%sindex.html">%s</a><nav>%s</nav></header>
 <main>%s</main>
@@ -135,7 +140,7 @@ def page(title, body, desc="", path_depth=0):
 <p>&copy; %s</p>
 </footer></body></html>""" % (esc(title), esc(site), esc(desc or title), esc(site), esc(title), esc(CFG["site_url"]),
        ('<meta name="google-site-verification" content="%s">\n' % esc(CFG["google_site_verification"])) if CFG.get("google_site_verification") else "",
-       rel, rel, esc(site).replace("推し", "<b>推し</b>", 1), nav, body, TODAY,
+       GA_TAG, rel, rel, esc(site).replace("推し", "<b>推し</b>", 1), nav, body, TODAY,
                               rel, rel, esc(contact), esc(site))
 
 PAGES = collections.OrderedDict()
@@ -675,14 +680,18 @@ write("about.html", page("このサイトについて", """<h1>このサイト�
 <h2>広告について</h2><p>当サイトは Amazon.co.jp アソシエイト、楽天アフィリエイト、もしもアフィリエイト（Yahoo!ショッピング等）のアフィリエイトプログラムに参加しています。リンク先での購入・契約により当サイトに紹介料が支払われることがありますが、ランキングの順位は収益によって変わりません。</p>
 """ % (esc(CFG["site_name"]), ('<a href="%s">お問い合わせフォーム</a>' % esc(CFG["contact_url"])) if CFG.get("contact_url") else "準備中（YouTube チャンネルのコメント欄からご連絡ください）")))
 
+GA_POLICY = ("""<p>当サイトでは、サイトの利用状況を把握するために、Google LLC が提供するアクセス解析ツール「Google アナリティクス」を利用しています。Google アナリティクスは Cookie を使って、閲覧したページ、滞在時間、おおよその地域、利用端末やブラウザの種類などの情報を収集し、Google LLC に送信します。これらの情報は個人を特定するものではありません。</p>
+<p>収集されたデータは Google のプライバシーポリシーに基づいて管理されます。詳しくは「<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">Google のサービスを使用するサイトやアプリから収集した情報の Google による使用</a>」をご覧ください。データの収集を望まない場合は、ブラウザの Cookie を無効にするか、<a href="https://tools.google.com/dlpage/gaoptout?hl=ja" target="_blank" rel="noopener">Google アナリティクス オプトアウト アドオン</a>を利用することで停止できます。</p>"""
+             if GA_TAG else
+             "<p>当サイトでは、今後 Google アナリティクス等のアクセス解析ツールを利用する場合があります。これらはトラフィックデータ収集のために Cookie を使用しますが、個人を特定するものではありません。</p>")
 write("privacy.html", page("プライバシーポリシー", """<h1>プライバシーポリシー</h1>
 <h2>広告の配信について</h2>
 <p>当サイトは、Amazon.co.jp を宣伝しリンクすることによってサイトが紹介料を獲得できる手段を提供することを目的に設定されたアフィリエイトプログラムである、Amazonアソシエイト・プログラムの参加者です。また楽天アフィリエイト、もしもアフィリエイトを利用しています。</p>
 <h2>アクセス解析について</h2>
-<p>当サイトでは、今後 Google アナリティクス等のアクセス解析ツールを利用する場合があります。これらはトラフィックデータ収集のために Cookie を使用しますが、個人を特定するものではありません。</p>
+%s
 <h2>免責事項</h2>
 <p>当サイトの情報は、できる限り正確な情報を掲載するよう努めていますが、ランキングは外部データの集計であり、正確性・最新性を保証するものではありません。リンク先の商品・サービスについては各提供元にお問い合わせください。</p>
-<p>制定日: 2026年10月11日</p>"""))
+<p>制定日: 2026年10月11日%s</p>""" % (GA_POLICY, "／改定日: 2026年10月13日" if GA_TAG else "")))
 
 # ---------- CSS ----------
 write("style.css", """
