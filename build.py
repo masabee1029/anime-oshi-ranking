@@ -188,12 +188,15 @@ def kg_norm(t):
     return t.lower()
 KG_KEYS = sorted(((kg_norm(k), v) for k, v in KAKUGEN.items() if not k.startswith("_")), key=lambda kv: -len(kv[0]))
 def kakugen(title):
-    """作品名の頭が一致する一番長いキーの格言（続編・劇場版にも当たる）"""
+    """作中の名言 {"q", "who"}。作品名の頭が一致する一番長いキー（exact のものは題名が完全一致のときだけ）"""
     t = kg_norm(FIX_TITLE.get(title, title))
     for k, v in KG_KEYS:
-        if len(k) >= 2 and t.startswith(k):
+        if len(k) < 2: continue
+        if (v.get("exact") and t == k) or (not v.get("exact") and t.startswith(k)):
             return v
     return None
+def quote_html(kg, cls):
+    return '<div class="%s">「%s」<span class="kgw">— %s</span></div>' % (cls, esc(kg["q"]), esc(kg["who"]))
 
 # ---------- 順位の変動（前回の記録と比べる） ----------
 HIST = os.path.join(ST, "history")
@@ -238,7 +241,7 @@ def rank_list(items, show_shop=True, label=None, href=None):
                     '<div class="sub">%s</div>%s%s%s%s</div></li>' % (
                         esc(it["rank"]), it.get("chg", ""), img(it.get("img"), it["title"]), tlink(it["title"]), esc(it.get("sub", "")),
                         ('<div class="meta">%s</div>' % esc(it["meta"])) if it.get("meta") else "",
-                        ('<div class="kg">%s</div>' % esc(kg)) if kg else "",
+                        quote_html(kg, "kg") if kg else "",
                         watch_line(it["title"]),
                         shop_buttons(it["title"]) if show_shop else ""))
     return '<ol class="rank">%s</ol>' % "".join(rows)
@@ -670,12 +673,12 @@ for k, d in TITLE_DB.items():
     apps = "".join('<tr><td><a href="../%s">%s</a></td><td class="r">%s位</td><td class="s">%s</td></tr>' % (esc(h), esc(lab), esc(rk), esc(sb))
                    for lab, rk, h, sb in sorted(d["apps"], key=lambda a: int(a[1]) if str(a[1]).isdigit() else 99))
     body = ('<p class="crumb"><a href="../index.html">トップ</a> › 作品</p><h1 class="wt">%s</h1>' % esc(t) +
-            (('<blockquote class="kgq"><span class="kgl">ひとこと格言（当サイトオリジナル）</span>%s</blockquote>' % esc(kg)) if kg else "") +
+            (('<blockquote class="kgq"><span class="kgl">作中の名言</span>「%s」<span class="kgw">— %s『%s』より</span></blockquote>' % (esc(kg["q"]), esc(kg["who"]), esc(t))) if kg else "") +
             (('<table class="info">%s</table>' % "".join('<tr><th>%s</th><td>%s</td></tr>' % (esc(a), esc(b)) for a, b in info)) if info else "") +
             watch + pv_block(k) +
             '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps +
             '<h2>Blu-ray・原作・グッズ</h2>' + shop_buttons(t))
-    desc = "%sはどこで観られる？配信サービス・ランキング順位・%sまとめ" % (t, "格言・" if kg else "")
+    desc = "%sはどこで観られる？配信サービス・ランキング順位・%sまとめ" % (t, "名言・" if kg else "")
     write("anime/%s.html" % k, page("%sはどこで観られる？配信・ランキングまとめ" % t, body, desc, 1))
 json.dump(index_out, open(os.path.join(HERE, "titles_index.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
@@ -741,6 +744,7 @@ a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hov
 .kg{font-size:.85rem;color:#ffd9e6;margin:4px 0 2px;padding-left:10px;border-left:2px solid var(--ac)}
 .watch{font-size:.8rem;color:#bfe6cf;margin-top:4px}
 .crumb{font-size:.8rem;color:var(--mu);margin:12px 0 0}.wt{font-size:1.7rem;line-height:1.4}
+.kgw{display:block;font-size:.75rem;font-weight:400;color:var(--mu);margin-top:2px}.kg .kgw{display:inline;margin-left:6px}
 .kgq{margin:16px 0 24px;padding:16px 20px;background:var(--card);border-left:4px solid var(--ac);border-radius:8px;font-size:1.15rem;font-weight:700}.kgl{display:block;font-size:.72rem;font-weight:400;color:var(--mu);margin-bottom:4px}
 .info{border-collapse:collapse;width:100%;font-size:.9rem}.info th{text-align:left;color:var(--mu);font-weight:400;width:7em;padding:6px 0;vertical-align:top}.info td{padding:6px 0}.info tr{border-bottom:1px solid var(--line)}
 .wrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.wlb{flex:0 0 8em;font-size:.8rem;color:var(--mu)}.chip{font-size:.82rem;padding:3px 12px;border-radius:999px;border:1px solid #3a8f63;color:#bfe6cf}
