@@ -115,11 +115,7 @@ GA_TAG = ("""<script async src="https://www.googletagmanager.com/gtag/js?id=%s">
 """ % (GA_ID, GA_ID)) if re.fullmatch(r"G-[A-Z0-9]+", GA_ID) else ""
 
 BANNERS = set(f[:-4] for f in os.listdir(os.path.join(HERE, "assets", "banner")) if f.endswith(".jpg")) if os.path.isdir(os.path.join(HERE, "assets", "banner")) else set()
-# ページのサムネイルはユーザー提供の画像（2026-10-13）。今季アニメの画像は「2026年秋」と書かれているので、その季節の間だけ使う
-SEASON_BANNER_FOR = "2026年秋"
-_COUR = {1: "冬", 2: "冬", 3: "冬", 4: "春", 5: "春", 6: "春", 7: "夏", 8: "夏", 9: "夏", 10: "秋", 11: "秋", 12: "秋"}
-if "%d年%s" % (datetime.date.today().year, _COUR[datetime.date.today().month]) != SEASON_BANNER_FOR:
-    BANNERS.discard("season")
+# 今季アニメの画像は季節ごとに assets/banner/season-<年>-<winter|spring|summer|fall>.jpg を置く（無い季節はトップの画像）
 def page(title, body, desc="", path_depth=0, banner=None, hero=False):
     """banner: ページ用サムネイル名（assets/banner/<name>.jpg）。hero=True でページ上部にも表示"""
     rel = "../" * path_depth
@@ -561,28 +557,63 @@ cur_rows = season_rows(SEASON_Y, SEASON_C)
 if not cur_rows:   # データがまだ無ければ一番新しいクール
     last = seasonal[-1]; SEASON_Y, SEASON_C = int(last["year"]), last["cour"]; cur_rows = season_rows(SEASON_Y, SEASON_C)
 flm_set = {norm(strip_extra(r["title"])) for r in flm}
-def season_items(rows, n=30):
+def season_items(rows, n=30, hot_flag=True):
     out = []
     for r in rows[:n]:
         t = jp_title(r)
         sub = ["%s" % (r.get("format") or "")]
         if r.get("studio"): sub.append(r["studio"])
         if r.get("average_score"): sub.append("評価 %s点" % r["average_score"])
-        hot = norm(strip_extra(t)) in flm_set
+        hot = hot_flag and norm(strip_extra(t)) in flm_set
         out.append({"rank": len(out) + 1, "title": t, "sub": " / ".join(x for x in sub if x) + (" / Filmarks で話題" if hot else ""),
                     "meta": genres_ja(r.get("genres")), "img": cover(t, r.get("anilist_id")),
                     "alts": (r.get("title_romaji"), r.get("title_english"))})
     return out
 season_label = "%d年%sアニメ" % (SEASON_Y, SEASON_C)
-prev_c = {"冬": ("秋", -1), "春": ("冬", 0), "夏": ("春", 0), "秋": ("夏", 0)}[SEASON_C]
-prev_rows_s = season_rows(SEASON_Y + prev_c[1], prev_c[0])
-body = ("<h1>%s 人気ランキング TOP30</h1><p class=\"lead\">今期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。"
-        "「Filmarks で話題」は国内のレビューサイトでも話題になっている作品です。</p>%s" % (
-            esc(season_label), SEASON_Y, SEASON_C, rank_list(season_items(cur_rows), label=season_label, href="season.html")))
-if prev_rows_s:
-    body += "<h2>前期（%d年%s）の人気 TOP10</h2>%s" % (SEASON_Y + prev_c[1], prev_c[0],
-             rank_list(season_items(prev_rows_s, 10), label="%d年%sアニメ" % (SEASON_Y + prev_c[1], prev_c[0]), href="season.html"))
-write("season.html", page("%s 人気ランキング" % season_label, body, "%sの人気ランキング。今期いちばん注目されているアニメがわかる" % season_label, banner="season", hero=True))
+COUR_EN = {"冬": "winter", "春": "spring", "夏": "summer", "秋": "fall"}
+COUR_ORDER = ["冬", "春", "夏", "秋"]
+ARCHIVE_FROM = (2026, "秋")   # このシーズンから、季節ごとの保存ページを作る（2026-10-13 ユーザー指定）
+def season_slug(y, c): return "%d-%s" % (y, COUR_EN[c])
+def seasons_since(start, end):
+    y, c = start; out = []
+    while (y, COUR_ORDER.index(c)) <= (end[0], COUR_ORDER.index(end[1])):
+        out.append((y, c))
+        i = COUR_ORDER.index(c) + 1
+        if i == 4: y, i = y + 1, 0
+        c = COUR_ORDER[i]
+    return out
+ARCHIVE = [sc for sc in seasons_since(ARCHIVE_FROM, (SEASON_Y, SEASON_C)) if season_rows(*sc)]
+
+def season_body(y, c, current):
+    rows = season_rows(y, c)
+    lab = "%d年%sアニメ" % (y, c)
+    lead = ("今期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。「Filmarks で話題」は国内のレビューサイトでも話題になっている作品です。" % (y, c)
+            if current else "%d年%sクールに放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べた記録です。" % (y, c))
+    b = "<h1>%s 人気ランキング TOP30</h1><p class=\"lead\">%s</p>%s" % (esc(lab), lead,
+         rank_list(season_items(rows, hot_flag=current), label=lab, href="season/%s.html" % season_slug(y, c)))
+    pc = {"冬": ("秋", -1), "春": ("冬", 0), "夏": ("春", 0), "秋": ("夏", 0)}[c]
+    prows = season_rows(y + pc[1], pc[0])
+    if current and prows:
+        b += "<h2>前期（%d年%s）の人気 TOP10</h2>%s" % (y + pc[1], pc[0],
+             rank_list(season_items(prows, 10, hot_flag=False), label="%d年%sアニメ" % (y + pc[1], pc[0]), href="season.html"))
+    return b
+
+def archive_links(rel, skip=None):
+    items = ['<a href="%sseason/%s.html">%d年%s</a>' % (rel, season_slug(y, c), y, c) for y, c in reversed(ARCHIVE) if (y, c) != skip]
+    return ('<h2>シーズンごとのランキング</h2><p class="ylinks">%s</p>' % "".join(items)) if items else ""
+
+# 今季（season.html）
+cur_banner = "season-" + season_slug(SEASON_Y, SEASON_C)
+body = season_body(SEASON_Y, SEASON_C, True) + archive_links("", (SEASON_Y, SEASON_C))
+write("season.html", page("%s 人気ランキング" % season_label, body, "%sの人気ランキング。今期いちばん注目されているアニメがわかる" % season_label,
+                          banner=cur_banner, hero=True))
+# 季節ごとの保存ページ（季節が変わっても残る）
+for y, c in ARCHIVE:
+    lab = "%d年%sアニメ" % (y, c)
+    cur = (y, c) == (SEASON_Y, SEASON_C)
+    body = ('<p class="crumb"><a href="../season.html">今季アニメ</a> › %d年%s</p>' % (y, c)) + season_body(y, c, cur) + archive_links("../", (y, c))
+    write("season/%s.html" % season_slug(y, c), page("%s 人気ランキング" % lab, body, "%sの人気ランキングTOP30" % lab, 1,
+                                                     banner="season-" + season_slug(y, c), hero=True))
 
 # ---------- トップ ----------
 def mini(items, href, title):
