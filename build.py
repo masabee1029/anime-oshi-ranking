@@ -601,7 +601,7 @@ for s, rows in by_svc.items():
 
 HERO_IMG = os.path.exists(os.path.join(OUT, "thumbnail.jpg"))
 body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
-<img src="thumbnail.jpg" alt="推しアニメランキング｜世界27か国・国内12サービスの配信ランキングと歴代評価から、いま観るべきアニメがわかる" width="1200" height="630">
+<img src="thumbnail.jpg" alt="推しアニメランキング（毎月更新）｜世界27か国・国内13サービスの配信ランキングと歴代評価から「いま観るべきアニメ」がわかる" width="1200" height="630">
 <p class="vh">世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""" if HERO_IMG else
 """<section class="hero"><h1>%s</h1>
 <p>世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""") + """

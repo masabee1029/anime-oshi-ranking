@@ -78,5 +78,8 @@ d.rectangle([(W - 120) // 2, 362, (W + 120) // 2, 367], fill=PINK)
 center("世界27か国・国内13サービスの配信ランキングと歴代評価から", fs, 392, (228, 228, 235))
 center("「いま観るべきアニメ」がわかる", fs, 436, (228, 228, 235))
 
-img.save(OUT, "JPEG", quality=90, optimize=True)
+if os.path.exists(os.path.join(HERE, "assets", "root", "thumbnail.jpg")):
+    print("assets/root/thumbnail.jpg（ユーザー指定の画像）があるので自動作成はしない")
+else:
+    img.save(OUT, "JPEG", quality=90, optimize=True)
 print("thumbnail", OUT)
