@@ -116,6 +116,38 @@ GA_TAG = ("""<script async src="https://www.googletagmanager.com/gtag/js?id=%s">
 
 BANNERS = set(f[:-4] for f in os.listdir(os.path.join(HERE, "assets", "banner")) if f.endswith(".jpg")) if os.path.isdir(os.path.join(HERE, "assets", "banner")) else set()
 # 今季アニメの画像は季節ごとに assets/banner/season-<年>-<winter|spring|summer|fall>.jpg を置く（無い季節はトップの画像）
+# ---------- 収益ブログ型の共通パーツ（サイドバー・パンくず・著者・シェア・構造化データ） ----------
+SISTER_SITES = [("AIデザイン実践ラボ", "ai-design-lab"), ("推し活グッズ＆遠征ガイド", "oshikatsu-guide"),
+                ("はじめてのスパイスカレー", "spice-curry-start"), ("推し発見ナビ", "oshi-hakken-navi"),
+                ("そのまま使えるAIプロンプト集", "ai-prompt-recipes")]
+PROFILE = ("アニメ好きの運営者が、Netflix 公式 Top10・JustWatch・AniList・Filmarks のデータを毎月集計して、"
+           "「いま観るべきアニメ」が一目でわかるランキングにまとめています。歌い手やボカロなど音楽の推し活もしています。")
+
+def sidebar(rel):
+    rank = "".join('<li><a href="%s%s">%s</a></li>' % (rel, h, t) for h, t in NAV[1:])
+    svc = "".join('<a class="sbtn" rel="nofollow sponsored noopener" target="_blank" href="%s" style="--bc:%s">%s</a>'
+                  % (esc(x["url"]), esc(x.get("color", "#ff6b9d")), esc(x["name"])) for x in CFG.get("streaming", []) if x.get("url"))
+    sis = "".join('<li><a href="https://masabee1029.github.io/%s/" target="_blank" rel="noopener">%s</a></li>' % (p, esc(n)) for n, p in SISTER_SITES)
+    return ('<aside class="side">'
+            '<div class="sbox"><div class="sh">運営者</div><div class="prof"><div class="avatar">推</div><p>%s</p></div>'
+            '<a class="more" href="%sabout.html">このサイトについて</a></div>'
+            '%s'
+            '<div class="sbox"><div class="sh">ランキング一覧</div><ul class="slist">%s</ul></div>'
+            '<div class="sbox"><div class="sh">姉妹サイト</div><ul class="slist">%s</ul></div>'
+            '</aside>') % (esc(PROFILE), rel,
+                           ('<div class="sbox sticky"><div class="sh">アニメを観るなら <span class="prc">PR</span></div>%s'
+                            '<p class="note">配信作品・料金・無料期間は各サービスの公式サイトで確認してください。</p></div>' % svc) if svc else "",
+                           rank, sis)
+
+def author_box(rel):
+    return ('<div class="author"><div class="avatar">推</div><div><strong>このページを作った人：運営者</strong><p>%s</p>'
+            '<p><a href="%sabout.html">運営者について詳しく</a></p></div></div>' % (esc(PROFILE), rel))
+
+def share_box():
+    return ('<div class="share"><a class="sx" rel="noopener" target="_blank" href="https://twitter.com/intent/tweet?url=\x00URLQ\x00&text=\x00TITLEQ\x00">Xでシェア</a>'
+            '<a class="sl" rel="noopener" target="_blank" href="https://social-plugins.line.me/lineit/share?url=\x00URLQ\x00">LINEで送る</a>'
+            '<a class="sb" rel="noopener" target="_blank" href="https://b.hatena.ne.jp/entry/panel/?url=\x00URLQ\x00">はてブ</a></div>')
+
 def page(title, body, desc="", path_depth=0, banner=None, hero=False):
     """banner: ページ用サムネイル名（assets/banner/<name>.jpg）。hero=True でページ上部にも表示"""
     rel = "../" * path_depth
@@ -124,6 +156,19 @@ def page(title, body, desc="", path_depth=0, banner=None, hero=False):
         body = ('<p class="page-hero"><img src="%sbanner/%s.jpg" alt="%s" width="1200" height="630"></p>' % (rel, banner, esc(title))) + body
     nav = "".join('<a href="%s%s">%s</a>' % (rel, h, t) for h, t in NAV)
     site = CFG["site_name"]
+    is_top = title == "トップ"
+    is_fixed = title in ("このサイトについて", "プライバシーポリシー")
+    ld = {"@context": "https://schema.org", "@type": "WebSite", "name": site, "url": CFG["site_url"]} if is_top else \
+         {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+             {"@type": "ListItem", "position": 1, "name": "トップ", "item": CFG["site_url"]},
+             {"@type": "ListItem", "position": 2, "name": title}]}
+    if not is_top and 'class="crumb"' not in body:
+        body = '<p class="crumb"><a href="%sindex.html">トップ</a> › %s</p>' % (rel, esc(title)) + body
+    if not is_fixed:
+        body += share_box() + author_box(rel)
+    body = '<div class="layout"><main>%s</main>%s</div>' % (body, sidebar(rel))
+    ld_tag = '<script type="application/ld+json">%s</script>\n' % json.dumps(ld, ensure_ascii=False)
+
     contact = CFG.get("contact_url") or (rel + "about.html")
     return """<!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8">
@@ -135,10 +180,11 @@ def page(title, body, desc="", path_depth=0, banner=None, hero=False):
 <meta property="og:title" content="%s">
 <meta property="og:image" content="%s%s">
 <meta name="twitter:card" content="summary_large_image">
-%s%s<link rel="stylesheet" href="%sstyle.css">
+%s%s%s<link rel="stylesheet" href="%sstyle.css">
 </head><body>
 <header><a class="logo" href="%sindex.html">%s</a><nav>%s</nav></header>
-<main>%s</main>
+<p class="pr">※本サイトはプロモーション（広告）を含みます。商品・配信サービスのリンクから購入・登録されると運営者に紹介料が入ることがあります。</p>
+%s
 <footer>
 <p>データ: AniList / Netflix Tudum 公式Top10 / JustWatch / Filmarks をもとに集計。最終更新 %s</p>
 <p>本サイトはアフィリエイト広告（Amazonアソシエイト・楽天アフィリエイト等）を利用しています。</p>
@@ -146,7 +192,7 @@ def page(title, body, desc="", path_depth=0, banner=None, hero=False):
 <p>&copy; %s</p>
 </footer></body></html>""" % (esc(title), esc(site), esc(desc or title), esc(site), esc(title), esc(CFG["site_url"]), og_img,
        ('<meta name="google-site-verification" content="%s">\n' % esc(CFG["google_site_verification"])) if CFG.get("google_site_verification") else "",
-       GA_TAG, rel, rel, esc(site).replace("推し", "<b>推し</b>", 1), nav, body, TODAY,
+       GA_TAG, ld_tag, rel, rel, esc(site).replace("推し", "<b>推し</b>", 1), nav, body, TODAY,
                               rel, rel, esc(contact), esc(site))
 
 PAGES = collections.OrderedDict()
@@ -164,6 +210,11 @@ def flush():
                 return '<a class="tl" href="%sanime/%s.html">%s</a>' % (rel, k, text)
             return text
         content = pat.sub(sub, content)
+        if name.endswith(".html"):
+            url = CFG["site_url"].rstrip("/") + "/" + ("" if name == "index.html" else name)
+            mt = re.search(r"<title>(.*?)</title>", content)
+            content = content.replace("\x00URLQ\x00", urllib.parse.quote(url, safe="")).replace(
+                "\x00TITLEQ\x00", urllib.parse.quote(html.unescape(mt.group(1)) if mt else ""))
         p = os.path.join(OUT, name)
         os.makedirs(os.path.dirname(p), exist_ok=True)
         with open(p, "w", encoding="utf-8") as f:
@@ -790,7 +841,19 @@ write("style.css", """
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.8}
 a{color:var(--ac)}header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;padding:16px 20px;border-bottom:1px solid var(--line);background:var(--card)}
 .logo{font-weight:800;font-size:1.75rem;letter-spacing:.02em;line-height:1.3;text-decoration:none;color:var(--tx)}.logo b{color:var(--ac)}nav{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.9rem}nav a{text-decoration:none;color:var(--mu)}nav a:hover{color:var(--ac)}
-.pr{font-size:.75rem;color:var(--mu);margin:6px 16px}main{max-width:860px;margin:0 auto;padding:8px 16px 40px}
+.pr{font-size:.75rem;color:var(--mu);margin:6px auto 0;max-width:1180px;padding:0 16px}
+.layout{max-width:1180px;margin:0 auto;padding:8px 16px 40px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:start}
+@media(max-width:1023px){.layout{grid-template-columns:minmax(0,1fr)}}main{min-width:0}
+.side{display:flex;flex-direction:column;gap:16px;padding-top:16px}.sbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:.88rem}
+.sbox.sticky{position:sticky;top:12px}.sh{font-weight:800;margin-bottom:8px;border-left:4px solid var(--ac);padding-left:8px}.prc{font-size:.65rem;font-weight:700;border:1px solid var(--mu);color:var(--mu);border-radius:4px;padding:0 4px;margin-left:4px;vertical-align:middle}
+.slist{list-style:none;margin:0;padding:0}.slist li{border-top:1px solid var(--line)}.slist a{display:block;padding:7px 2px;text-decoration:none;color:var(--tx)}.slist a:hover{color:var(--ac)}
+.prof{display:flex;gap:10px;align-items:flex-start}.prof p{margin:0;font-size:.82rem;color:var(--mu);line-height:1.7}
+.avatar{flex:0 0 48px;width:48px;height:48px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem}
+.sbtn{--bc:#ff6b9d;display:block;text-align:center;margin:8px 0 0;padding:10px;border-radius:10px;background:var(--bc);color:#fff;text-decoration:none;font-weight:800}
+.author{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:24px 0}.author p{margin:4px 0 0;font-size:.85rem;color:var(--mu)}
+.share{display:flex;gap:8px;flex-wrap:wrap;margin:32px 0 8px}.share a{flex:1 1 90px;text-align:center;padding:8px;border-radius:8px;color:#fff;text-decoration:none;font-size:.8rem;font-weight:700}
+.share .sx{background:#000;border:1px solid #444}.share .sl{background:#06c755}.share .sb{background:#00a4de}
+@media(max-width:640px){nav{flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:4px}}
 h1{font-size:1.5rem;margin:16px 0 8px}h2{font-size:1.2rem;margin:40px 0 12px;border-left:4px solid var(--ac);padding-left:8px}.lead{color:var(--mu);font-size:.95rem;margin:0 0 20px}
 ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--line)}
 .rk{flex:0 0 2.2em;font-size:1.4rem;font-weight:800;color:var(--ac);text-align:right}ol.rank li:nth-child(-n+3) .rk{color:#ffd166}
