@@ -800,7 +800,7 @@ for k, d in TITLE_DB.items():
               if kg.get("original") else
               ('<blockquote class="kgq"><span class="kgl">作中の名言</span>「%s」<span class="kgw">— %s『%s』より</span></blockquote>' % (esc(kg["q"]), esc(kg["who"]), esc(t)))) if kg else "") +
             (('<table class="info">%s</table>' % "".join('<tr><th>%s</th><td>%s</td></tr>' % (esc(a), esc(b)) for a, b in info)) if info else "") +
-            watch + pv_block(k) +
+            pv_block(k) + watch +
             '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps +
             '<h2>Blu-ray・原作・グッズ</h2>' + shop_buttons(t))
     desc = "%sはどこで観られる？配信サービス・ランキング順位・%sまとめ" % (t, "名言・" if kg else "")
