@@ -741,17 +741,18 @@ write("index.html", page("トップ", body, "配信ランキングと歴代評�
 
 # ---------- 作品の個別ページ ----------
 def pv_block(k):
-    """公式 YouTube の PV。クリックするまで YouTube を読み込まない（表示を軽く、Cookie も送らない）"""
+    """公式 YouTube の PV。サムネイルは YouTube 公式画像を直接表示（コピーしない）。プレーヤーはクリックまで読み込まない"""
     v = PV.get(k) or {}
     if not v.get("video_id"): return ""
     vid = esc(v["video_id"])
     return ('<h2>公式 PV（YouTube）</h2><div class="pv" data-id="%s"><button class="pv-btn" type="button" aria-label="PV を再生">'
+            '<img class="pv-img" src="https://i.ytimg.com/vi/%s/hqdefault.jpg" alt="" loading="lazy" referrerpolicy="no-referrer">'
             '<span class="pv-play">▶</span><span class="pv-t">%s</span></button></div>'
             '<p class="note">出典: YouTube「%s」公式チャンネル（%s 公開）。再生ボタンを押すと YouTube の動画を読み込みます。</p>'
             '<script>document.querySelectorAll(".pv").forEach(function(b){b.querySelector("button").onclick=function(){'
             'b.innerHTML=\'<iframe src="https://www.youtube-nocookie.com/embed/\'+b.dataset.id+\'?autoplay=1&rel=0" title="公式PV" '
             'allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>\';};});</script>'
-            % (vid, esc(v.get("video_title", "")), esc(v.get("channel", "")), esc(v.get("published", ""))))
+            % (vid, vid, esc(v.get("video_title", "")), esc(v.get("channel", "")), esc(v.get("published", ""))))
 
 META = {}
 for r in world + read_json(os.path.join(DATA, "japan_top.json")) + seasonal:
@@ -895,7 +896,7 @@ a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hov
 .pv iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .pv-btn{all:unset;cursor:pointer;position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff;text-align:center;padding:16px}
 .pv-play{width:72px;height:72px;border-radius:50%;border:2px solid var(--ac);display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:var(--ac)}
-.pv-btn:hover .pv-play{background:var(--ac);color:#fff}.pv-t{font-size:.9rem;color:var(--mu);max-width:90%}
+.pv-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}.pv-btn::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.6));z-index:0}.pv-play,.pv-t{position:relative;z-index:1}.pv-play{background:rgba(0,0,0,.45)}.pv-btn:hover .pv-play{background:var(--ac);color:#fff}.pv-t{font-size:.9rem;color:#fff;max-width:90%;text-shadow:0 1px 4px #000}
 .apps{border-collapse:collapse;width:100%;font-size:.9rem}.apps td{padding:7px 4px;border-bottom:1px solid var(--line)}.apps .r{font-weight:700;color:var(--ac);white-space:nowrap}.apps .s{color:var(--mu);font-size:.8rem}
 """)
 # GitHub Pages 用
