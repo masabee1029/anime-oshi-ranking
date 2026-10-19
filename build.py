@@ -723,9 +723,9 @@ for s, rows in by_svc.items():
 HERO_IMG = os.path.exists(os.path.join(OUT, "thumbnail.jpg"))
 body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
 <img src="thumbnail.jpg" alt="推しアニメランキング（毎月更新）｜世界27か国・国内13サービスの配信ランキングと歴代評価から「いま観るべきアニメ」がわかる" width="1200" height="630">
-<p class="vh">あなたが今夜観る1本が見つかります。世界27か国・国内12サービスの配信ランキングと歴代の評価データから、いま人気のアニメを毎月更新で紹介します。</p></section>""" if HERO_IMG else
+<p class="vh">あなたが今夜観る1本が見つかります。世界27か国・国内13サービスの配信ランキングと歴代の評価データから、いま人気のアニメを毎月更新で紹介します。</p></section>""" if HERO_IMG else
 """<section class="hero"><h1>%s</h1>
-<p>あなたが今夜観る1本が見つかります。世界27か国・国内12サービスの配信ランキングと歴代の評価データから、いま人気のアニメを毎月更新で紹介します。</p></section>""") + """
+<p>あなたが今夜観る1本が見つかります。世界27か国・国内13サービスの配信ランキングと歴代の評価データから、いま人気のアニメを毎月更新で紹介します。</p></section>""") + """
 <div class="grid">%s%s%s%s%s%s</div>
 <h2>配信サービス別 世界TOP5 <a class="h2more" href="services.html">すべてのサービス →</a></h2><div class="svcgrid">%s</div>
 <h2>探す</h2><p class="find"><a href="season.html">%s 人気ランキング →</a></p><p class="find"><a href="prev-season.html">前季アニメ 人気ランキング →</a></p><p class="find"><a href="seasons.html">シーズン別ランキング（1970年〜）→</a></p><p class="find"><a href="genre.html">ジャンル別のおすすめ →</a></p><p class="find"><a href="year.html">年別のおすすめ（1970年〜）→</a></p><p class="find"><a href="services.html">配信サービス別ランキング（13サービス）→</a></p><p class="find"><a href="country.html">国別ランキング（27か国）→</a></p>
