@@ -120,8 +120,8 @@ BANNERS = set(f[:-4] for f in os.listdir(os.path.join(HERE, "assets", "banner"))
 SISTER_SITES = [("AIデザイン実践ラボ", "ai-design-lab"), ("推し活グッズ＆遠征ガイド", "oshikatsu-guide"),
                 ("はじめてのスパイスカレー", "spice-curry-start"), ("推し発見ナビ", "oshi-hakken-navi"),
                 ("そのまま使えるAIプロンプト集", "ai-prompt-recipes")]
-PROFILE = ("アニメ好きの運営者が、Netflix 公式 Top10・JustWatch・AniList・Filmarks のデータを毎月集計して、"
-           "「いま観るべきアニメ」が一目でわかるランキングにまとめています。歌い手やボカロなど音楽の推し活もしています。")
+PROFILE = ("あなたが「次に観る1本」を迷わず選べるように、Netflix 公式 Top10・JustWatch・AniList・Filmarks のデータを"
+           "毎月集計してランキングにまとめています。運営者もアニメ好きで、歌い手やボカロなど音楽の推し活もしています。見に来てくださって、ありがとうございます。")
 
 def sidebar(rel):
     rank = "".join('<li><a href="%s%s">%s</a></li>' % (rel, h, t) for h, t in NAV[1:])
@@ -136,7 +136,7 @@ def sidebar(rel):
             '<div class="sbox"><div class="sh">姉妹サイト</div><ul class="slist">%s</ul></div>'
             '</aside>') % (esc(PROFILE), rel,
                            ('<div class="sbox sticky"><div class="sh">アニメを観るなら <span class="prc">PR</span></div>%s'
-                            '<p class="note">配信作品・料金・無料期間は各サービスの公式サイトで確認してください。</p></div>' % svc) if svc else "",
+                            '<p class="note">配信作品・料金・無料期間の最新は、各サービスの公式サイトでご確認いただけます。</p></div>' % svc) if svc else "",
                            rank, sis)
 
 def author_box(rel):
@@ -371,17 +371,17 @@ def now_items(rows, n=30, prev=None):
     return out
 
 body = """<h1>国内いま人気のアニメ TOP30（全配信サービス合算）</h1>
-<p class="lead">Netflix・Prime Video・U-NEXT・dアニメストア・Disney+・Hulu などの国内ランキングを合算した、いま日本で観られているアニメです（集計日 %s、毎月更新）。</p>
+<p class="lead">いま日本で観られているアニメが、ひと目でわかります。Netflix・Prime Video・U-NEXT・dアニメストア・Disney+・Hulu などの国内ランキングを合算しました（集計日 %s、毎月更新）。</p>
 %s
 <h2>Filmarks で話題のアニメ</h2>
-<p class="lead">レビューサイト Filmarks の「話題のアニメ」。数字は5点満点の平均評価。</p>
+<p class="lead">観た人の声で選びたいあなたに。レビューサイト Filmarks の「話題のアニメ」です。数字は5点満点の平均評価。</p>
 %s""" % (esc(snap), rank_list(now_items(now_j, prev=PREV_J), label="国内いま人気（全配信合算）", href="now-japan.html"),
          rank_list([{"rank": r["rank"], "title": r["title"], "sub": "評価 %s / 5.0" % r["score_5"], "img": cover(r["title"]),
                      "chg": chg_badge(r["rank"], r["title"], PREV_F)} for r in flm[:20]], label="Filmarks 話題のアニメ", href="now-japan.html"))
 write("now-japan.html", page("国内いま人気のアニメ TOP30", body, "日本の配信サービス全体で今月人気のアニメランキング", banner="now-japan", hero=True))
 
 body = """<h1>世界いま人気のアニメ TOP30（27か国・全配信合算）</h1>
-<p class="lead">世界27か国の Netflix・Prime Video・Disney+・Crunchyroll・Hulu・HBO Max・Apple TV+ のランキングを合算（集計日 %s）。</p>
+<p class="lead">世界のファンがいま夢中な作品が、ひと目でわかります。世界27か国の Netflix・Prime Video・Disney+・Crunchyroll・Hulu・HBO Max・Apple TV+ のランキングを合算しました（集計日 %s）。</p>
 %s""" % (esc(snap), rank_list(now_items(now_w, prev=PREV_W), label="世界いま人気（27か国合算）", href="now-world.html"))
 write("now-world.html", page("世界いま人気のアニメ TOP30", body, "世界27か国の配信ランキングを合算した今月のアニメ人気TOP30", banner="now-world", hero=True))
 
@@ -397,7 +397,7 @@ def anilist_items(rows, n=100):
     return out
 
 body = """<h1>歴代アニメ 世界評価ランキング TOP100</h1>
-<p class="lead">世界最大級のアニメデータベース AniList の平均スコア順。海外ファンからの評価の高さを示します。</p>
+<p class="lead">長く愛される名作から、あなたの次の1本を選べます。世界最大級のアニメデータベース AniList の平均スコア順で、海外ファンからの評価の高さを示します。</p>
 %s""" % rank_list(anilist_items(world), label="歴代・世界評価", href="best-world.html")
 write("best-world.html", page("歴代アニメ 世界評価ランキング TOP100", body, "AniList 平均スコアによる歴代アニメ世界評価TOP100", banner="best-world", hero=True))
 
@@ -418,7 +418,7 @@ body = """<h1>Netflix アニメランキング</h1>
 <p class="lead">Netflix 公式「Tudum Top 10」の世界集計。再生回数は Netflix が公表している唯一の公式数字です。</p>
 %s
 <h2>日本 TOP30</h2>
-<p class="lead">日本の Netflix 週間TOP10に入った週数の多い順。</p>
+<p class="lead">日本で長く観られ続けている作品がわかります。日本の Netflix 週間TOP10に入った週数の多い順です。</p>
 %s""" % (rank_list(nf_items(nf_g, prev=PREV_NG), label="Netflix 世界", href="netflix.html"),
          rank_list(nf_items(nf_c, views=False, prev=PREV_NJ), label="Netflix 日本", href="netflix.html"))
 write("netflix.html", page("Netflix アニメランキング 世界・日本", body, "Netflix公式Top10に基づくアニメの世界・日本ランキング", banner="netflix", hero=True))
@@ -525,7 +525,7 @@ def hub_card(sid, name, top):
     lis = "".join('<li><span class="rk">%d</span>%s<span class="nm">%s</span></li>' % (i["rank"], img(i.get("img"), i["title"], "cvs"), esc(i["title"])) for i in top)
     return '<a class="svc svc-link" href="service/%s.html"><h3>%s</h3><ol>%s</ol><span class="more">ランキングを見る →</span></a>' % (sid, h, lis)
 
-body = ("<h1>配信サービス別アニメランキング</h1><p class=\"lead\">各配信サービスで、いま人気のアニメ。毎月更新（集計日 %s）。</p>" % esc(snap) +
+body = ("<h1>配信サービス別アニメランキング</h1><p class=\"lead\">あなたが使っている配信サービスで、いま人気のアニメがわかります。毎月更新（集計日 %s）。</p>" % esc(snap) +
         "<h2>世界（27か国合算）</h2><div class=\"svcgrid\">%s</div>" % "".join(hub_card(*x) for x in hub_world) +
         "<h2>日本国内</h2><div class=\"svcgrid\">%s</div>" % "".join(hub_card(*x) for x in hub_jp))
 write("services.html", page("配信サービス別アニメランキング", body, "Netflix・Prime Video・U-NEXT・dアニメストア・ABEMA など配信サービスごとのアニメ人気ランキング", banner="services", hero=True))
@@ -594,7 +594,7 @@ for y in sorted(by_year):
     write(fn, page("%d年のおすすめアニメ" % y, b, "%d年に放送されたアニメのおすすめランキングTOP%d" % (y, len(rows)), 1, banner="year"))
 ydiv = "".join('<div class="yrow"><span class="ydec">%d年代</span><div class="ylinks">%s</div></div>' % (d, "".join(v))
                for d, v in sorted(year_links.items(), reverse=True))
-write("year.html", page("年別おすすめアニメ", "<h1>年別おすすめアニメ</h1><p class=\"lead\">1970年から今年まで、その年に放送・公開されたアニメを世界評価順に紹介します。</p>%s" % ydiv,
+write("year.html", page("年別おすすめアニメ", "<h1>年別おすすめアニメ</h1><p class=\"lead\">生まれた年や思い出の年から、好きな作品を探せます。1970年から今年まで、その年に放送・公開されたアニメを世界評価順に紹介します。</p>%s" % ydiv,
                         "1970年から今年まで、年ごとのおすすめアニメランキング", banner="year", hero=True))
 
 def mini(items, href, title):
@@ -646,9 +646,9 @@ def season_body(y, c, kind):
     """kind: current（今季）/ prev（前季）/ archive（それより前）"""
     rows = season_rows(y, c)
     lab = "%d年%sアニメ" % (y, c)
-    lead = {"current": "今期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。「Filmarks で話題」は国内のレビューサイトでも話題になっている作品です。" % (y, c),
-            "prev": "前期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。見逃した作品を配信でまとめて観るのにおすすめです。" % (y, c),
-            "archive": "%d年%sクールに放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べた記録です。" % (y, c)}[kind]
+    lead = {"current": "今期の1話目、どれから観るか決められます。今期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。「Filmarks で話題」は国内のレビューサイトでも話題になっている作品です。" % (y, c),
+            "prev": "見逃した作品を、配信でまとめて観るのに役立ちます。前期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。" % (y, c),
+            "archive": "あの頃夢中だった作品に、また会えます。%d年%sクールに放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べた記録です。" % (y, c)}[kind]
     # 個別ページを作るのは今季・前季の作品だけ（過去の全シーズン分は数が多すぎるため）
     label = lab if kind in ("current", "prev") else None
     href = {"current": "season.html", "prev": "prev-season.html"}.get(kind)
@@ -685,7 +685,7 @@ for y, c in reversed(ARCHIVE):
     by_y.setdefault(y, []).append(c)
 rows_html = "".join('<div class="yrow"><span class="ydec">%d年</span><div class="ylinks spl">%s</div></div>' % (
     y, "".join('<a href="season/%s.html">%s</a>' % (season_slug(y, c), c) for c in COUR_ORDER if c in cs)) for y, cs in by_y.items())
-body = ("<h1>シーズン別アニメランキング</h1><p class=\"lead\">1970年から今期まで、クール（冬・春・夏・秋）ごとに放送が始まったアニメの人気ランキングをまとめました。</p>"
+body = ("<h1>シーズン別アニメランキング</h1><p class=\"lead\">あなたが観ていたあの季節のアニメに、すぐたどり着けます。1970年から今期まで、クール（冬・春・夏・秋）ごとに放送が始まったアニメの人気ランキングをまとめました。</p>"
         + '<div class="grid">%s%s</div>' % (mini(season_items(season_rows(SEASON_Y, SEASON_C)), "season.html", "今季：" + season_label),
                                            mini(season_items(season_rows(PREV_Y, PREV_C), hot_flag=False), "prev-season.html", "前季：" + prev_label))
         + "<h2>過去のシーズン</h2>" + rows_html)
@@ -723,9 +723,9 @@ for s, rows in by_svc.items():
 HERO_IMG = os.path.exists(os.path.join(OUT, "thumbnail.jpg"))
 body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
 <img src="thumbnail.jpg" alt="推しアニメランキング（毎月更新）｜世界27か国・国内13サービスの配信ランキングと歴代評価から「いま観るべきアニメ」がわかる" width="1200" height="630">
-<p class="vh">世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""" if HERO_IMG else
+<p class="vh">あなたが今夜観る1本が見つかります。世界27か国・国内12サービスの配信ランキングと歴代の評価データから、いま人気のアニメを毎月更新で紹介します。</p></section>""" if HERO_IMG else
 """<section class="hero"><h1>%s</h1>
-<p>世界27か国・国内12サービスの配信ランキングと、歴代の評価データから「いま観るべきアニメ」を毎月更新で紹介します。</p></section>""") + """
+<p>あなたが今夜観る1本が見つかります。世界27か国・国内12サービスの配信ランキングと歴代の評価データから、いま人気のアニメを毎月更新で紹介します。</p></section>""") + """
 <div class="grid">%s%s%s%s%s%s</div>
 <h2>配信サービス別 世界TOP5 <a class="h2more" href="services.html">すべてのサービス →</a></h2><div class="svcgrid">%s</div>
 <h2>探す</h2><p class="find"><a href="season.html">%s 人気ランキング →</a></p><p class="find"><a href="prev-season.html">前季アニメ 人気ランキング →</a></p><p class="find"><a href="seasons.html">シーズン別ランキング（1970年〜）→</a></p><p class="find"><a href="genre.html">ジャンル別のおすすめ →</a></p><p class="find"><a href="year.html">年別のおすすめ（1970年〜）→</a></p><p class="find"><a href="services.html">配信サービス別ランキング（13サービス）→</a></p><p class="find"><a href="country.html">国別ランキング（27か国）→</a></p>
@@ -737,7 +737,7 @@ body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
        mini(anilist_items(world), "best-world.html", "歴代・世界評価"),
        mini([{"rank": r["rank"], "title": r["title"], "chg": chg_badge(r["rank"], r["title"], PREV_F)} for r in flm], "now-japan.html", "Filmarks 話題"),
        svc_cards, esc(season_label))
-write("index.html", page("トップ", body, "配信ランキングと歴代評価でえらぶ、いま観るべきおすすめアニメ"))
+write("index.html", page("トップ", body, "あなたが今夜観る1本が見つかる。配信ランキングと歴代評価でえらぶおすすめアニメ"))
 
 # ---------- 作品の個別ページ ----------
 def pv_block(k):
@@ -810,7 +810,7 @@ json.dump(index_out, open(os.path.join(HERE, "titles_index.json"), "w", encoding
 
 # ---------- 固定ページ ----------
 write("about.html", page("このサイトについて", """<h1>このサイトについて</h1>
-<p>「%s」は、世界と日本の配信ランキング・レビューサイトの評価データを毎月集計し、おすすめアニメを紹介する個人運営サイトです。</p>
+<p>「%s」では、あなたが次に観るアニメを、世界と日本の配信ランキング・レビューサイトの評価データから選べます。データは毎月集計し、個人で運営しています。見に来てくださって、ありがとうございます。</p>
 <h2>データの出典</h2>
 <ul><li>AniList（世界最大級のアニメデータベース）: 歴代評価・ジャンル・年別</li>
 <li>Netflix Tudum 公式 Top 10: 週間ランキング・再生回数</li>
@@ -818,7 +818,8 @@ write("about.html", page("このサイトについて", """<h1>このサイト�
 <li>ABEMA・DMM TV・TVer・バンダイチャンネル: 各サービスのランキング画面</li>
 <li>Filmarks: 話題のアニメ・5段階評価</li></ul>
 <p>配信サービスのアイコンは JustWatch より。</p>
-<h2>運営者</h2><p>Masabee（YouTube: <a href="https://www.youtube.com/@Masabee1029" target="_blank" rel="noopener">@Masabee1029</a>）</p>
+<h2>運営者</h2><p>Masabee（YouTube: <a href="https://www.youtube.com/@Masabee1029" target="_blank" rel="noopener">@Masabee1029</a>）。運営者もアニメと音楽の推し活が好きで、「次に何を観よう」と迷う時間を、作品を楽しむ時間に変えられるように集計しています。</p>
+<p>あなたの、いちばん好きなアニメは何ですか？　このサイトが、その次の1本に出会うきっかけになればうれしいです。</p>
 <h2>お問い合わせ</h2><p>%s</p>
 <h2>広告について</h2><p>当サイトは Amazon.co.jp アソシエイト、楽天アフィリエイト、もしもアフィリエイト（Yahoo!ショッピング等）のアフィリエイトプログラムに参加しています。リンク先での購入・契約により当サイトに紹介料が支払われることがありますが、ランキングの順位は収益によって変わりません。</p>
 """ % (esc(CFG["site_name"]), ('<a href="%s">お問い合わせフォーム</a>' % esc(CFG["contact_url"])) if CFG.get("contact_url") else "準備中（YouTube チャンネルのコメント欄からご連絡ください）")))
