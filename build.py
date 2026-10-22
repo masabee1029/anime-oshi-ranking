@@ -104,6 +104,36 @@ def shop_buttons(title):
                   '<div class="shop-btns">%s</div></div>' % "".join(vods))
     return html_
 
+GOODS = read_json(os.path.join(HERE, "goods.json")) if os.path.exists(os.path.join(HERE, "goods.json")) else {}
+def goods_pick(k, m):
+    """作品ごとのおすすめグッズ 1 つ（goods.json に {key: {item, why}} があれば優先。無ければ形式・ジャンル・年から選ぶ）"""
+    if GOODS.get(k): return GOODS[k]["item"], GOODS[k]["why"]
+    m = m or {}; g = set((m.get("genres") or "").split("|"))
+    y = m.get("season_year") or m.get("year") or 0
+    try: y = int(y)
+    except Exception: y = 0
+    if m.get("format") == "MOVIE":
+        return "パンフレット", "劇場で売られた公式パンフレットは、スタッフ・キャストのインタビューや設定資料が読める映画ファンの定番グッズです。"
+    if "Sports" in g:
+        return "マフラータオル", "スポーツ作品は応援グッズが似合います。マフラータオルなら観戦気分で飾ったり使ったりできます。"
+    if "Music" in g:
+        return "サウンドトラック", "音楽が主役の作品なので、劇中の曲をまとめたサウンドトラック（CD・配信）で名場面をもう一度楽しめます。"
+    if "Mecha" in g:
+        return "プラモデル", "ロボット作品なら、劇中の機体を自分の手で組み立てられるプラモデルがいちばんの楽しみです。"
+    if y and y < 2005:
+        return "設定資料集", "放送から年月がたった名作は、キャラクターや世界観の設定画をまとめた資料集で制作の裏側を楽しめます。"
+    return "アクリルスタンド", "推しキャラを机や棚に飾れるアクリルスタンドは、手ごろな価格で集めやすい定番グッズです。"
+
+def goods_block(t, item, why):
+    q = "%s %s" % (t, item)
+    def a(cls, url, label):
+        return '<a class="btn %s" href="%s" target="_blank" rel="nofollow sponsored noopener">%s</a>' % (cls, esc(url), label)
+    shops = [a("amz", amazon_link(q), "Amazon"), a("rkt", rakuten_link(q), "楽天")]
+    if yahoo_link(q): shops.append(a("yho", yahoo_link(q), "Yahoo!"))
+    return ('<h2>おすすめのグッズ</h2><div class="goods"><p class="goods-n">%s</p><p class="goods-w">%s</p></div>'
+            '<div class="shop"><span class="shop-lb">「%s」を探す</span><div class="shop-btns">%s</div></div>'
+            % (esc(q), esc(why), esc(q), "".join(shops)))
+
 # ---------- ページ枠 ----------
 NAV = [("index.html", "トップ"), ("season.html", "今季アニメ"), ("prev-season.html", "前季アニメ"), ("seasons.html", "シーズン別"), ("now-japan.html", "国内いま人気"), ("now-world.html", "世界いま人気"),
        ("best-world.html", "歴代・世界評価"), ("netflix.html", "Netflix"), ("services.html", "配信サービス別"), ("country.html", "国別"), ("genre.html", "ジャンル別"),
@@ -803,6 +833,7 @@ for k, d in TITLE_DB.items():
             (('<table class="info">%s</table>' % "".join('<tr><th>%s</th><td>%s</td></tr>' % (esc(a), esc(b)) for a, b in info)) if info else "") +
             pv_block(k) + watch +
             '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps +
+            goods_block(t, *goods_pick(k, m)) +
             '<h2>Blu-ray・原作・グッズ</h2>' + shop_buttons(t))
     desc = "%sはどこで観られる？配信サービス・ランキング順位・%sまとめ" % (t, "名言・" if kg else "")
     write("anime/%s.html" % k, page("%sはどこで観られる？配信・ランキングまとめ" % t, body, desc, 1))
@@ -893,6 +924,7 @@ a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hov
 .info{border-collapse:collapse;width:100%;font-size:.9rem}.info th{text-align:left;color:var(--mu);font-weight:400;width:7em;padding:6px 0;vertical-align:top}.info td{padding:6px 0}.info tr{border-bottom:1px solid var(--line)}
 .wrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.wlb{flex:0 0 8em;font-size:.8rem;color:var(--mu)}.chip{font-size:.82rem;padding:3px 12px;border-radius:999px;border:1px solid #3a8f63;color:#bfe6cf}
 .note{font-size:.75rem;color:var(--mu)}
+.goods{background:var(--card,#1a1d29);border:1px solid var(--line);border-left:4px solid var(--ac);border-radius:10px;padding:12px 16px;margin:8px 0}.goods-n{font-weight:700;font-size:1.05rem;margin:0 0 4px}.goods-w{margin:0;color:var(--mu);font-size:.92rem}
 .pv{position:relative;width:100%;aspect-ratio:16/9;background:linear-gradient(140deg,#2a1830,#101420);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .pv iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .pv-btn{all:unset;cursor:pointer;position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff;text-align:center;padding:16px}
