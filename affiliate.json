@@ -35,5 +35,36 @@
  "google_site_verification": "",
  "_google_site_verification_comment": "Google Search Console の「HTML タグ」で出る content=\"...\" の中身を入れると全ページに確認タグが入る",
  "ga_measurement_id": "G-EHWF25C1RB",
- "_ga_measurement_id_comment": "Google アナリティクス 4 の測定 ID（G-XXXXXXX）。入れると全ページに計測タグが入り、プライバシーポリシーも「利用しています」に変わる"
+ "_ga_measurement_id_comment": "Google アナリティクス 4 の測定 ID（G-XXXXXXX）。入れると全ページに計測タグが入り、プライバシーポリシーも「利用しています」に変わる",
+ "vc_ads_pending": [
+  {
+   "name": "Anime Store.JP",
+   "note": "アニメ・ゲームのキャラクターグッズを公式に買える",
+   "btn": "グッズを探す",
+   "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732677",
+   "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732677"
+  },
+  {
+   "name": "レコチョク",
+   "note": "アニメの主題歌やサントラを1曲から買える",
+   "btn": "曲を探す",
+   "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732678",
+   "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732678"
+  },
+  {
+   "name": "コロムビアミュージックショップ",
+   "note": "特典つきのアニメCD・DVDがそろう",
+   "btn": "CD・DVDを探す",
+   "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732679",
+   "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732679"
+  },
+  {
+   "name": "ぷりんと楽譜",
+   "note": "アニソンの楽譜を1曲からダウンロードできる",
+   "btn": "楽譜を探す",
+   "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732680",
+   "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732680"
+  }
+ ],
+ "_vc_note": "VCサイト審査（ID 3785496）が通ったら vc_ads_pending を vc_ads に戻して build"
 }

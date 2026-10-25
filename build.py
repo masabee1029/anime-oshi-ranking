@@ -161,13 +161,25 @@ def sidebar(rel):
     return ('<aside class="side">'
             '<div class="sbox"><div class="sh">運営者</div><div class="prof"><div class="avatar">推</div><p>%s</p></div>'
             '<a class="more" href="%sabout.html">このサイトについて</a></div>'
-            '%s'
+            '%s%s'
             '<div class="sbox"><div class="sh">ランキング一覧</div><ul class="slist">%s</ul></div>'
             '<div class="sbox"><div class="sh">姉妹サイト</div><ul class="slist">%s</ul></div>'
             '</aside>') % (esc(PROFILE), rel,
                            ('<div class="sbox sticky"><div class="sh">アニメを観るなら <span class="prc">PR</span></div>%s'
                             '<p class="note">配信作品・料金・無料期間の最新は、各サービスの公式サイトでご確認いただけます。</p></div>' % svc) if svc else "",
-                           rank, sis)
+                           vc_box(), rank, sis)
+
+# バリューコマースの提携広告（affiliate.json の vc_ads。審査中は vc_ads_pending に置いて出さない。2026-10-25 追加）
+def vc_box():
+    ads = [a for a in CFG.get("vc_ads", []) if a.get("url")]
+    if not ads:
+        return ""
+    items = "".join('<div class="vcad"><strong>%s</strong><span>%s</span>'
+                    '<a class="sbtn" rel="nofollow sponsored noopener" target="_blank" href="%s" style="--bc:#3fc1a5">%s</a>%s</div>'
+                    % (esc(a["name"]), esc(a.get("note", "")), esc(a["url"]), esc(a.get("btn", "公式サイトを見る")),
+                       '<img src="%s" height="1" width="1" alt="" style="border:0">' % esc(a["beacon"]) if a.get("beacon") else "")
+                    for a in ads)
+    return '<div class="sbox"><div class="sh">グッズ・音楽を探すなら <span class="prc">PR</span></div>%s</div>' % items
 
 def author_box(rel):
     return ('<div class="author"><div class="avatar">推</div><div><strong>このページを作った人：運営者</strong><p>%s</p>'
@@ -924,6 +936,7 @@ a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hov
 .info{border-collapse:collapse;width:100%;font-size:.9rem}.info th{text-align:left;color:var(--mu);font-weight:400;width:7em;padding:6px 0;vertical-align:top}.info td{padding:6px 0}.info tr{border-bottom:1px solid var(--line)}
 .wrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.wlb{flex:0 0 8em;font-size:.8rem;color:var(--mu)}.chip{font-size:.82rem;padding:3px 12px;border-radius:999px;border:1px solid #3a8f63;color:#bfe6cf}
 .note{font-size:.75rem;color:var(--mu)}
+.vcad{display:flex;flex-direction:column;gap:4px;padding:8px 0;border-top:1px solid var(--line)}.vcad span{font-size:.85rem;color:var(--mu)}.vcad .sbtn{align-self:flex-start}
 .goods{background:var(--card,#1a1d29);border:1px solid var(--line);border-left:4px solid var(--ac);border-radius:10px;padding:12px 16px;margin:8px 0}.goods-n{font-weight:700;font-size:1.05rem;margin:0 0 4px}.goods-w{margin:0;color:var(--mu);font-size:.92rem}
 .pv{position:relative;width:100%;aspect-ratio:16/9;background:linear-gradient(140deg,#2a1830,#101420);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .pv iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
