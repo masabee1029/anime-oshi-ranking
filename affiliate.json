@@ -1,34 +1,39 @@
 {
-  "_comment": "ASP登録後にここを埋めて python3 build.py を実行すると全リンクが差し替わる",
-  "amazon_tag": "masabee00001-22",
-  "rakuten_affiliate_id": "5867408e.a723d753.5867408f.9cd38db5",
-  "site_url": "https://masabee1029.github.io/anime-oshi-ranking/",
-  "site_name": "推しアニメランキング",
-  "contact_url": "",
-  "_streaming_comment": "配信サービスの紹介リンク。name=ボタン名, url=もしも等で発行したリンク。並び順どおりに表示。urlが空のものは出さない",
-  "streaming": [
-    {
-      "name": "DMM TVで観る",
-      "url": "",
-      "color": "#0a74da"
-    },
-    {
-      "name": "U-NEXTで観る",
-      "url": "",
-      "color": "#1b1f66"
-    }
-  ],
-  "moshimo_yahoo": {
-    "a_id": "5842872",
-    "p_id": "1225",
-    "pc_id": "1925",
-    "pl_id": "18502"
+ "_comment": "ASP登録後にここを埋めて python3 build.py を実行すると全リンクが差し替わる",
+ "amazon_tag": "masabee00001-22",
+ "rakuten_affiliate_id": "5867408e.a723d753.5867408f.9cd38db5",
+ "site_url": "https://masabee1029.github.io/anime-oshi-ranking/",
+ "site_name": "推しアニメランキング",
+ "contact_url": "",
+ "_streaming_comment": "配信サービスの紹介リンク。name=ボタン名, url=もしも等で発行したリンク。並び順どおりに表示。urlが空のものは出さない",
+ "streaming": [
+  {
+   "name": "ABEMAで観る",
+   "url": "https://px.a8.net/svt/ejp?a8mat=4BENDR+6XGRVM+4EKC+5YJRM",
+   "color": "#222222"
   },
-  "_moshimo_yahoo_comment": "もしも経由 Yahoo!ショッピングのどこでもリンク。SNS・YouTube への掲載は不可（サイトのみ）",
-  "use_anilist_covers": false,
-  "_use_anilist_covers_comment": "AniList の作品画像を表示するか。著作権の整理（2026-10-12）により false。true に戻すと画像が出る",
-  "google_site_verification": "",
-  "_google_site_verification_comment": "Google Search Console の「HTML タグ」で出る content=\"...\" の中身を入れると全ページに確認タグが入る",
-  "ga_measurement_id": "G-EHWF25C1RB",
-  "_ga_measurement_id_comment": "Google アナリティクス 4 の測定 ID（G-XXXXXXX）。入れると全ページに計測タグが入り、プライバシーポリシーも「利用しています」に変わる"
+  {
+   "name": "DMM TVで観る",
+   "url": "",
+   "color": "#0a74da"
+  },
+  {
+   "name": "U-NEXTで観る",
+   "url": "",
+   "color": "#1b1f66"
+  }
+ ],
+ "moshimo_yahoo": {
+  "a_id": "5842872",
+  "p_id": "1225",
+  "pc_id": "1925",
+  "pl_id": "18502"
+ },
+ "_moshimo_yahoo_comment": "もしも経由 Yahoo!ショッピングのどこでもリンク。SNS・YouTube への掲載は不可（サイトのみ）",
+ "use_anilist_covers": false,
+ "_use_anilist_covers_comment": "AniList の作品画像を表示するか。著作権の整理（2026-10-12）により false。true に戻すと画像が出る",
+ "google_site_verification": "",
+ "_google_site_verification_comment": "Google Search Console の「HTML タグ」で出る content=\"...\" の中身を入れると全ページに確認タグが入る",
+ "ga_measurement_id": "G-EHWF25C1RB",
+ "_ga_measurement_id_comment": "Google アナリティクス 4 の測定 ID（G-XXXXXXX）。入れると全ページに計測タグが入り、プライバシーポリシーも「利用しています」に変わる"
 }
