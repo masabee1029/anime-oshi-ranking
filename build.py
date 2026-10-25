@@ -805,6 +805,15 @@ def meta_for(d):
         m = META.get(norm(t)) or META.get(norm(strip_extra(t)))
         if m: return m
     return None
+
+# ---------- Prime Video の作品リンク（affiliate.json の prime_video: {作品名: Amazon アソシエイトの URL}。2026-10-25 追加） ----------
+_PV = {norm(k): v for k, v in (CFG.get("prime_video") or {}).items()}
+def prime_link(title):
+    n = norm(title)
+    for k, v in _PV.items():
+        if k and (k == n or k in n or n in k):
+            return v
+    return ""
 SVC_FROM_RANK = {"ABEMA 日本": "ABEMA", "DMM TV 日本": "DMM TV", "TVer 日本": "TVer", "バンダイチャンネル 日本": "バンダイチャンネル"}
 index_out = []
 for k, d in TITLE_DB.items():
@@ -832,6 +841,9 @@ for k, d in TITLE_DB.items():
         if free: rows_.append('<div class="wrow"><span class="wlb">無料</span>%s</div>' % "".join('<span class="chip">%s</span>' % esc(x) for x in free))
         if rent: rows_.append('<div class="wrow"><span class="wlb">レンタル・購入</span>%s</div>' % "".join('<span class="chip">%s</span>' % esc(x) for x in rent))
         series_note = ("「%s」シリーズ全体の配信状況です。この作品（続編・劇場版）が含まれるかは各サービスで確認してください。" % esc(w["series"])) if w.get("series") else ""
+        pv = prime_link(t)
+        if pv:
+            rows_.append('<div class="wrow"><span class="wlb">Prime Video</span><a class="btn amz" rel="nofollow sponsored noopener" target="_blank" href="%s">Prime Video で観る（レンタル・購入）</a></div>' % esc(pv))
         watch = ('<h2>どこで観られる？（日本）</h2>%s<p class="note">%sJustWatch と各サービスのランキングから集計（%s 時点）。配信状況は変わることがあるので、最新は各サービスで確認してください。</p>'
                  % ("".join(rows_), series_note, esc(w.get("date") or snap)))
     else:
