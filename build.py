@@ -811,7 +811,7 @@ _PV = {norm(k): v for k, v in (CFG.get("prime_video") or {}).items()}
 def prime_link(title):
     n = norm(title)
     for k, v in _PV.items():
-        if k and (k == n or k in n or n in k):
+        if k and (k == n or (k in n and len(n) - len(k) <= 6)):
             return v
     return ""
 SVC_FROM_RANK = {"ABEMA 日本": "ABEMA", "DMM TV 日本": "DMM TV", "TVer 日本": "TVer", "バンダイチャンネル 日本": "バンダイチャンネル"}
