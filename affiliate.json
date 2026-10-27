@@ -36,7 +36,11 @@
  "_google_site_verification_comment": "Google Search Console の「HTML タグ」で出る content=\"...\" の中身を入れると全ページに確認タグが入る",
  "ga_measurement_id": "G-EHWF25C1RB",
  "_ga_measurement_id_comment": "Google アナリティクス 4 の測定 ID（G-XXXXXXX）。入れると全ページに計測タグが入り、プライバシーポリシーも「利用しています」に変わる",
- "vc_ads_pending": [
+ "_prime_video_comment": "Prime Video の作品ページへのアソシエイトリンク（Amazon バーで作ったもの）。作品名をキーに、作品ページの「どこで観られる？」にボタンとして出る。2026-10-25 本人提供",
+ "prime_video": {
+  "チェンソーマン レゼ篇": "https://www.amazon.co.jp/gp/video/detail/0RWIZNU5S5IQ8IRCU4EOW7JNVZ?&linkCode=sl2&tag=masabee00001-22&linkId=11bcf13b770fc5419fb45c8c1a8ab36a&ref_=as_li_ss_tl"
+ },
+ "vc_ads": [
   {
    "name": "Anime Store.JP",
    "note": "アニメ・ゲームのキャラクターグッズを公式に買える",
@@ -65,10 +69,5 @@
    "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732680",
    "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732680"
   }
- ],
- "_vc_note": "VCサイト審査（ID 3785496）が通ったら vc_ads_pending を vc_ads に戻して build",
- "_prime_video_comment": "Prime Video の作品ページへのアソシエイトリンク（Amazon バーで作ったもの）。作品名をキーに、作品ページの「どこで観られる？」にボタンとして出る。2026-10-25 本人提供",
- "prime_video": {
-  "チェンソーマン レゼ篇": "https://www.amazon.co.jp/gp/video/detail/0RWIZNU5S5IQ8IRCU4EOW7JNVZ?&linkCode=sl2&tag=masabee00001-22&linkId=11bcf13b770fc5419fb45c8c1a8ab36a&ref_=as_li_ss_tl"
- }
+ ]
 }
