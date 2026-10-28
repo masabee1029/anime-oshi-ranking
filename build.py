@@ -88,6 +88,14 @@ def yahoo_link(title):
     return ("https://af.moshimo.com/af/c/click?a_id=%s&p_id=%s&pc_id=%s&pl_id=%s&url=%s" %
             (y["a_id"], y["p_id"], y["pc_id"], y["pl_id"], urllib.parse.quote(dest, safe="")))
 
+def neowing_link(title):
+    """NEOWING（CD・Blu-ray・アニメグッズ）。バリューコマースのリンクに作品名の検索ページを vc_url で付ける（affiliate.json の neowing_vc: {sid, pid}。2026-10-28 追加）"""
+    nv = CFG.get("neowing_vc") or {}
+    if not nv.get("pid"):
+        return ""
+    dest = "https://www.neowing.co.jp/searchuni?q=" + urllib.parse.quote(title)
+    return "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=%s&pid=%s&vc_url=%s" % (nv["sid"], nv["pid"], urllib.parse.quote(dest, safe=""))
+
 def shop_buttons(title):
     def a(cls, url, label, style=""):
         return '<a class="btn %s" %shref="%s" target="_blank" rel="nofollow sponsored noopener">%s</a>' % (
@@ -95,6 +103,8 @@ def shop_buttons(title):
     shops = [a("amz", amazon_link(title), "Amazon"), a("rkt", rakuten_link(title), "楽天")]
     if yahoo_link(title):
         shops.append(a("yho", yahoo_link(title), "Yahoo!"))
+    if neowing_link(title):
+        shops.append(a("neo", neowing_link(title), "NEOWING", "background:#0a7bc2;color:#fff"))
     html_ = ('<div class="shop"><span class="shop-lb">Blu-ray・原作・グッズを探す</span>'
              '<div class="shop-btns">%s</div></div>' % "".join(shops))
     vods = [a("vod", sv["url"], esc(sv["name"]), "--bc:%s" % esc(sv.get("color") or "#888"))
