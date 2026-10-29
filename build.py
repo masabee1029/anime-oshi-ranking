@@ -600,6 +600,7 @@ JP_SVC = [("nfx", "Netflix", ("jw", "Netflix")), ("amp", "Amazon Prime Video", (
           ("fod", "FOD", ("jw", "FOD")), ("abema", "ABEMA", ("csv", "abema")), ("dmmtv", "DMM TV", ("csv", "dmmtv")),
           ("tver", "TVer", ("csv", "tver")), ("bandai", "バンダイチャンネル", ("csv", "bandai"))]
 
+WIDE_LISTS = {}   # 年がわからないサービスは、全ランキングが揃ってから「人気の広さ」グラフを入れる
 def jp_rows(how):
     kind, key = how
     if kind == "jw":
@@ -634,9 +635,10 @@ for sid, name, how in JP_SVC:
         hub_jp.append((sid, name, jp_rows(how)[:3])); continue
     jl = jp_rows(how)
     if not jl: continue
-    body = "<h1>%s アニメランキング</h1><h2>日本 TOP%d</h2>%s%s" % (esc(name), len(jl), decade_chart("%sで人気の作品は、いつの作品？" % esc(name), [year_of(i["title"]) for i in jl],
-                                                                                "%s の日本ランキングの作品を、放送・公開された年代ごとに数えました（年がわかった作品だけ）。" % esc(name)), rank_list(jl, label="%s 日本" % name, href="service/%s.html" % sid))
+    body = "<h1>%s アニメランキング</h1><h2>日本 TOP%d</h2>%s%s" % (esc(name), len(jl), (lambda c_: c_ or ("\x00WIDE:%s\x00" % sid))(decade_chart("%sで人気の作品は、いつの作品？" % esc(name), [year_of(i["title"]) for i in jl],
+                                                                                "%s の日本ランキングの作品を、放送・公開された年代ごとに数えました（年がわかった作品だけ）。" % esc(name))), rank_list(jl, label="%s 日本" % name, href="service/%s.html" % sid))
     write("service/%s.html" % sid, page("%s アニメランキング" % name, body, "%sで人気のアニメランキング" % name, 1, banner="services"))
+    WIDE_LISTS[sid] = (name, jl)
     hub_jp.append((sid, name, jl[:3]))
 
 HIDE_SVC_HUB = {"Apple TV+"}
@@ -1023,6 +1025,17 @@ def pop_line(t, m):
     return ('<section class="rchart" data-anim><h2>「観たい」人の数の伸び</h2><svg viewBox="0 0 %d %d" class="rc-svg" role="img" aria-label="%sの人気の伸び">%s%s</svg>'
             '<p class="note">AniList で「%s」を「観る・観たいリスト」に入れた人の数です（毎週日曜と最新の日、%s 時点）。%s/%d から %s人増えました。</p></section>'
             % (W, H, esc(t), "".join(g), clip, esc(t), pts[-1], int(pts[0][5:7]), int(pts[0][8:10]), format(grow, ",")))
+def near_chart(k, d):
+    """数字の少ない作品は、載っているランキングで前後の順位の作品と並べる（この作品は太字）"""
+    apps_ = [a for a in d["apps"] if str(a[1]).isdigit()]
+    if not apps_: return ""
+    lab, rk, hr = apps_[0][0], int(apps_[0][1]), apps_[0][2]
+    same = sorted({(int(a[1]), k2) for k2, d2 in TITLE_DB.items() for a in d2["apps"] if a[0] == lab and a[2] == hr and str(a[1]).isdigit() and int(a[1]) <= 30})
+    i = [x[1] for x in same].index(k) if k in [x[1] for x in same] else None
+    if i is None: return ""
+    win = same[max(0, i - 3): i + 4]
+    rows_ = [(("<b>%s</b>" % esc(TITLE_DB[k2]["title"])) if k2 == k else ('<a href="%s.html">%s</a>' % (k2, esc(TITLE_DB[k2]["title"]))), 31 - r_, "%d位" % r_, "") for r_, k2 in win]
+    return bar_chart("「%s」で近い順位の作品" % esc(lab), rows_, "棒が長いほど上の順位です。近い順位の作品も、次に観る候補にどうぞ。", ranked=False, mx=30)
 def apps_chart(apps):
     """世界評価が無い作品は、各ランキングでの順位を棒にする（上の順位ほど長い）"""
     rows_ = [(esc(lab), 31 - int(rk), "%s位" % rk, "") for lab, rk, h, sb in sorted(apps, key=lambda a: int(a[1]) if str(a[1]).isdigit() else 99)
@@ -1128,7 +1141,7 @@ for k, d in TITLE_DB.items():
               ('<blockquote class="kgq"><span class="kgl">作中の名言</span>「%s」<span class="kgw">— %s『%s』より</span></blockquote>' % (esc(kg["q"]), esc(kg["who"]), esc(t)))) if kg else "") +
             (('<table class="info">%s</table>' % "".join('<tr><th>%s</th><td>%s</td></tr>' % (esc(a), esc(b)) for a, b in info)) if info else "") +
             pv_block(k) + watch +
-            '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps + (score_chart(t, m) or apps_chart(d["apps"])) + pop_line(t, m) +
+            '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps + (score_chart(t, m) or apps_chart(d["apps"]) or (near_chart(k, d) if not (m and TRENDS.get(str(m.get("anilist_id") or ""))) else "")) + pop_line(t, m) +
             goods_block(t, *goods_pick(k, m)) +
             '<h2>Blu-ray・原作・グッズ</h2>' + shop_buttons(t) +
             next_block(k))
@@ -1241,5 +1254,14 @@ urls = [n for n in PAGES if n.endswith(".html")]
 write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
       "".join("<url><loc>%s%s</loc><lastmod>%s</lastmod></url>\n" % (base, "" if n == "index.html" else n, TODAY) for n in urls) + "</urlset>\n")
 write("robots.txt", "User-agent: *\nAllow: /\nSitemap: %ssitemap.xml\n" % base)
+for sid_, (nm_, jl_) in WIDE_LISTS.items():
+    rows_ = []
+    for it in jl_[:10]:
+        d_ = TITLE_DB.get(tkey(it["title"]))
+        n_ = len({a[0] for a in d_["apps"]}) if d_ else 1
+        rows_.append((tlink(it["title"]), n_, "%dつ" % n_, ""))
+    ch_ = bar_chart("%sの人気作は、ほかのランキングにもいくつ入っている？" % esc(nm_), rows_,
+                    "このサイトのランキング（配信サービス・国・季節など）のうち、その作品が入っている数です。多いほど、いろいろな場所で人気です。", mx=max([r[1] for r in rows_] + [1]))
+    PAGES["service/%s.html" % sid_] = PAGES["service/%s.html" % sid_].replace("\x00WIDE:%s\x00" % sid_, ch_)
 flush()
 print("generated", len([f for _, _, fs in os.walk(OUT) for f in fs]), "files in docs/")
