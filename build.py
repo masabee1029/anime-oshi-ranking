@@ -220,6 +220,7 @@ def page(title, body, desc="", path_depth=0, banner=None, hero=False):
         body += share_box() + author_box(rel)
     body = '<div class="layout"><main>%s</main>%s</div>' % (body, sidebar(rel))
     if "data-anim" in body: body += ANIM_JS
+    if '<ol class="rank">' in body: body += RANK_JS
     ld_tag = '<script type="application/ld+json">%s</script>\n' % json.dumps(ld, ensure_ascii=False)
 
     contact = CFG.get("contact_url") or (rel + "about.html")
@@ -254,6 +255,10 @@ ANIM_JS = ("<script>(function(){var rm=window.matchMedia&&matchMedia('(prefers-r
            "var b=function(){a.forEach(function(x){try{x.beginElement()}catch(e){x.parentNode.setAttribute('width',x.getAttribute('to'))}})};"
            "var go=function(){s.classList.add('go');if(document.readyState==='complete')setTimeout(b,30);else addEventListener('load',function(){setTimeout(b,30)})};"
            "if(!('IntersectionObserver' in window))return go();var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){go();o.disconnect()}},{threshold:.3});o.observe(s)})})()</script>")
+RANK_JS = ("<script>(function(){if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;"
+           "var L=document.querySelectorAll('ol.rank>li');if(!L.length||!('IntersectionObserver' in window))return;"
+           "var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');o.unobserve(e.target)}})},{threshold:.15,rootMargin:'0px 0px -8% 0px'});"
+           "L.forEach(function(li){li.classList.add('rv');o.observe(li)})})()</script>")
 PAGES = collections.OrderedDict()
 def write(name, content):
     """いったん溜めて、最後に作品名を個別ページへのリンクに変えてから書き出す"""
@@ -1221,6 +1226,7 @@ h1{font-size:1.5rem;margin:16px 0 8px}h2{font-size:1.2rem;margin:40px 0 12px;bor
 ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--line)}
 .rk{flex:0 0 2.2em;font-size:1.4rem;font-weight:800;color:var(--ac);text-align:right}ol.rank li:nth-child(-n+3) .rk{color:#ffd166}
 .cv{flex:0 0 72px;width:72px;height:102px;object-fit:cover;border-radius:6px;background:#222}.noimg{background:linear-gradient(135deg,#262a33,#1a1d24)}
+.btn.vod{font-weight:700}ol.rank li.rv{opacity:0;transform:translateX(28px)}ol.rank li.rv.in{opacity:1;transform:none;transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1)}ol.rank li.rv .rk{display:inline-block}ol.rank li.in .rk{animation:rkpop .6s .15s cubic-bezier(.3,1.6,.5,1) both}ol.rank li.in .cv{animation:cvflip .7s .1s ease both}ol.rank li.in .sc-m i{animation:scfill 1s .35s ease-out both}.cv.tile{position:relative;overflow:hidden}.cv.tile:after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);transform:translateX(-120%)}ol.rank li.in .cv.tile:after{animation:shine 1.1s .6s ease both}ol.rank li .cv{transition:transform .25s}ol.rank li:hover .cv{transform:translateY(-4px) rotate(-3deg) scale(1.05)}@keyframes rkpop{0%{transform:scale(.3);opacity:0}100%{transform:scale(1);opacity:1}}@keyframes cvflip{0%{transform:perspective(400px) rotateY(80deg);opacity:0}100%{transform:none;opacity:1}}@keyframes scfill{from{width:0}}@keyframes shine{to{transform:translateX(120%)}}
 .tile{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;text-shadow:0 1px 3px rgba(0,0,0,.35)}.cv.tile span{font-size:2rem}.cvs.tile{display:inline-flex}.cvs.tile span{font-size:.85rem}
 .cvs{display:inline-block;width:28px;height:40px;object-fit:cover;border-radius:3px;vertical-align:middle;margin-right:6px;background:#222}
 .body{flex:1;min-width:0}.tt{font-weight:700;font-size:1.05rem;line-height:1.5;margin-bottom:4px}.sub,.meta{font-size:.82rem;color:var(--mu);line-height:1.7}
