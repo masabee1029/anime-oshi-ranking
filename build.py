@@ -789,6 +789,27 @@ body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
        mini(anilist_items(world), "best-world.html", "歴代・世界評価"),
        mini([{"rank": r["rank"], "title": r["title"], "chg": chg_badge(r["rank"], r["title"], PREV_F)} for r in flm], "now-japan.html", "Filmarks 話題"),
        svc_cards, esc(season_label))
+def trend_chart(rows, prev, n=10):
+    """トップの「今月の人気の動き」: 世界27か国の点数（各国1位=30点…30位=1点の合計）の横棒と、先月からの順位の動き"""
+    items = []
+    for r in rows:
+        if len(items) >= n: break
+        t = r["title"] if (r.get("original_title") and r.get("title")) else (r.get("title_ja") or r.get("title"))
+        if t in EXCLUDE or r.get("title") in EXCLUDE or r.get("title_ja") in EXCLUDE: continue
+        try: pts = int(float(r.get("points") or 0))
+        except ValueError: pts = 0
+        if pts <= 0: continue
+        items.append((FIX_TITLE.get(t, t), pts, r.get("countries_in_top30") or "", chg_badge(len(items) + 1, r["title"], prev)))
+    if not items: return ""
+    mx = max(p for _, p, _, _ in items)
+    bars = "".join('<li><span class="tr-rk">%d</span><div class="tr-main"><div class="tr-nm">%s%s</div>'
+                   '<div class="tr-row"><div class="tr-bar"><span style="width:%.1f%%"></span></div><em>%d点・%sか国</em></div></div></li>'
+                   % (i, tlink(t), c, 100.0 * p / mx, p, esc(str(cn))) for i, (t, p, cn, c) in enumerate(items, 1))
+    note = ("棒の長さは、世界27か国の配信ランキングで各国1位=30点〜30位=1点として合計した人気の大きさです。"
+            + ("矢印は先月からの順位の動きです。" if prev is not None else "先月からの順位の動き（↑↓）は、次の集計から表示します。"))
+    return ('<section class="trend"><h2>今月の人気の動き（世界TOP10） <a class="h2more" href="now-world.html">TOP30を見る →</a></h2>'
+            '<ol class="tr-list">%s</ol><p class="note">%s（%s 集計）</p></section>' % (bars, note, esc(snap)))
+body = body.replace('<div class="grid">', trend_chart(now_w, PREV_W) + '<div class="grid">', 1)
 write("index.html", page("トップ", body, "あなたが今夜観る1本が見つかる。配信ランキングと歴代評価でえらぶおすすめアニメ"))
 
 # ---------- 作品の個別ページ ----------
@@ -826,6 +847,58 @@ def prime_link(title):
     return ""
 SVC_FROM_RANK = {"ABEMA 日本": "ABEMA", "DMM TV 日本": "DMM TV", "TVer 日本": "TVer", "バンダイチャンネル 日本": "バンダイチャンネル"}
 index_out = []
+# 「これが好きなら次はこの5本」用に、作品ごとの特徴（ジャンル・評価・見放題サービス・形式）を先にまとめる
+FEAT = {}
+for k_, d_ in TITLE_DB.items():
+    m_ = meta_for(d_)
+    if not m_ or not m_.get("genres"): continue
+    try: sc_ = float(m_.get("average_score") or 0)
+    except ValueError: sc_ = 0
+    w_ = WATCH.get(k_) or {}
+    FEAT[k_] = {"title": d_["title"], "g": set(x for x in m_["genres"].split("|") if GENRE_JA.get(x, x)), "sc": sc_,
+                "flat": set(w_.get("flatrate") or []), "movie": m_.get("format") == "MOVIE", "base": norm(strip_extra(d_["title"]))[:4]}
+def next_five(k):
+    """同じジャンルが多い・評価が近い・同じサービスで見放題・形式が同じ、の順に重みを付けて 5 本選ぶ。同じシリーズは 1 本まで（自分のシリーズも含む）"""
+    me = FEAT.get(k)
+    if not me: return []
+    cand = []
+    for k2, f in FEAT.items():
+        if k2 == k: continue
+        inter = me["g"] & f["g"]
+        if not inter: continue
+        s_ = 3.0 * len(inter) / len(me["g"] | f["g"])
+        if me["sc"] and f["sc"]: s_ += 1.0 - min(abs(me["sc"] - f["sc"]), 20) / 20.0
+        s_ += 0.4 * (f["sc"] / 100.0)
+        if me["flat"] & f["flat"]: s_ += 0.5
+        if me["movie"] == f["movie"]: s_ += 0.3
+        cand.append((s_, k2, inter))
+    cand.sort(key=lambda x: -x[0])
+    out, used = [], set()
+    for s_, k2, inter in cand:
+        b = FEAT[k2]["base"]
+        if b in used: continue
+        used.add(b)
+        out.append((k2, inter))
+        if len(out) == 5: break
+    return out
+POPULAR_KEYS = [kk for kk in dict.fromkeys(tkey(i["title"]) for i in now_items(now_w, n=40)) if kk in FEAT]
+def next_block(k):
+    picks = next_five(k)
+    if not picks:   # ジャンルの情報が無い作品は、いま世界で人気の作品から 5 本
+        pop = [kk for kk in POPULAR_KEYS if kk != k][:5]
+        if not pop: return ""
+        lis = "".join('<li><a href="%s.html">%s</a></li>' % (kk, esc(FEAT[kk]["title"])) for kk in pop)
+        return '<h2>迷ったら、いま世界で人気のこの5本</h2><ol class="nx">%s</ol>' % lis
+    lis = []
+    for k2, inter in picks:
+        f = FEAT[k2]
+        bits = ["ジャンル: " + "・".join(GENRE_JA.get(x, x) for x in sorted(inter)[:3])]
+        if f["sc"]: bits.append("世界評価 %d点" % f["sc"])
+        if f["flat"]: bits.append("見放題: " + "・".join(sorted(f["flat"])[:2]) + (" ほか" if len(f["flat"]) > 2 else ""))
+        lis.append('<li><a href="%s.html">%s</a><span class="nx-s">%s</span></li>' % (k2, esc(f["title"]), esc(" ／ ".join(bits))))
+    return ('<h2>これが好きなら、次はこの5本</h2><ol class="nx">%s</ol>'
+            '<p class="note">同じジャンル・近い評価・同じサービスで見放題、の順に近い作品を選んでいます。</p>' % "".join(lis))
+
 for k, d in TITLE_DB.items():
     t = d["title"]; m = meta_for(d)
     year = (m.get("season_year") or m.get("year")) if m else ""
@@ -868,7 +941,8 @@ for k, d in TITLE_DB.items():
             pv_block(k) + watch +
             '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps +
             goods_block(t, *goods_pick(k, m)) +
-            '<h2>Blu-ray・原作・グッズ</h2>' + shop_buttons(t))
+            '<h2>Blu-ray・原作・グッズ</h2>' + shop_buttons(t) +
+            next_block(k))
     desc = "%sはどこで観られる？配信サービス・ランキング順位・%sまとめ" % (t, "名言・" if kg else "")
     write("anime/%s.html" % k, page("%sはどこで観られる？配信・ランキングまとめ" % t, body, desc, 1))
 json.dump(index_out, open(os.path.join(HERE, "titles_index.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
@@ -960,6 +1034,7 @@ a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hov
 .wrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.wlb{flex:0 0 8em;font-size:.8rem;color:var(--mu)}.chip{font-size:.82rem;padding:3px 12px;border-radius:999px;border:1px solid #3a8f63;color:#bfe6cf}
 .note{font-size:.75rem;color:var(--mu)}
 .vcad{display:flex;flex-direction:column;gap:4px;padding:8px 0;border-top:1px solid var(--line)}.vcad span{font-size:.85rem;color:var(--mu)}.vcad .sbtn{align-self:flex-start}
+.trend{margin:8px 0 24px}.tr-list{list-style:none;padding:0;margin:0}.tr-list li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}.tr-rk{min-width:1.6em;font-weight:700;color:var(--ac);text-align:right}.tr-main{flex:1;min-width:0}.tr-nm{font-size:.95rem;margin-bottom:4px}.tr-bar{position:relative;height:14px;background:var(--line);border-radius:9px;overflow:hidden}.tr-bar span{display:block;height:100%;background:linear-gradient(90deg,#ff6b9d,#ffb36b);border-radius:9px;transform-origin:left;animation:trg .9s ease-out both}.tr-row{display:flex;align-items:center;gap:8px}.tr-row .tr-bar{flex:1}.tr-row em{font-size:.75rem;font-style:normal;color:var(--mu);white-space:nowrap;min-width:6.5em;text-align:right}@keyframes trg{from{transform:scaleX(0)}to{transform:scaleX(1)}}@media(prefers-reduced-motion:reduce){.tr-bar span{animation:none}}.nx{padding-left:1.4em}.nx li{margin:8px 0}.nx li a{font-weight:700}.nx-s{display:block;font-size:.82rem;color:var(--mu)}
 .goods{background:var(--card,#1a1d29);border:1px solid var(--line);border-left:4px solid var(--ac);border-radius:10px;padding:12px 16px;margin:8px 0}.goods-n{font-weight:700;font-size:1.05rem;margin:0 0 4px}.goods-w{margin:0;color:var(--mu);font-size:.92rem}
 .pv{position:relative;width:100%;aspect-ratio:16/9;background:linear-gradient(140deg,#2a1830,#101420);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .pv iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
