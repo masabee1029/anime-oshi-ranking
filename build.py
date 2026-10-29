@@ -219,6 +219,7 @@ def page(title, body, desc="", path_depth=0, banner=None, hero=False):
     if not is_fixed:
         body += share_box() + author_box(rel)
     body = '<div class="layout"><main>%s</main>%s</div>' % (body, sidebar(rel))
+    if "data-anim" in body: body += ANIM_JS
     ld_tag = '<script type="application/ld+json">%s</script>\n' % json.dumps(ld, ensure_ascii=False)
 
     contact = CFG.get("contact_url") or (rel + "about.html")
@@ -247,6 +248,12 @@ def page(title, body, desc="", path_depth=0, banner=None, hero=False):
        GA_TAG, ld_tag, rel, rel, esc(site).replace("推し", "<b>推し</b>", 1), nav, body, TODAY,
                               rel, rel, esc(contact), esc(site))
 
+ANIM_JS = ("<script>(function(){var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;"
+           "document.querySelectorAll('[data-anim]').forEach(function(s){if(rm)return;var a=s.querySelectorAll('animate');"
+           "a.forEach(function(x){x.parentNode.setAttribute('width',0)});s.classList.add('wait');"
+           "var b=function(){a.forEach(function(x){try{x.beginElement()}catch(e){x.parentNode.setAttribute('width',x.getAttribute('to'))}})};"
+           "var go=function(){s.classList.add('go');if(document.readyState==='complete')setTimeout(b,30);else addEventListener('load',function(){setTimeout(b,30)})};"
+           "if(!('IntersectionObserver' in window))return go();var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){go();o.disconnect()}},{threshold:.3});o.observe(s)})})()</script>")
 PAGES = collections.OrderedDict()
 def write(name, content):
     """いったん溜めて、最後に作品名を個別ページへのリンクに変えてから書き出す"""
@@ -389,6 +396,57 @@ def is_adult(r):
     return "Hentai" in (r.get("genres") or "")
 world = [r for r in world if not is_adult(r)]
 
+# ---------- グラフの部品（2026-10-29 全ページにグラフ） ----------
+YEAR_OF = {}
+for r_ in seasonal + world:
+    y_ = r_.get("season_year") or r_.get("year")
+    if not (y_ and str(y_).isdigit()): continue
+    for k_ in ("title_native", "title_romaji", "title_english"):
+        if r_.get(k_): YEAR_OF.setdefault(norm(r_[k_]), int(y_))
+def year_of(*names):
+    for t in names:
+        if t and norm(t) in YEAR_OF: return YEAR_OF[norm(t)]
+        if t and norm(strip_extra(t)) in YEAR_OF: return YEAR_OF[norm(strip_extra(t))]
+    return None
+
+def bar_chart(h2, rows, note, more="", ranked=True, mx=None):
+    """横棒グラフ。rows: [(名前のHTML, 値, 右に出す文字, 名前の後ろに付けるHTML)]。画面に入ったら左から伸びる"""
+    rows = [r for r in rows if r[1] and r[1] > 0]
+    if len(rows) < 2: return ""
+    mx = mx or max(r[1] for r in rows)
+    lis = "".join('<li>%s<div class="tr-main"><div class="tr-nm">%s%s</div>'
+                  '<div class="tr-row"><div class="tr-bar"><span style="width:%.1f%%;animation-delay:%.2fs"></span></div><em>%s</em></div></div></li>'
+                  % (('<span class="tr-rk">%d</span>' % i) if ranked else "", nm, ex, 100.0 * v / mx, 0.06 * (i - 1), esc(lb))
+                  for i, (nm, v, lb, ex) in enumerate(rows, 1))
+    return ('<section class="trend" data-anim><h2>%s%s</h2><ol class="tr-list%s">%s</ol><p class="note">%s</p></section>'
+            % (h2, more, "" if ranked else " nr", lis, note))
+
+def decade_chart(h2, years, note):
+    """作品の放送・公開年を 10 年ごとに数える"""
+    c = collections.Counter((y // 10) * 10 for y in years if y)
+    if len(c) < 2: return ""
+    return bar_chart(h2, [("%d年代" % d, n, "%d作品" % n, "") for d, n in sorted(c.items(), reverse=True)], note, ranked=False)
+
+def genre_chart(h2, genre_strs, note, n=8):
+    c = collections.Counter(GENRE_JA.get(g, g) for gs in genre_strs for g in (gs or "").split("|") if g and GENRE_JA.get(g, g))
+    if len(c) < 2: return ""
+    return bar_chart(h2, [(esc(g), k, "%d作品" % k, "") for g, k in c.most_common(n)], note, ranked=False)
+
+def trend_chart(rows, prev, n=10, h2="今月の人気の動き（世界TOP10）", more=' <a class="h2more" href="now-world.html">TOP30を見る →</a>'):
+    """世界27か国の点数（各国1位=30点…30位=1点の合計）の横棒と、先月からの順位の動き"""
+    items = []
+    for r in rows:
+        if len(items) >= n: break
+        t = r["title"] if (r.get("original_title") and r.get("title")) else (r.get("title_ja") or r.get("title"))
+        if t in EXCLUDE or r.get("title") in EXCLUDE or r.get("title_ja") in EXCLUDE: continue
+        try: pts = int(float(r.get("points") or 0))
+        except ValueError: pts = 0
+        if pts <= 0: continue
+        items.append((tlink(FIX_TITLE.get(t, t)), pts, "%d点・%sか国" % (pts, r.get("countries_in_top30") or ""), chg_badge(len(items) + 1, r["title"], prev)))
+    note = ("棒の長さは、世界27か国の配信ランキングで各国1位=30点〜30位=1点として合計した人気の大きさです。"
+            + ("矢印は先月からの順位の動きです。" if prev is not None else "先月からの順位の動き（↑↓）は、次の集計から表示します。"))
+    return bar_chart(h2, items, "%s（%s 集計）" % (note, esc(snap)), more)
+
 # ---------- 国内いま人気 ----------
 # 日本のアニメではない作品（JustWatch の制作国表記で混入するもの）。Disney+ の欄だけは海外作品も表示する（2026-10-11 ユーザー指定）
 EXCLUDE = {"ザ・スーパーマリオギャラクシー・ムービー", "The Legend of Korra",
@@ -424,17 +482,19 @@ def now_items(rows, n=30, prev=None):
 
 body = """<h1>国内いま人気のアニメ TOP30（全配信サービス合算）</h1>
 <p class="lead">いま日本で観られているアニメが、ひと目でわかります。Netflix・Prime Video・U-NEXT・dアニメストア・Disney+・Hulu などの国内ランキングを合算しました（集計日 %s、毎月更新）。</p>
-%s
+%s%s
 <h2>Filmarks で話題のアニメ</h2>
 <p class="lead">観た人の声で選びたいあなたに。レビューサイト Filmarks の「話題のアニメ」です。数字は5点満点の平均評価。</p>
-%s""" % (esc(snap), rank_list(now_items(now_j, prev=PREV_J), label="国内いま人気（全配信合算）", href="now-japan.html"),
+%s""" % (esc(snap), decade_chart("いま人気の30本は、いつの作品？", [int(r["year"]) if (r.get("year") or "").isdigit() else year_of(r.get("title"), r.get("original_title")) for r in now_j if r.get("title") not in EXCLUDE][:30],
+                                     "国内いま人気 TOP30 の作品を、放送・公開された年代ごとに数えました。新作だけでなく、昔の名作も観られています。"),
+         rank_list(now_items(now_j, prev=PREV_J), label="国内いま人気（全配信合算）", href="now-japan.html"),
          rank_list([{"rank": r["rank"], "title": r["title"], "sub": "評価 %s / 5.0" % r["score_5"], "img": cover(r["title"]),
                      "chg": chg_badge(r["rank"], r["title"], PREV_F)} for r in flm[:20]], label="Filmarks 話題のアニメ", href="now-japan.html"))
 write("now-japan.html", page("国内いま人気のアニメ TOP30", body, "日本の配信サービス全体で今月人気のアニメランキング", banner="now-japan", hero=True))
 
 body = """<h1>世界いま人気のアニメ TOP30（27か国・全配信合算）</h1>
 <p class="lead">世界のファンがいま夢中な作品が、ひと目でわかります。世界27か国の Netflix・Prime Video・Disney+・Crunchyroll・Hulu・HBO Max・Apple TV+ のランキングを合算しました（集計日 %s）。</p>
-%s""" % (esc(snap), rank_list(now_items(now_w, prev=PREV_W), label="世界いま人気（27か国合算）", href="now-world.html"))
+%s%s""" % (esc(snap), trend_chart(now_w, PREV_W, h2="人気の大きさ（TOP10）", more=""), rank_list(now_items(now_w, prev=PREV_W), label="世界いま人気（27か国合算）", href="now-world.html"))
 write("now-world.html", page("世界いま人気のアニメ TOP30", body, "世界27か国の配信ランキングを合算した今月のアニメ人気TOP30", banner="now-world", hero=True))
 
 # ---------- 歴代・世界評価 ----------
@@ -450,7 +510,9 @@ def anilist_items(rows, n=100):
 
 body = """<h1>歴代アニメ 世界評価ランキング TOP100</h1>
 <p class="lead">長く愛される名作から、あなたの次の1本を選べます。世界最大級のアニメデータベース AniList の平均スコア順で、海外ファンからの評価の高さを示します。</p>
-%s""" % rank_list(anilist_items(world), label="歴代・世界評価", href="best-world.html")
+%s%s""" % (decade_chart("名作TOP100は、いつの作品？", [int(r["season_year"]) if str(r.get("season_year") or "").isdigit() else None for r in world[:100]],
+                       "歴代・世界評価 TOP100 の作品を、放送・公開された年代ごとに数えました。"),
+           rank_list(anilist_items(world), label="歴代・世界評価", href="best-world.html"))
 write("best-world.html", page("歴代アニメ 世界評価ランキング TOP100", body, "AniList 平均スコアによる歴代アニメ世界評価TOP100", banner="best-world", hero=True))
 
 # ---------- Netflix ----------
@@ -468,10 +530,15 @@ def nf_items(rows, n=30, views=True, prev=None):
 body = """<h1>Netflix アニメランキング</h1>
 <h2>世界 TOP30（公式週間TOP10の累計）</h2>
 <p class="lead">Netflix 公式「Tudum Top 10」の世界集計。再生回数は Netflix が公表している唯一の公式数字です。</p>
-%s
+%s%s
 <h2>日本 TOP30</h2>
 <p class="lead">日本で長く観られ続けている作品がわかります。日本の Netflix 週間TOP10に入った週数の多い順です。</p>
-%s""" % (rank_list(nf_items(nf_g, prev=PREV_NG), label="Netflix 世界", href="netflix.html"),
+%s%s""" % (bar_chart("累計の再生回数（TOP10）", [(tlink(r.get("anime_title_ja") or r["show_title"]), int(float(r["views"] or 0)) // 10000,
+                                              "%s万回" % format(int(float(r["views"] or 0)) // 10000, ","), "") for r in nf_g[:10]],
+                     "Netflix 公式 Top10 に載った週の再生回数を合計した数字です。"),
+           rank_list(nf_items(nf_g, prev=PREV_NG), label="Netflix 世界", href="netflix.html"),
+         bar_chart("日本でTOP10に入った週の数（TOP10）", [(tlink(r.get("anime_title_ja") or r["show_title"]), int(r["weeks"] or 0), "%s週" % r["weeks"], "") for r in nf_c[:10]],
+                   "日本の Netflix 週間TOP10に入った週の数です。長いほど、長く観られ続けています。"),
          rank_list(nf_items(nf_c, views=False, prev=PREV_NJ), label="Netflix 日本", href="netflix.html"))
 write("netflix.html", page("Netflix アニメランキング 世界・日本", body, "Netflix公式Top10に基づくアニメの世界・日本ランキング", banner="netflix", hero=True))
 
@@ -555,8 +622,8 @@ for sid, name in WORLD_SVC:
                            "sub": "%s か国でTOP30入り" % r["countries_in_top30"], "img": cover(r.get("title_ja"), None, r["title"]),
                            "chg": chg_badge(r["rank"], (name, r["title"]), PREV_SVC), "alts": (r["title"],)})
     body = "<h1>%s アニメランキング</h1>" % esc(name)
-    body += "<h2>世界 TOP%d（27か国合算）</h2><p class=\"lead\">各国の%sアニメランキングを点数化（1位=30点…30位=1点）して合計。</p>%s" % (
-        len(world_list), esc(name), rank_list(world_list, label="%s 世界" % name, href="service/%s.html" % sid))
+    body += "<h2>世界 TOP%d（27か国合算）</h2><p class=\"lead\">各国の%sアニメランキングを点数化（1位=30点…30位=1点）して合計。</p>%s%s" % (
+        len(world_list), esc(name), trend_chart([r for r in rows if sid == "dnp" or r["title"] not in EXCLUDE], None, h2="%sの人気の大きさ（TOP10）" % esc(name), more="").replace("先月からの順位の動き（↑↓）は、次の集計から表示します。", ""), rank_list(world_list, label="%s 世界" % name, href="service/%s.html" % sid))
     if sid in jp_map:
         jl = jp_rows(jp_map[sid][1])
         if jl: body += "<h2>日本 TOP%d</h2>%s" % (len(jl), rank_list(jl, label="%s 日本" % name, href="service/%s.html" % sid))
@@ -567,10 +634,12 @@ for sid, name, how in JP_SVC:
         hub_jp.append((sid, name, jp_rows(how)[:3])); continue
     jl = jp_rows(how)
     if not jl: continue
-    body = "<h1>%s アニメランキング</h1><h2>日本 TOP%d</h2>%s" % (esc(name), len(jl), rank_list(jl, label="%s 日本" % name, href="service/%s.html" % sid))
+    body = "<h1>%s アニメランキング</h1><h2>日本 TOP%d</h2>%s%s" % (esc(name), len(jl), decade_chart("%sで人気の作品は、いつの作品？" % esc(name), [year_of(i["title"]) for i in jl],
+                                                                                "%s の日本ランキングの作品を、放送・公開された年代ごとに数えました（年がわかった作品だけ）。" % esc(name)), rank_list(jl, label="%s 日本" % name, href="service/%s.html" % sid))
     write("service/%s.html" % sid, page("%s アニメランキング" % name, body, "%sで人気のアニメランキング" % name, 1, banner="services"))
     hub_jp.append((sid, name, jl[:3]))
 
+HIDE_SVC_HUB = {"Apple TV+"}
 def hub_card(sid, name, top):
     icon = SVC_ICON_FILE.get(sid)
     h = ('<img class="svc-ic" src="svc/%s.png" alt="" width="28" height="28">' % icon if icon else '<span class="svc-ic txt">%s</span>' % esc(name[:1])) + esc(name)
@@ -578,6 +647,9 @@ def hub_card(sid, name, top):
     return '<a class="svc svc-link" href="service/%s.html"><h3>%s</h3><ol>%s</ol><span class="more">ランキングを見る →</span></a>' % (sid, h, lis)
 
 body = ("<h1>配信サービス別アニメランキング</h1><p class=\"lead\">あなたが使っている配信サービスで、いま人気のアニメがわかります。毎月更新（集計日 %s）。</p>" % esc(snap) +
+        bar_chart("アニメがよく観られているサービス（世界）", sorted([('<a href="service/%s.html">%s</a>' % (sid, esc(nm_)), sum(int(float(r["points"] or 0)) for r in svc if r["service"] == nm_),
+                                                         "%s点" % format(sum(int(float(r["points"] or 0)) for r in svc if r["service"] == nm_), ","), "") for sid, nm_ in WORLD_SVC if nm_ not in HIDE_SVC_HUB], key=lambda x: -x[1]),
+                  "各サービスのアニメランキング（27か国）の点数を全部足した数です。大きいほど、そのサービスでアニメがたくさん観られています。") +
         "<h2>世界（27か国合算）</h2><div class=\"svcgrid\">%s</div>" % "".join(hub_card(*x) for x in hub_world) +
         "<h2>日本国内</h2><div class=\"svcgrid\">%s</div>" % "".join(hub_card(*x) for x in hub_jp))
 write("services.html", page("配信サービス別アニメランキング", body, "Netflix・Prime Video・U-NEXT・dアニメストア・ABEMA など配信サービスごとのアニメ人気ランキング", banner="services", hero=True))
@@ -591,13 +663,18 @@ for region, codes in REGION:
         if not rows: continue
         items = jw_items(rows, 30)
         cname = COUNTRY_JA.get(cc, cc)
-        body = ("<h1>%sで人気のアニメ TOP%d（全配信サービス合計）</h1><p class=\"lead\">%sの配信サービス全体で、いま人気のアニメ（JustWatch 集計、%s）。</p>%s" % (
-            esc(cname), len(items), esc(cname), esc(snap), rank_list(items, label="%s（全配信合計）" % cname, href="country/%s.html" % cc.lower())))
+        body = ("<h1>%sで人気のアニメ TOP%d（全配信サービス合計）</h1><p class=\"lead\">%sの配信サービス全体で、いま人気のアニメ（JustWatch 集計、%s）。</p>%s%s" % (
+            esc(cname), len(items), esc(cname), esc(snap),
+            decade_chart("%sで人気の作品は、いつの作品？" % esc(cname), [int(r["year"]) if (r.get("year") or "").isdigit() else None for r in rows[:30]],
+                         "%sの TOP30 の作品を、放送・公開された年代ごとに数えました。" % esc(cname)), rank_list(items, label="%s（全配信合計）" % cname, href="country/%s.html" % cc.lower())))
         write("country/%s.html" % cc.lower(), page("%sで人気のアニメランキング" % cname, body, "%sの配信サービス全体で人気のアニメTOP%d" % (cname, len(items)), 1, banner="country"))
         lis = "".join('<li><span class="rk">%d</span>%s<span class="nm">%s</span></li>' % (i["rank"], img(i.get("img"), i["title"], "cvs"), esc(i["title"])) for i in items[:3])
         cards.append('<a class="svc svc-link" href="country/%s.html"><h3>%s</h3><ol>%s</ol><span class="more">TOP30を見る →</span></a>' % (cc.lower(), esc(cname), lis))
     country_cards.append("<h2>%s</h2><div class=\"svcgrid\">%s</div>" % (region, "".join(cards)))
-body = ("<h1>国別アニメランキング（全配信サービス合計）</h1><p class=\"lead\">世界27か国で、それぞれの国の配信サービス全体を合わせたアニメ人気ランキング（集計日 %s）。</p>" % esc(snap)) + "".join(country_cards)
+body = ("<h1>国別アニメランキング（全配信サービス合計）</h1><p class=\"lead\">世界27か国で、それぞれの国の配信サービス全体を合わせたアニメ人気ランキング（集計日 %s）。</p>" % esc(snap)) + bar_chart(
+    "TOP30に入った国の数（TOP10）", [(tlink(FIX_TITLE.get(r.get("title_ja") or r["title"], r.get("title_ja") or r["title"])), int(r["countries_in_top30"] or 0), "%sか国（1位は%sか国）" % (r["countries_in_top30"], r.get("top1_countries") or 0), "")
+                                 for r in now_w if r["title"] not in EXCLUDE and (r.get("title_ja") or "") not in EXCLUDE][:10],
+    "世界27か国のうち、何か国で TOP30 に入ったかの数です。") + "".join(country_cards)
 write("country.html", page("国別アニメランキング", body, "世界27か国の配信サービス全体で人気のアニメランキング", banner="country", hero=True))
 
 # ---------- サービス別（トップに要約） ----------
@@ -617,10 +694,14 @@ for g, rows in sorted(genre_map.items(), key=lambda kv: -len(kv[1])):
     name = GENRE_JA.get(g, g)
     fn = "genre/%s.html" % g.lower().replace(" ", "-")
     links.append('<li><a href="%s">%s（%d作品）</a></li>' % (fn, esc(name), len(rows)))
-    b = "<h1>%s アニメ おすすめランキング TOP30</h1><p class=\"lead\">世界評価（AniList スコア）順の%sジャンル TOP30。</p>%s" % (
-        esc(name), esc(name), rank_list([dict(it, rank=i) for i, it in enumerate(anilist_items(rows, 30), 1)]))
+    b = "<h1>%s アニメ おすすめランキング TOP30</h1><p class=\"lead\">世界評価（AniList スコア）順の%sジャンル TOP30。</p>%s%s" % (
+        esc(name), esc(name), decade_chart("%sの名作は、いつの作品？" % esc(name), [int(r["season_year"]) if str(r.get("season_year") or "").isdigit() else None for r in rows],
+                                           "歴代・世界評価の上位に入った%sジャンルの%d作品を、放送・公開された年代ごとに数えました。" % (esc(name), len(rows))), rank_list([dict(it, rank=i) for i, it in enumerate(anilist_items(rows, 30), 1)]))
     write(fn, page("%s アニメ おすすめランキング" % name, b, "%sジャンルのおすすめアニメTOP30" % name, 1, banner="genre"))
-write("genre.html", page("ジャンル別おすすめアニメ", "<h1>ジャンル別おすすめアニメ</h1><ul class=\"links\">%s</ul>" % "".join(links), banner="genre", hero=True))
+genre_bar = bar_chart("名作が多いジャンル", [('<a href="genre/%s.html">%s</a>' % (g.lower().replace(" ", "-"), esc(GENRE_JA.get(g, g))), len(rows), "%d作品" % len(rows), "")
+                                         for g, rows in sorted(genre_map.items(), key=lambda kv: -len(kv[1])) if len(rows) >= 10][:12],
+                      "歴代・世界評価の上位作品に、そのジャンルが何本入っているかの数です。", ranked=False)
+write("genre.html", page("ジャンル別おすすめアニメ", "<h1>ジャンル別おすすめアニメ</h1>%s<ul class=\"links\">%s</ul>" % (genre_bar, "".join(links)), banner="genre", hero=True))
 
 # ---------- 年別 ----------
 by_year = collections.defaultdict(dict)
@@ -641,12 +722,17 @@ for y in sorted(by_year):
     prev_next = '<p class="pn">%s%s</p>' % (
         ('<a href="%d.html">← %d年</a>' % (y - 1, y - 1)) if (y - 1) in by_year else "",
         ('<a href="%d.html">%d年 →</a>' % (y + 1, y + 1)) if (y + 1) in by_year else "")
-    b = "<h1>%d年のおすすめアニメ TOP%d</h1><p class=\"lead\">%d年に放送・公開された作品を世界評価（AniList スコア）順に。</p>%s%s%s" % (
-        y, len(rows), y, prev_next, rank_list([dict(it, rank=i) for i, it in enumerate(anilist_items(rows, 30), 1)]), prev_next)
+    b = "<h1>%d年のおすすめアニメ TOP%d</h1><p class=\"lead\">%d年に放送・公開された作品を世界評価（AniList スコア）順に。</p>%s%s%s%s" % (
+        y, len(rows), y, prev_next, genre_chart("%d年に多かったジャンル" % y, [r.get("genres") for r in rows],
+                                                "%d年のおすすめ TOP%d に、それぞれのジャンルの作品が何本あるかの数です（1作品に複数のジャンルがあります）。" % (y, len(rows))), rank_list([dict(it, rank=i) for i, it in enumerate(anilist_items(rows, 30), 1)]), prev_next)
     write(fn, page("%d年のおすすめアニメ" % y, b, "%d年に放送されたアニメのおすすめランキングTOP%d" % (y, len(rows)), 1, banner="year"))
 ydiv = "".join('<div class="yrow"><span class="ydec">%d年代</span><div class="ylinks">%s</div></div>' % (d, "".join(v))
                for d, v in sorted(year_links.items(), reverse=True))
-write("year.html", page("年別おすすめアニメ", "<h1>年別おすすめアニメ</h1><p class=\"lead\">生まれた年や思い出の年から、好きな作品を探せます。1970年から今年まで、その年に放送・公開されたアニメを世界評価順に紹介します。</p>%s" % ydiv,
+dec_c = collections.Counter()
+for y_, v_ in by_year.items(): dec_c[(y_ // 10) * 10] += len(v_)
+year_bar = bar_chart("年代ごとの人気作品の数", [("%d年代" % d, n_, "%d作品" % n_, "") for d, n_ in sorted(dec_c.items(), reverse=True)],
+                     "このサイトで年別ページに使っている人気作品（AniList でリストに入れた人が一定数以上）の数です。", ranked=False)
+write("year.html", page("年別おすすめアニメ", "<h1>年別おすすめアニメ</h1><p class=\"lead\">生まれた年や思い出の年から、好きな作品を探せます。1970年から今年まで、その年に放送・公開されたアニメを世界評価順に紹介します。</p>%s%s" % (year_bar, ydiv),
                         "1970年から今年まで、年ごとのおすすめアニメランキング", banner="year", hero=True))
 
 def mini(items, href, title):
@@ -747,12 +833,22 @@ def rank_chart(y, c, n=10):
         CHART_COLORS[i % len(CHART_COLORS)], ranks[a][last], tlink(name.get(a, "")),
         (lambda f: (' <span class="rc-d up">↑%d</span>' % (f - ranks[a][last])) if f > ranks[a][last] else ((' <span class="rc-d dn">↓%d</span>' % (ranks[a][last] - f)) if f < ranks[a][last] else ""))(ranks[a][pts[0]] if pts[0] in ranks[a] else ranks[a][last]))
         for i, a in enumerate(top))
-    return ('<section class="rchart"><h2>%sの順位の動き（TOP%d）</h2>'
+    lines = ('<defs><clipPath id="rcclip"><rect x="0" y="0" width="%d" height="%d"><animate attributeName="width" from="0" to="%d" dur="2.4s" begin="indefinite" fill="freeze" '
+             'calcMode="spline" keyTimes="0;1" keySplines=".45 0 .25 1"/></rect></clipPath></defs><g clip-path="url(#rcclip)">%s</g>' % (W, H, W, "".join(lines)))
+    return ('<section class="rchart" data-anim><h2>%sの順位の動き（TOP%d）</h2>'
             '<svg viewBox="0 0 %d %d" class="rc-svg" role="img" aria-label="%d年%sアニメ TOP%d の%sの順位の動き">%s%s</svg>'
             '<ol class="rc-lg">%s</ol><p class="note">AniList で作品を「観る・観たいリスト」に入れた人の数を%sの時点で比べ、この季節の%d作品の中での順位にしました。'
             '矢印は%sからの順位の変化です（%s 時点）。下のランキングは毎月の集計の時点の順位なので、順番が少し違うことがあります。</p></section>'
-            % (unit, len(top), W, H, y, c, len(top), unit, "".join(g), "".join(lines), legend, "月末（今月は最新の日）" if unit == "毎月" else "毎週日曜（最後は最新の日）",
+            % (unit, len(top), W, H, y, c, len(top), unit, "".join(g), lines, legend, "月末（今月は最新の日）" if unit == "毎月" else "毎週日曜（最後は最新の日）",
                len(series), lab(pts[0]), last))
+
+def pop_chart(rows, h2, n=10):
+    items = []
+    for r in rows[:n]:
+        try: pop = int(r.get("popularity") or 0)
+        except ValueError: pop = 0
+        items.append((tlink(jp_title(r)), pop, "%s人" % format(pop, ","), ""))
+    return bar_chart(h2, items, "AniList で作品を「観る・観たいリスト」に入れた人の数（いまの数）です。")
 
 def season_body(y, c, kind):
     """kind: current（今季）/ prev（前季）/ archive（それより前）"""
@@ -765,7 +861,7 @@ def season_body(y, c, kind):
     label = lab if kind in ("current", "prev") else None
     href = {"current": "season.html", "prev": "prev-season.html"}.get(kind)
     return "<h1>%s 人気ランキング TOP30</h1><p class=\"lead\">%s</p>%s%s" % (esc(lab), lead,
-           rank_chart(y, c) if kind in ("current", "prev") else "",
+           rank_chart(y, c) if kind in ("current", "prev") else pop_chart(rows, "その季節の人気の大きさ（TOP10）"),
            rank_list(season_items(rows, hot_flag=(kind == "current")), label=label, href=href))
 
 def nav_cards(rel):
@@ -801,6 +897,7 @@ rows_html = "".join('<div class="yrow"><span class="ydec">%d年</span><div class
 body = ("<h1>シーズン別アニメランキング</h1><p class=\"lead\">あなたが観ていたあの季節のアニメに、すぐたどり着けます。1970年から今期まで、クール（冬・春・夏・秋）ごとに放送が始まったアニメの人気ランキングをまとめました。</p>"
         + '<div class="grid">%s%s</div>' % (mini(season_items(season_rows(SEASON_Y, SEASON_C)), "season.html", "今季：" + season_label),
                                            mini(season_items(season_rows(PREV_Y, PREV_C), hot_flag=False), "prev-season.html", "前季：" + prev_label))
+        + pop_chart(season_rows(SEASON_Y, SEASON_C), "今季いちばん注目の10本")
         + "<h2>過去のシーズン</h2>" + rows_html)
 SEASONS_BODY = body
 
@@ -850,26 +947,6 @@ body = (("""<section class="hero hero-img"><h1 class="vh">%s</h1>
        mini(anilist_items(world), "best-world.html", "歴代・世界評価"),
        mini([{"rank": r["rank"], "title": r["title"], "chg": chg_badge(r["rank"], r["title"], PREV_F)} for r in flm], "now-japan.html", "Filmarks 話題"),
        svc_cards, esc(season_label))
-def trend_chart(rows, prev, n=10):
-    """トップの「今月の人気の動き」: 世界27か国の点数（各国1位=30点…30位=1点の合計）の横棒と、先月からの順位の動き"""
-    items = []
-    for r in rows:
-        if len(items) >= n: break
-        t = r["title"] if (r.get("original_title") and r.get("title")) else (r.get("title_ja") or r.get("title"))
-        if t in EXCLUDE or r.get("title") in EXCLUDE or r.get("title_ja") in EXCLUDE: continue
-        try: pts = int(float(r.get("points") or 0))
-        except ValueError: pts = 0
-        if pts <= 0: continue
-        items.append((FIX_TITLE.get(t, t), pts, r.get("countries_in_top30") or "", chg_badge(len(items) + 1, r["title"], prev)))
-    if not items: return ""
-    mx = max(p for _, p, _, _ in items)
-    bars = "".join('<li><span class="tr-rk">%d</span><div class="tr-main"><div class="tr-nm">%s%s</div>'
-                   '<div class="tr-row"><div class="tr-bar"><span style="width:%.1f%%"></span></div><em>%d点・%sか国</em></div></div></li>'
-                   % (i, tlink(t), c, 100.0 * p / mx, p, esc(str(cn))) for i, (t, p, cn, c) in enumerate(items, 1))
-    note = ("棒の長さは、世界27か国の配信ランキングで各国1位=30点〜30位=1点として合計した人気の大きさです。"
-            + ("矢印は先月からの順位の動きです。" if prev is not None else "先月からの順位の動き（↑↓）は、次の集計から表示します。"))
-    return ('<section class="trend"><h2>今月の人気の動き（世界TOP10） <a class="h2more" href="now-world.html">TOP30を見る →</a></h2>'
-            '<ol class="tr-list">%s</ol><p class="note">%s（%s 集計）</p></section>' % (bars, note, esc(snap)))
 body = body.replace('<div class="grid">', trend_chart(now_w, PREV_W) + '<div class="grid">', 1)
 write("index.html", page("トップ", body, "あなたが今夜観る1本が見つかる。配信ランキングと歴代評価でえらぶおすすめアニメ"))
 
@@ -908,6 +985,57 @@ def prime_link(title):
     return ""
 SVC_FROM_RANK = {"ABEMA 日本": "ABEMA", "DMM TV 日本": "DMM TV", "TVer 日本": "TVer", "バンダイチャンネル 日本": "バンダイチャンネル"}
 index_out = []
+# 作品ページの「世界評価くらべ」用に、ジャンルごとの平均点（ある程度観られている作品だけ）
+_gs = collections.defaultdict(list)
+for r_ in seasonal:
+    try: sc_, pp_ = int(r_.get("average_score") or 0), int(r_.get("popularity") or 0)
+    except ValueError: continue
+    if sc_ and pp_ >= 2000 and not is_adult(r_):
+        for g_ in (r_.get("genres") or "").split("|"):
+            if g_: _gs[g_].append(sc_)
+GENRE_AVG = {g_: sum(v_) / len(v_) for g_, v_ in _gs.items() if len(v_) >= 20}
+def pop_line(t, m):
+    """今季・前季の作品は、AniList で「観る・観たいリスト」に入れた人の数の伸びを折れ線にする（毎週日曜＋最新の日）"""
+    v = TRENDS.get(str(m.get("anilist_id") or "")) if m else None
+    if not v or len(v) < 3: return ""
+    days = sorted(v)
+    pts = [d for d in days if datetime.date.fromisoformat(d).weekday() == 6] + [days[-1]]
+    pts = sorted(set(d for d in pts if d >= days[0]))
+    if len(pts) < 3: pts = days
+    if len(pts) > 16: pts = pts[-16:]
+    vals = [v[d] for d in pts]
+    lo, hi = min(vals), max(vals)
+    if hi <= lo: return ""
+    W, H, L, R, T, B = 640, 220, 62, 26, 14, 30
+    xs = lambda i: L + (W - L - R) * (i / max(1, len(pts) - 1))
+    ys = lambda x: T + (H - T - B) * (1 - (x - lo) / (hi - lo))
+    g = ['<line x1="%d" y1="%.1f" x2="%d" y2="%.1f" class="rc-g"/><text x="%d" y="%.1f" class="rc-y">%s人</text>' % (L, ys(x), W - R, ys(x), L - 4, ys(x) + 4, format(int(x), ","))
+         for x in (lo, (lo + hi) / 2, hi)]
+    step = max(1, len(pts) // 6)
+    g += ['<text x="%.1f" y="%d" class="rc-x">%d/%d</text>' % (xs(i), H - 8, int(d[5:7]), int(d[8:10])) for i, d in enumerate(pts) if i % step == 0 or i == len(pts) - 1]
+    xy = [(xs(i), ys(x)) for i, x in enumerate(vals)]
+    area = "%.1f,%d %s %.1f,%d" % (xy[0][0], H - B, " ".join("%.1f,%.1f" % q for q in xy), xy[-1][0], H - B)
+    body = ('<polygon points="%s" class="pl-a"/><polyline points="%s" fill="none" stroke="#ff6b9d" stroke-width="2.5" stroke-linejoin="round"/>%s'
+            % (area, " ".join("%.1f,%.1f" % q for q in xy), "".join('<circle cx="%.1f" cy="%.1f" r="3.5" fill="#ff6b9d"/>' % q for q in xy)))
+    clip = ('<defs><clipPath id="plclip"><rect x="0" y="0" width="%d" height="%d"><animate attributeName="width" from="0" to="%d" dur="2s" begin="indefinite" fill="freeze" '
+            'calcMode="spline" keyTimes="0;1" keySplines=".45 0 .25 1"/></rect></clipPath></defs><g clip-path="url(#plclip)">%s</g>' % (W, H, W, body))
+    grow = vals[-1] - vals[0]
+    return ('<section class="rchart" data-anim><h2>「観たい」人の数の伸び</h2><svg viewBox="0 0 %d %d" class="rc-svg" role="img" aria-label="%sの人気の伸び">%s%s</svg>'
+            '<p class="note">AniList で「%s」を「観る・観たいリスト」に入れた人の数です（毎週日曜と最新の日、%s 時点）。%s/%d から %s人増えました。</p></section>'
+            % (W, H, esc(t), "".join(g), clip, esc(t), pts[-1], int(pts[0][5:7]), int(pts[0][8:10]), format(grow, ",")))
+def apps_chart(apps):
+    """世界評価が無い作品は、各ランキングでの順位を棒にする（上の順位ほど長い）"""
+    rows_ = [(esc(lab), 31 - int(rk), "%s位" % rk, "") for lab, rk, h, sb in sorted(apps, key=lambda a: int(a[1]) if str(a[1]).isdigit() else 99)
+             if str(rk).isdigit() and int(rk) <= 30][:8]
+    return bar_chart("ランキングでの順位くらべ", rows_, "棒が長いほど、そのランキングで上の順位です（1位がいちばん長い）。", ranked=False, mx=30)
+def score_chart(t, m):
+    try: sc = int(float(m.get("average_score") or 0)) if m else 0
+    except ValueError: sc = 0
+    if not sc: return ""
+    rows_ = [("<b>%s</b>" % esc(t), sc, "%d点" % sc, "")]
+    for g_ in [x for x in (m.get("genres") or "").split("|") if x in GENRE_AVG and GENRE_JA.get(x, x)][:4]:
+        rows_.append(("%sの平均" % esc(GENRE_JA.get(g_, g_)), GENRE_AVG[g_], "%.0f点" % GENRE_AVG[g_], ""))
+    return bar_chart("世界評価くらべ", rows_, "AniList の平均スコア（100点満点）です。ジャンルの平均は、そのジャンルである程度観られている作品の平均点です。", ranked=False, mx=100)
 # 「これが好きなら次はこの5本」用に、作品ごとの特徴（ジャンル・評価・見放題サービス・形式）を先にまとめる
 FEAT = {}
 for k_, d_ in TITLE_DB.items():
@@ -1000,7 +1128,7 @@ for k, d in TITLE_DB.items():
               ('<blockquote class="kgq"><span class="kgl">作中の名言</span>「%s」<span class="kgw">— %s『%s』より</span></blockquote>' % (esc(kg["q"]), esc(kg["who"]), esc(t)))) if kg else "") +
             (('<table class="info">%s</table>' % "".join('<tr><th>%s</th><td>%s</td></tr>' % (esc(a), esc(b)) for a, b in info)) if info else "") +
             pv_block(k) + watch +
-            '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps +
+            '<h2>ランキングでの順位</h2><table class="apps">%s</table>' % apps + (score_chart(t, m) or apps_chart(d["apps"])) + pop_line(t, m) +
             goods_block(t, *goods_pick(k, m)) +
             '<h2>Blu-ray・原作・グッズ</h2>' + shop_buttons(t) +
             next_block(k))
@@ -1095,8 +1223,8 @@ a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hov
 .wrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.wlb{flex:0 0 8em;font-size:.8rem;color:var(--mu)}.chip{font-size:.82rem;padding:3px 12px;border-radius:999px;border:1px solid #3a8f63;color:#bfe6cf}
 .note{font-size:.75rem;color:var(--mu)}
 .vcad{display:flex;flex-direction:column;gap:4px;padding:8px 0;border-top:1px solid var(--line)}.vcad span{font-size:.85rem;color:var(--mu)}.vcad .sbtn{align-self:flex-start}
-.rchart{margin:8px 0 24px}.rc-svg{width:100%;height:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}.rc-g{stroke:var(--line);stroke-width:1}.rc-y{fill:var(--mu);font-size:11px;text-anchor:end}.rc-x{fill:var(--mu);font-size:11px;text-anchor:middle}.rc-l{stroke-dasharray:2000;stroke-dashoffset:2000;animation:rcd 1.6s ease-out forwards}@keyframes rcd{to{stroke-dashoffset:0}}@media(prefers-reduced-motion:reduce){.rc-l{animation:none;stroke-dashoffset:0}}.rc-lg{list-style:none;padding:0;margin:10px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px;font-size:.88rem}@media(max-width:640px){.rc-lg{grid-template-columns:1fr}}.rc-lg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}.rc-lg b{margin-right:6px;color:var(--mu);font-weight:600}.rc-d{font-size:.78rem;font-weight:700}.rc-d.up{color:#7bd88f}.rc-d.dn{color:#ff8a65}
-.trend{margin:8px 0 24px}.tr-list{list-style:none;padding:0;margin:0}.tr-list li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}.tr-rk{min-width:1.6em;font-weight:700;color:var(--ac);text-align:right}.tr-main{flex:1;min-width:0}.tr-nm{font-size:.95rem;margin-bottom:4px}.tr-bar{position:relative;height:14px;background:var(--line);border-radius:9px;overflow:hidden}.tr-bar span{display:block;height:100%;background:linear-gradient(90deg,#ff6b9d,#ffb36b);border-radius:9px;transform-origin:left;animation:trg .9s ease-out both}.tr-row{display:flex;align-items:center;gap:8px}.tr-row .tr-bar{flex:1}.tr-row em{font-size:.75rem;font-style:normal;color:var(--mu);white-space:nowrap;min-width:6.5em;text-align:right}@keyframes trg{from{transform:scaleX(0)}to{transform:scaleX(1)}}@media(prefers-reduced-motion:reduce){.tr-bar span{animation:none}}.nx{padding-left:1.4em}.nx li{margin:8px 0}.nx li a{font-weight:700}.nx-s{display:block;font-size:.82rem;color:var(--mu)}
+.rchart{margin:8px 0 24px}.rc-svg{width:100%;height:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}.rc-g{stroke:var(--line);stroke-width:1}.rc-y{fill:var(--mu);font-size:11px;text-anchor:end}.rc-x{fill:var(--mu);font-size:11px;text-anchor:middle}.rc-lg{list-style:none;padding:0;margin:10px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px;font-size:.88rem}@media(max-width:640px){.rc-lg{grid-template-columns:1fr}}.rc-lg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}.rc-lg b{margin-right:6px;color:var(--mu);font-weight:600}.rc-d{font-size:.78rem;font-weight:700}.rc-d.up{color:#7bd88f}.rc-d.dn{color:#ff8a65}
+.trend{margin:8px 0 24px}.tr-list{list-style:none;padding:0;margin:0}.tr-list li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}.tr-rk{min-width:1.6em;font-weight:700;color:var(--ac);text-align:right}.tr-main{flex:1;min-width:0}.tr-nm{font-size:.95rem;margin-bottom:4px}.tr-bar{position:relative;height:14px;background:var(--line);border-radius:9px;overflow:hidden}.tr-bar span{display:block;height:100%;background:linear-gradient(90deg,#ff6b9d,#ffb36b);border-radius:9px;transform-origin:left;animation:trg .9s ease-out both}.tr-row{display:flex;align-items:center;gap:8px}.tr-row .tr-bar{flex:1}.tr-row em{font-size:.75rem;font-style:normal;color:var(--mu);white-space:nowrap;min-width:6.5em;text-align:right}@keyframes trg{from{transform:scaleX(0)}to{transform:scaleX(1)}}.pl-a{fill:#ff6b9d;opacity:.12}.wait .tr-bar span{animation-play-state:paused}.wait.go .tr-bar span{animation-play-state:running}.tr-list.nr li{align-items:center}@media(prefers-reduced-motion:reduce){.tr-bar span{animation:none}}.nx{padding-left:1.4em}.nx li{margin:8px 0}.nx li a{font-weight:700}.nx-s{display:block;font-size:.82rem;color:var(--mu)}
 .goods{background:var(--card,#1a1d29);border:1px solid var(--line);border-left:4px solid var(--ac);border-radius:10px;padding:12px 16px;margin:8px 0}.goods-n{font-weight:700;font-size:1.05rem;margin:0 0 4px}.goods-w{margin:0;color:var(--mu);font-size:.92rem}
 .pv{position:relative;width:100%;aspect-ratio:16/9;background:linear-gradient(140deg,#2a1830,#101420);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .pv iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
