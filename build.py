@@ -348,6 +348,18 @@ def watch_line(title):
     names = w["flatrate"]
     return '<div class="watch">見放題%s: %s%s</div>' % ("（シリーズ）" if w.get("series") else "", esc("・".join(names[:4])), " ほか" if len(names) > 4 else "")
 
+SCORE_RE = re.compile(r"評価 ([0-9.]+)(点| / 5\.0)")
+def score_badge(sub):
+    """サブ行の「評価 85点」「評価 4.3 / 5.0」を取り出して、大きな数字＋メーターにする（2026-10-29 ユーザー「評価点をもっと大きく」）"""
+    m_ = SCORE_RE.search(sub or "")
+    if not m_: return "", sub
+    v, five = float(m_.group(1)), m_.group(2) != "点"
+    pct = v / 5.0 * 100 if five else v
+    rest = " / ".join(x for x in SCORE_RE.sub("", sub).split(" / ") if x.strip())
+    num = ("%.1f" % v) if five else ("%d" % round(v))
+    return ('<div class="sc"><span class="sc-l">%s</span><b class="sc-n">%s</b><span class="sc-u">%s</span>'
+            '<span class="sc-m"><i style="width:%.0f%%"></i></span></div>'
+            % ("みんなの評価" if five else "世界評価", num, "/ 5.0" if five else "点 / 100", pct)), rest
 def rank_list(items, show_shop=True, label=None, href=None):
     """items: list of dict(rank,title,sub,meta,chg)。label を渡すと作品の個別ページに記録する"""
     rows = []
@@ -355,9 +367,10 @@ def rank_list(items, show_shop=True, label=None, href=None):
         if label:
             register(it["title"], label, it["rank"], href, it.get("sub", ""), it.get("alts", ()))
         kg = kakugen(it["title"])
+        badge, sub_ = score_badge(it.get("sub", ""))
         rows.append('<li><span class="rk">%s%s</span>%s<div class="body"><div class="tt">%s</div>'
-                    '<div class="sub">%s</div>%s%s%s%s</div></li>' % (
-                        esc(it["rank"]), it.get("chg", ""), img(it.get("img"), it["title"]), tlink(it["title"]), esc(it.get("sub", "")),
+                    '%s<div class="sub">%s</div>%s%s%s%s</div></li>' % (
+                        esc(it["rank"]), it.get("chg", ""), img(it.get("img"), it["title"]), tlink(it["title"]), badge, esc(sub_),
                         ('<div class="meta">%s</div>' % esc(it["meta"])) if it.get("meta") else "",
                         quote_html(kg, "kg") if kg else "",
                         watch_line(it["title"]),
@@ -1237,7 +1250,7 @@ a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hov
 .note{font-size:.75rem;color:var(--mu)}
 .vcad{display:flex;flex-direction:column;gap:4px;padding:8px 0;border-top:1px solid var(--line)}.vcad span{font-size:.85rem;color:var(--mu)}.vcad .sbtn{align-self:flex-start}
 .rchart{margin:8px 0 24px}.rc-svg{width:100%;height:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}.rc-g{stroke:var(--line);stroke-width:1}.rc-y{fill:var(--mu);font-size:11px;text-anchor:end}.rc-x{fill:var(--mu);font-size:11px;text-anchor:middle}.rc-lg{list-style:none;padding:0;margin:10px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px;font-size:.88rem}@media(max-width:640px){.rc-lg{grid-template-columns:1fr}}.rc-lg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}.rc-lg b{margin-right:6px;color:var(--mu);font-weight:600}.rc-d{font-size:.78rem;font-weight:700}.rc-d.up{color:#7bd88f}.rc-d.dn{color:#ff8a65}
-.trend{margin:8px 0 24px}.tr-list{list-style:none;padding:0;margin:0}.tr-list li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}.tr-rk{min-width:1.6em;font-weight:700;color:var(--ac);text-align:right}.tr-main{flex:1;min-width:0}.tr-nm{font-size:.95rem;margin-bottom:4px}.tr-bar{position:relative;height:14px;background:var(--line);border-radius:9px;overflow:hidden}.tr-bar span{display:block;height:100%;background:linear-gradient(90deg,#ff6b9d,#ffb36b);border-radius:9px;transform-origin:left;animation:trg .9s ease-out both}.tr-row{display:flex;align-items:center;gap:8px}.tr-row .tr-bar{flex:1}.tr-row em{font-size:.75rem;font-style:normal;color:var(--mu);white-space:nowrap;min-width:6.5em;text-align:right}@keyframes trg{from{transform:scaleX(0)}to{transform:scaleX(1)}}.pl-a{fill:#ff6b9d;opacity:.12}.wait .tr-bar span{animation-play-state:paused}.wait.go .tr-bar span{animation-play-state:running}.tr-list.nr li{align-items:center}@media(prefers-reduced-motion:reduce){.tr-bar span{animation:none}}.nx{padding-left:1.4em}.nx li{margin:8px 0}.nx li a{font-weight:700}.nx-s{display:block;font-size:.82rem;color:var(--mu)}
+.trend{margin:8px 0 24px}.tr-list{list-style:none;padding:0;margin:0}.tr-list li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}.tr-rk{min-width:1.6em;font-weight:700;color:var(--ac);text-align:right}.tr-main{flex:1;min-width:0}.tr-nm{font-size:.95rem;margin-bottom:4px}.tr-bar{position:relative;height:14px;background:var(--line);border-radius:9px;overflow:hidden}.tr-bar span{display:block;height:100%;background:linear-gradient(90deg,#ff6b9d,#ffb36b);border-radius:9px;transform-origin:left;animation:trg .9s ease-out both}.tr-row{display:flex;align-items:center;gap:8px}.tr-row .tr-bar{flex:1}.tr-row em{font-size:.75rem;font-style:normal;color:var(--mu);white-space:nowrap;min-width:6.5em;text-align:right}@keyframes trg{from{transform:scaleX(0)}to{transform:scaleX(1)}}.pl-a{fill:#ff6b9d;opacity:.12}.sc{display:flex;align-items:baseline;gap:6px;margin:4px 0 2px;flex-wrap:wrap}.sc-l{font-size:.78rem;color:var(--mu)}.sc-n{font-size:1.9rem;line-height:1;font-weight:800;color:#ffd166;letter-spacing:.01em}.sc-u{font-size:.85rem;color:var(--mu);margin-right:6px}.sc-m{align-self:center;display:inline-block;width:120px;height:8px;border-radius:6px;background:var(--line);overflow:hidden}.sc-m i{display:block;height:100%;background:linear-gradient(90deg,#ffb36b,#ffd166);border-radius:6px}.wait .tr-bar span{animation-play-state:paused}.wait.go .tr-bar span{animation-play-state:running}.tr-list.nr li{align-items:center}@media(prefers-reduced-motion:reduce){.tr-bar span{animation:none}}.nx{padding-left:1.4em}.nx li{margin:8px 0}.nx li a{font-weight:700}.nx-s{display:block;font-size:.82rem;color:var(--mu)}
 .goods{background:var(--card,#1a1d29);border:1px solid var(--line);border-left:4px solid var(--ac);border-radius:10px;padding:12px 16px;margin:8px 0}.goods-n{font-weight:700;font-size:1.05rem;margin:0 0 4px}.goods-w{margin:0;color:var(--mu);font-size:.92rem}
 .pv{position:relative;width:100%;aspect-ratio:16/9;background:linear-gradient(140deg,#2a1830,#101420);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .pv iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
