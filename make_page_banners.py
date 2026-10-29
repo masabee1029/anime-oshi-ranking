@@ -5,7 +5,9 @@ assets/banner/base.webp（トップの画像）のイラスト・王冠・グラ
 右側のタイトル・吹き出し・説明文だけを消して、ページごとの文言で描き直す。
 出力: assets/banner/<name>.jpg（build.py が docs/banner/ にコピーする）
 """
-import os, json, datetime, random
+import os, json, datetime, random, sys
+if "--force" not in sys.argv:   # 2026-10-29: ページのバナーは make_text_banners.py（文字と図形だけ）が正。上書きしないよう止める
+    sys.exit("make_page_banners.py は使わない。make_text_banners.py を使う（2026-10-29）")
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
