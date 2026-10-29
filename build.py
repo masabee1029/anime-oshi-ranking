@@ -280,8 +280,14 @@ def flush():
             f.write(content)
 
 # ---------- 作品の記録（個別ページ用） ----------
+import unicodedata
+_CANON, ALIAS = {}, {}   # 全角・半角だけ違う同じ作品（Season２ と Season2 など）を 1 ページにまとめる（2026-10-29）
 def tkey(title):
-    return hashlib.md5(norm(FIX_TITLE.get(title, title)).encode("utf-8")).hexdigest()[:10]
+    t = FIX_TITLE.get(title, title)
+    h = hashlib.md5(norm(t).encode("utf-8")).hexdigest()[:10]
+    k = _CANON.setdefault(norm(unicodedata.normalize("NFKC", t or "")), h)
+    if k != h: ALIAS[h] = k
+    return k
 TITLE_DB = collections.OrderedDict()   # key -> {"title", "apps": [(label, rank, href, sub)], "alts": set()}
 TITLE_PAGES = set()
 def register(title, label, rank, href, sub="", alts=()):
@@ -1071,7 +1077,7 @@ for k_, d_ in TITLE_DB.items():
     except ValueError: sc_ = 0
     w_ = WATCH.get(k_) or {}
     FEAT[k_] = {"title": d_["title"], "g": set(x for x in m_["genres"].split("|") if GENRE_JA.get(x, x)), "sc": sc_,
-                "flat": set(w_.get("flatrate") or []), "movie": m_.get("format") == "MOVIE", "base": norm(strip_extra(d_["title"]))[:4]}
+                "flat": set(w_.get("flatrate") or []), "movie": m_.get("format") == "MOVIE", "base": norm(unicodedata.normalize("NFKC", strip_extra(d_["title"])))[:4]}
 def next_five(k):
     """同じジャンルが多い・評価が近い・同じサービスで見放題・形式が同じ、の順に重みを付けて 5 本選ぶ。同じシリーズは 1 本まで（自分のシリーズも含む）"""
     me = FEAT.get(k)
@@ -1087,7 +1093,7 @@ def next_five(k):
         if me["movie"] == f["movie"]: s_ += 0.3
         cand.append((s_, k2, inter))
     cand.sort(key=lambda x: -x[0])
-    out, used = [], set()
+    out, used = [], {me["base"]}   # 自分と同じシリーズはすすめない
     for s_, k2, inter in cand:
         b = FEAT[k2]["base"]
         if b in used: continue
@@ -1276,5 +1282,10 @@ for sid_, (nm_, jl_) in WIDE_LISTS.items():
     ch_ = bar_chart("%sの人気作は、ほかのランキングにもいくつ入っている？" % esc(nm_), rows_,
                     "このサイトのランキング（配信サービス・国・季節など）のうち、その作品が入っている数です。多いほど、いろいろな場所で人気です。", mx=max([r[1] for r in rows_] + [1]))
     PAGES["service/%s.html" % sid_] = PAGES["service/%s.html" % sid_].replace("\x00WIDE:%s\x00" % sid_, ch_)
+for old_, new_ in ALIAS.items():
+    if new_ in TITLE_PAGES:
+        PAGES["anime/%s.html" % old_] = ('<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=%s.html">'
+                                         '<link rel="canonical" href="%sanime/%s.html"><title>移動しました</title></head><body><a href="%s.html">新しいページへ</a></body></html>'
+                                         % (new_, CFG["site_url"].rstrip("/") + "/", new_, new_))
 flush()
 print("generated", len([f for _, _, fs in os.walk(OUT) for f in fs]), "files in docs/")

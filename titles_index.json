@@ -214,9 +214,11 @@
   "key": "b976c78177",
   "title": "ここは俺に任せて先に行けと言ってから10年がたったら伝説になっていた。",
   "alts": [
+   "I Became a Legend After My 10 Year-Long Last Stand",
+   "Koko wa Ore ni Makasete Saki ni Ike to Ittekara 10-nen ga Tattara Densetsu ni Natteita.",
    "ここは俺に任せて先に行けと言ってから10年がたったら伝説になっていた。"
   ],
-  "year": ""
+  "year": "2026"
  },
  {
   "key": "edba5c3685",
@@ -297,6 +299,8 @@
   "key": "a2228945a4",
   "title": "落第賢者の学院無双 ～二度目の転生、Ｓランクチート魔術師冒険録～",
   "alts": [
+   "From Overshadowed to Overpowered: Second Reincarnation of a Talentless Sage",
+   "Rakudai Kenja no Gakuin Musou: Nidome no Tensei, S-Rank Cheat Majutsushi Bouken-roku",
    "Rakudai Kenja no Gakuin Musou: Nidome no Tensei, S-Rank Cheat Majutsushi Boukenroku",
    "落第賢者の学院無双 ～二度目の転生、Ｓランクチート魔術師冒険録～"
   ],
@@ -396,7 +400,10 @@
  {
   "key": "a99c7a75c7",
   "title": "アオのハコ Season2",
-  "alts": [],
+  "alts": [
+   "Ao no Hako Season 2",
+   "Blue Box Season 2"
+  ],
   "year": 2024
  },
  {
@@ -3059,15 +3066,6 @@
   "year": "2026"
  },
  {
-  "key": "60ccd45970",
-  "title": "アオのハコ Season２",
-  "alts": [
-   "Ao no Hako Season 2",
-   "Blue Box Season 2"
-  ],
-  "year": 2026
- },
- {
   "key": "0be23253fe",
   "title": "メイドインアビス 目覚める神秘",
   "alts": [
@@ -3262,15 +3260,6 @@
   "year": "2026"
  },
  {
-  "key": "fde199be9d",
-  "title": "落第賢者の学院無双～二度目の転生、Sランクチート魔術師冒険録～",
-  "alts": [
-   "From Overshadowed to Overpowered: Second Reincarnation of a Talentless Sage",
-   "Rakudai Kenja no Gakuin Musou: Nidome no Tensei, S-Rank Cheat Majutsushi Bouken-roku"
-  ],
-  "year": "2026"
- },
- {
   "key": "ed85a57cc6",
   "title": "透明な夜に駆ける君と、目に見えない恋をした。",
   "alts": [
@@ -3348,15 +3337,6 @@
   "alts": [
    "Oh Boy, Was I Wrong About Her",
    "Tenkousaki no Seiso Karen na Bishoujo ga, Mukashi Danshi to Omotte Issho ni Asonda Osananajimi datta Ken"
-  ],
-  "year": "2026"
- },
- {
-  "key": "53841d86e4",
-  "title": "ここは俺に任せて先に行けと言ってから１０年がたったら伝説になっていた。",
-  "alts": [
-   "I Became a Legend After My 10 Year-Long Last Stand",
-   "Koko wa Ore ni Makasete Saki ni Ike to Ittekara 10-nen ga Tattara Densetsu ni Natteita."
   ],
   "year": "2026"
  },
