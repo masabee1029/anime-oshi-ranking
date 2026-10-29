@@ -694,6 +694,66 @@ _pc = {"冬": ("秋", -1), "春": ("冬", 0), "夏": ("春", 0), "秋": ("夏", 
 PREV_Y, PREV_C = SEASON_Y + _pc[1], _pc[0]
 prev_label = "%d年%sアニメ" % (PREV_Y, PREV_C)
 
+TRENDS = read_json(os.path.join(HERE, "trends.json")) if os.path.exists(os.path.join(HERE, "trends.json")) else {}
+CHART_COLORS = ["#ff6b9d", "#ffb36b", "#ffe066", "#7bd88f", "#4fc3f7", "#7c8cff", "#c58bff", "#ff8a65", "#4dd0b8", "#e0e0e0"]
+def rank_chart(y, c, n=10):
+    """季節ページの「毎月の順位の動き」: AniList の人気（リストに入れた人の数）の日ごとの記録から、
+    各月末（今月は最新の日）の時点で、その季節の作品の中で何位だったかを線で描く。月が 3 つ未満のときは毎週の順位"""
+    rows = season_rows(y, c)
+    series = {r["anilist_id"]: TRENDS.get(r["anilist_id"]) or {} for r in rows if r.get("anilist_id")}
+    days = sorted({d for v in series.values() for d in v})
+    if not days: return ""
+    start = datetime.date(y, {"冬": 1, "春": 4, "夏": 7, "秋": 10}[c], 1).isoformat()
+    days = [d for d in days if d >= start]
+    if not days: return ""
+    last = days[-1]
+    month_ends = sorted({max(d for d in days if d[:7] == m) for m in {d[:7] for d in days}})
+    if len(month_ends) >= 3:
+        pts, unit = month_ends, "毎月"
+        lab = lambda d: "%d月%s" % (int(d[5:7]), "" if d == last else "末")
+    else:
+        dd = [datetime.date.fromisoformat(d) for d in days]
+        pts = sorted({d.isoformat() for d in dd if d.weekday() == 6} | {last})
+        pts = [d for d in pts if d >= days[0]]
+        unit = "毎週"
+        lab = lambda d: "%d/%d" % (int(d[5:7]), int(d[8:10]))
+    def val(v, d):
+        ks = [k for k in v if k <= d]
+        return v[max(ks)] if ks else None
+    ranks = {}
+    for d in pts:
+        vals = sorted(((val(v, d), aid) for aid, v in series.items() if val(v, d) is not None), key=lambda x: -x[0])
+        for i, (_, aid) in enumerate(vals, 1): ranks.setdefault(aid, {})[d] = i
+    top = sorted((aid for aid in ranks if last in ranks[aid]), key=lambda a: ranks[a][last])[:n]
+    if not top: return ""
+    name = {r["anilist_id"]: jp_title(r) for r in rows}
+    ymax = min(30, max(ranks[a][d] for a in top for d in ranks[a]))
+    W, H, L, R, T, B = 640, 300, 34, 26, 14, 30
+    xs = lambda i: L + (W - L - R) * (i / max(1, len(pts) - 1))
+    ys = lambda rk: T + (H - T - B) * ((min(rk, ymax) - 1) / max(1, ymax - 1))
+    g = []
+    for rk in sorted({1, 5, 10, 15, 20, 25, 30} & set(range(1, ymax + 1))):
+        g.append('<line x1="%d" y1="%.1f" x2="%d" y2="%.1f" class="rc-g"/><text x="%d" y="%.1f" class="rc-y">%d位</text>' % (L, ys(rk), W - R, ys(rk), L - 4, ys(rk) + 4, rk))
+    for i, d in enumerate(pts):
+        g.append('<text x="%.1f" y="%d" class="rc-x">%s</text>' % (xs(i), H - 8, lab(d)))
+    lines = []
+    for j, a in enumerate(reversed(top)):
+        col = CHART_COLORS[(len(top) - 1 - j) % len(CHART_COLORS)]
+        xy = [(xs(i), ys(ranks[a][d])) for i, d in enumerate(pts) if d in ranks[a]]
+        if len(xy) > 1:
+            lines.append('<polyline points="%s" fill="none" stroke="%s" stroke-width="2.5" stroke-linejoin="round" class="rc-l"/>' % (" ".join("%.1f,%.1f" % p_ for p_ in xy), col))
+        lines.append("".join('<circle cx="%.1f" cy="%.1f" r="3.5" fill="%s"/>' % (x_, y_, col) for x_, y_ in xy))
+    legend = "".join('<li><i style="background:%s"></i><b>%d位</b>%s%s</li>' % (
+        CHART_COLORS[i % len(CHART_COLORS)], ranks[a][last], tlink(name.get(a, "")),
+        (lambda f: (' <span class="rc-d up">↑%d</span>' % (f - ranks[a][last])) if f > ranks[a][last] else ((' <span class="rc-d dn">↓%d</span>' % (ranks[a][last] - f)) if f < ranks[a][last] else ""))(ranks[a][pts[0]] if pts[0] in ranks[a] else ranks[a][last]))
+        for i, a in enumerate(top))
+    return ('<section class="rchart"><h2>%sの順位の動き（TOP%d）</h2>'
+            '<svg viewBox="0 0 %d %d" class="rc-svg" role="img" aria-label="%d年%sアニメ TOP%d の%sの順位の動き">%s%s</svg>'
+            '<ol class="rc-lg">%s</ol><p class="note">AniList で作品を「観る・観たいリスト」に入れた人の数を%sの時点で比べ、この季節の%d作品の中での順位にしました。'
+            '矢印は%sからの順位の変化です（%s 時点）。下のランキングは毎月の集計の時点の順位なので、順番が少し違うことがあります。</p></section>'
+            % (unit, len(top), W, H, y, c, len(top), unit, "".join(g), "".join(lines), legend, "月末（今月は最新の日）" if unit == "毎月" else "毎週日曜（最後は最新の日）",
+               len(series), lab(pts[0]), last))
+
 def season_body(y, c, kind):
     """kind: current（今季）/ prev（前季）/ archive（それより前）"""
     rows = season_rows(y, c)
@@ -704,7 +764,8 @@ def season_body(y, c, kind):
     # 個別ページを作るのは今季・前季の作品だけ（過去の全シーズン分は数が多すぎるため）
     label = lab if kind in ("current", "prev") else None
     href = {"current": "season.html", "prev": "prev-season.html"}.get(kind)
-    return "<h1>%s 人気ランキング TOP30</h1><p class=\"lead\">%s</p>%s" % (esc(lab), lead,
+    return "<h1>%s 人気ランキング TOP30</h1><p class=\"lead\">%s</p>%s%s" % (esc(lab), lead,
+           rank_chart(y, c) if kind in ("current", "prev") else "",
            rank_list(season_items(rows, hot_flag=(kind == "current")), label=label, href=href))
 
 def nav_cards(rel):
@@ -864,9 +925,8 @@ def next_five(k):
     cand = []
     for k2, f in FEAT.items():
         if k2 == k: continue
-        inter = me["g"] & f["g"]
-        if not inter: continue
-        s_ = 3.0 * len(inter) / len(me["g"] | f["g"])
+        inter = me["g"] & f["g"]   # ジャンルが重ならない作品も、5 本に足りないときの補欠として点数を付けておく
+        s_ = 3.0 * len(inter) / len(me["g"] | f["g"]) + (2.0 if inter else 0)
         if me["sc"] and f["sc"]: s_ += 1.0 - min(abs(me["sc"] - f["sc"]), 20) / 20.0
         s_ += 0.4 * (f["sc"] / 100.0)
         if me["flat"] & f["flat"]: s_ += 0.5
@@ -892,12 +952,13 @@ def next_block(k):
     lis = []
     for k2, inter in picks:
         f = FEAT[k2]
-        bits = ["ジャンル: " + "・".join(GENRE_JA.get(x, x) for x in sorted(inter)[:3])]
+        bits = (["ジャンル: " + "・".join(GENRE_JA.get(x, x) for x in sorted(inter)[:3])] if inter
+                else ["ジャンル: " + "・".join(GENRE_JA.get(x, x) for x in sorted(f["g"])[:3])])
         if f["sc"]: bits.append("世界評価 %d点" % f["sc"])
         if f["flat"]: bits.append("見放題: " + "・".join(sorted(f["flat"])[:2]) + (" ほか" if len(f["flat"]) > 2 else ""))
         lis.append('<li><a href="%s.html">%s</a><span class="nx-s">%s</span></li>' % (k2, esc(f["title"]), esc(" ／ ".join(bits))))
     return ('<h2>これが好きなら、次はこの5本</h2><ol class="nx">%s</ol>'
-            '<p class="note">同じジャンル・近い評価・同じサービスで見放題、の順に近い作品を選んでいます。</p>' % "".join(lis))
+            '<p class="note">同じジャンル・近い評価・同じサービスで見放題、の順に近い作品を選んでいます（同じジャンルが5本に足りないときは、評価や配信が近い作品で補っています）。</p>' % "".join(lis))
 
 for k, d in TITLE_DB.items():
     t = d["title"]; m = meta_for(d)
@@ -1034,6 +1095,7 @@ a.tl{color:var(--tx);text-decoration:none;border-bottom:1px dotted #555}a.tl:hov
 .wrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}.wlb{flex:0 0 8em;font-size:.8rem;color:var(--mu)}.chip{font-size:.82rem;padding:3px 12px;border-radius:999px;border:1px solid #3a8f63;color:#bfe6cf}
 .note{font-size:.75rem;color:var(--mu)}
 .vcad{display:flex;flex-direction:column;gap:4px;padding:8px 0;border-top:1px solid var(--line)}.vcad span{font-size:.85rem;color:var(--mu)}.vcad .sbtn{align-self:flex-start}
+.rchart{margin:8px 0 24px}.rc-svg{width:100%;height:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}.rc-g{stroke:var(--line);stroke-width:1}.rc-y{fill:var(--mu);font-size:11px;text-anchor:end}.rc-x{fill:var(--mu);font-size:11px;text-anchor:middle}.rc-l{stroke-dasharray:2000;stroke-dashoffset:2000;animation:rcd 1.6s ease-out forwards}@keyframes rcd{to{stroke-dashoffset:0}}@media(prefers-reduced-motion:reduce){.rc-l{animation:none;stroke-dashoffset:0}}.rc-lg{list-style:none;padding:0;margin:10px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px;font-size:.88rem}@media(max-width:640px){.rc-lg{grid-template-columns:1fr}}.rc-lg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}.rc-lg b{margin-right:6px;color:var(--mu);font-weight:600}.rc-d{font-size:.78rem;font-weight:700}.rc-d.up{color:#7bd88f}.rc-d.dn{color:#ff8a65}
 .trend{margin:8px 0 24px}.tr-list{list-style:none;padding:0;margin:0}.tr-list li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}.tr-rk{min-width:1.6em;font-weight:700;color:var(--ac);text-align:right}.tr-main{flex:1;min-width:0}.tr-nm{font-size:.95rem;margin-bottom:4px}.tr-bar{position:relative;height:14px;background:var(--line);border-radius:9px;overflow:hidden}.tr-bar span{display:block;height:100%;background:linear-gradient(90deg,#ff6b9d,#ffb36b);border-radius:9px;transform-origin:left;animation:trg .9s ease-out both}.tr-row{display:flex;align-items:center;gap:8px}.tr-row .tr-bar{flex:1}.tr-row em{font-size:.75rem;font-style:normal;color:var(--mu);white-space:nowrap;min-width:6.5em;text-align:right}@keyframes trg{from{transform:scaleX(0)}to{transform:scaleX(1)}}@media(prefers-reduced-motion:reduce){.tr-bar span{animation:none}}.nx{padding-left:1.4em}.nx li{margin:8px 0}.nx li a{font-weight:700}.nx-s{display:block;font-size:.82rem;color:var(--mu)}
 .goods{background:var(--card,#1a1d29);border:1px solid var(--line);border-left:4px solid var(--ac);border-radius:10px;padding:12px 16px;margin:8px 0}.goods-n{font-weight:700;font-size:1.05rem;margin:0 0 4px}.goods-w{margin:0;color:var(--mu);font-size:.92rem}
 .pv{position:relative;width:100%;aspect-ratio:16/9;background:linear-gradient(140deg,#2a1830,#101420);border:1px solid var(--line);border-radius:12px;overflow:hidden}
