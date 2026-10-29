@@ -160,8 +160,8 @@ BANNERS = set(f[:-4] for f in os.listdir(os.path.join(HERE, "assets", "banner"))
 SISTER_SITES = [("AIデザイン実践ラボ", "ai-design-lab"), ("推し活グッズ＆遠征ガイド", "oshikatsu-guide"),
                 ("はじめてのスパイスカレー", "spice-curry-start"), ("推し発見ナビ", "oshi-hakken-navi"),
                 ("そのまま使えるAIプロンプト集", "ai-prompt-recipes")]
-PROFILE = ("あなたが「次に観る1本」を迷わず選べるように、Netflix 公式 Top10・JustWatch・AniList・Filmarks のデータを"
-           "毎月集計してランキングにまとめています。運営者もアニメ好きで、歌い手やボカロなど音楽の推し活もしています。見に来てくださって、ありがとうございます。")
+PROFILE = ("見に来てくださって、ありがとうございます。あなたが「次に観る1本」を迷わず選べるように、Netflix 公式 Top10・JustWatch・AniList・Filmarks のデータを"
+           "毎月集計してランキングにまとめています。運営者もアニメ好きで、歌い手やボカロなど音楽の推し活もしています。")
 
 def sidebar(rel):
     rank = "".join('<li><a href="%s%s">%s</a></li>' % (rel, h, t) for h, t in NAV[1:])
@@ -1151,7 +1151,7 @@ json.dump(index_out, open(os.path.join(HERE, "titles_index.json"), "w", encoding
 
 # ---------- 固定ページ ----------
 write("about.html", page("このサイトについて", """<h1>このサイトについて</h1>
-<p>「%s」では、あなたが次に観るアニメを、世界と日本の配信ランキング・レビューサイトの評価データから選べます。データは毎月集計し、個人で運営しています。見に来てくださって、ありがとうございます。</p>
+<p>見に来てくださって、ありがとうございます。「%s」では、あなたが次に観るアニメを、世界と日本の配信ランキング・レビューサイトの評価データから選べます。データは毎月集計し、個人で運営しています。</p>
 <h2>データの出典</h2>
 <ul><li>AniList（世界最大級のアニメデータベース）: 歴代評価・ジャンル・年別</li>
 <li>Netflix Tudum 公式 Top 10: 週間ランキング・再生回数</li>
