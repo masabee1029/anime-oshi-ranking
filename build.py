@@ -1235,6 +1235,8 @@ ol.rank{list-style:none;padding:0;margin:0}ol.rank li{display:flex;gap:16px;padd
 .btn{--bc:#888;font-size:.75rem;padding:3px 12px;border-radius:999px;text-decoration:none;background:#fff;color:color-mix(in srgb,var(--bc) 65%,#000);border:2px solid var(--bc);transition:background .15s}
 .btn:hover{background:#fff8e6}
 .btn.amz{--bc:#ff9900;color:#b35c00}.btn.rkt{--bc:#bf0000;color:#bf0000}.btn.yho{--bc:#ff0033;color:#d6002e}
+/* 2026-10-30 本人指示: 暗い背景に合わせたボタン（白地をやめる） */
+.btn{background:#232733;color:color-mix(in srgb,var(--bc) 55%,#fff);font-weight:800}.btn:hover{background:#2e3342}.btn.amz{--bc:#ffad33;color:#ffc266;border-color:#ffad33;box-shadow:0 0 10px #ffad3333}.btn.rkt{--bc:#ff5c7a;color:#ff8fa3;border-color:#ff5c7a;box-shadow:0 0 10px #ff5c7a33}.btn.yho{--bc:#ff4d6d;color:#ff8fa3;border-color:#ff4d6d}
 .hero{padding:24px 0 8px}.hero h1{font-size:1.8rem}.hero-img{padding:20px 0 12px}.hero-img img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
 .page-hero{margin:16px 0 4px}.page-hero img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}@media(max-width:640px){.grid{grid-template-columns:1fr}}
