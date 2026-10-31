@@ -1,26 +1,29 @@
 [
  {
-  "key": "6fa2597525",
-  "title": "攻殻機動隊",
+  "key": "86bc2208f1",
+  "title": "薬屋のひとりごと",
   "alts": [
-   "Kôkaku Kidôtai",
-   "THE GHOST IN THE SHELL",
-   "The Ghost in the Shell",
-   "الشبح في الصدفة",
-   "攻壳机动队",
-   "攻殻機動隊",
-   "공각기동대"
+   "Die Tagebücher der Apothekerin",
+   "Diários de uma Apotecária",
+   "Il monologo della Speziale",
+   "Kusuriya no Hitorigoto",
+   "Les Carnets de l'apothicaire",
+   "Los diarios de la boticaria",
+   "The Apothecary Diaries",
+   "Zapiski zielarki",
+   "مذكرات الصيدلانية",
+   "药屋少女的呢喃",
+   "薬屋のひとりごと",
+   "약사의 혼잣말"
   ],
-  "year": "2026"
+  "year": 2023
  },
  {
   "key": "4161133a85",
   "title": "無職転生 ～異世界行ったら本気だす～",
   "alts": [
    "Mushoku Tensei Jobless Reincarnation",
-   "Mushoku Tensei: Isekai Ittara Honki Dasu",
    "Mushoku Tensei: Jobless Reincarnation",
-   "موشوكو تينسي",
    "无职转生～到了异世界就拿出真本事～",
    "無職転生 ～異世界行ったら本気だす～",
    "무직전생 ~이세계에 갔으면 최선을 다한다~"
@@ -28,38 +31,80 @@
   "year": 2021
  },
  {
-  "key": "2c228efbb4",
-  "title": "Re: ゼロから始める異世界生活",
+  "key": "6fa2597525",
+  "title": "攻殻機動隊",
   "alts": [
-   "Re: Zero - Empezar de cero en un mundo diferente",
-   "Re: Zero - Starting Life in Another World",
-   "Re: Zero -Starting Life in Another World",
-   "Re: Zero kara hajimeru isekai seikatsu",
-   "Re: Życie od zera w innym świecie",
-   "Re: ゼロから始める異世界生活",
-   "Re:ZERO -Starting Life in Another World-",
-   "Re:Zero kara Hajimeru Isekai Seikatsu",
-   "Re：從零開始的異世界生活"
+   "Kôkaku Kidôtai",
+   "THE GHOST IN THE SHELL",
+   "The Ghost in the Shell",
+   "攻壳机动队",
+   "攻殻機動隊",
+   "공각기동대"
   ],
-  "year": 2016
+  "year": "2026"
  },
  {
-  "key": "541351182e",
-  "title": "劇場版 チェンソーマン レゼ篇",
+  "key": "ec5a269152",
+  "title": "ドラゴンボール超 ビルス",
   "alts": [
-   "劇場版 チェンソーマン レゼ篇"
+   "Dragon Ball Super : Beerus",
+   "Dragon Ball Super: Beerus",
+   "ドラゴンボール超 ビルス",
+   "龙珠超：比鲁斯",
+   "드래곤볼 슈퍼: 비루스"
   ],
-  "year": 2025
+  "year": 2026
  },
  {
-  "key": "dad5639777",
-  "title": "逃げ若",
+  "key": "edba5c3685",
+  "title": "名探偵コナン",
   "alts": [
-   "Nige jôzu no wakagimi",
-   "The Elusive Samurai",
-   "逃げ若"
+   "Detective Conan",
+   "Detektiv Conan",
+   "Meitantei Conan",
+   "名探偵コナン",
+   "명탐정 코난"
+  ],
+  "year": 1996
+ },
+ {
+  "key": "1cdb87381d",
+  "title": "鑑定スキル",
+  "alts": [
+   "Tensei Kizoku, Kantei Skill de Nariagaru",
+   "鑑定スキル"
   ],
   "year": "2024"
+ },
+ {
+  "key": "5524f46680",
+  "title": "東京リベンジャーズ",
+  "alts": [
+   "Os Vingadores de Tóquio",
+   "Tokyo Revengers",
+   "Tôkyô Ribenjâzu",
+   "東京リベンジャーズ",
+   "東京復仇者"
+  ],
+  "year": 2021
+ },
+ {
+  "key": "1bf138749f",
+  "title": "FX戦士くるみちゃん",
+  "alts": [
+   "FX戦士くるみちゃん"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "f394b9a2db",
+  "title": "追放されたチート付与魔術師は気ままなセカンドライフを謳歌する。 ～俺は武器だけじゃなく、あらゆるものに『強化ポイント』を付与できるし、俺の意思でいつでも効果を解除できるけど、残った人たち大丈夫？～",
+  "alts": [
+   "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+   "Tsuihou Sareta Cheat Fuyo Majutsushi wa Kimama na Second Life wo Ouka Suru.: Ore wa Buki dake ja Naku, Arayuru Mono ni \"Kyouka Point\" wo Fuyo Dekiru shi, Ore no Ishi de Itsudemo Kouka wo Kaijo Dekiru kedo, Nokotta Hitotachi Daijoubu?",
+   "追放されたチート付与魔術師は気ままなセカンドライフを謳歌する。 ～俺は武器だけじゃなく、あらゆるものに『強化ポイント』を付与できるし、俺の意思でいつでも効果を解除できるけど、残った人たち大丈夫？～"
+  ],
+  "year": "2026"
  },
  {
   "key": "c4798f29c3",
@@ -72,198 +117,12 @@
   "year": "2026"
  },
  {
-  "key": "1d995a663e",
-  "title": "天幕のジャードゥーガル",
+  "key": "207608d8e9",
+  "title": "響け！ユーフォニアム",
   "alts": [
-   "Jaadugar: A Witch in Mongolia",
-   "Tenmaku no Jaadugar",
-   "Tenmaku no jâdûgaru",
-   "天幕のジャードゥーガル"
+   "響け！ユーフォニアム"
   ],
-  "year": 2026
- },
- {
-  "key": "d2821ffc78",
-  "title": "ふつつかな悪女ではございますが ～雛宮蝶鼠とりかえ伝～",
-  "alts": [
-   "Futsutsuka na Akujo de wa Gozaimasu ga: Suuguu Chouso Torikae Den",
-   "Though I Am an Inept Villainess",
-   "ふつつかな悪女ではございますが ～雛宮蝶鼠とりかえ伝～",
-   "虽然我是不完美恶女 ～雏宫蝶鼠替换传～"
-  ],
-  "year": 2026
- },
- {
-  "key": "0e7ab1895a",
-  "title": "骸骨騎士様、只今異世界へお出掛け中",
-  "alts": [
-   "Gaikotsu Kishi-sama, Tadaima isekai e odekake-chû",
-   "骸骨騎士様、只今異世界へお出掛け中"
-  ],
-  "year": "2022"
- },
- {
-  "key": "2a80a6b4bd",
-  "title": "乙女ゲー世界はモブに厳しい世界です",
-  "alts": [
-   "乙女ゲー世界はモブに厳しい世界です"
-  ],
-  "year": "2022"
- },
- {
-  "key": "86bc2208f1",
-  "title": "薬屋のひとりごと",
-  "alts": [
-   "Die Tagebücher der Apothekerin",
-   "Diários de uma Apotecária",
-   "Il monologo della speziale",
-   "Kusuriya no Hitorigoto",
-   "Kusuriya no hitorigoto",
-   "Les Carnets de l'apothicaire",
-   "Los diarios de la boticaria",
-   "The Apothecary Diaries",
-   "Zapiski zielarki",
-   "薬屋のひとりごと",
-   "藥屋少女的呢喃",
-   "약사의 혼잣말"
-  ],
-  "year": 2023
- },
- {
-  "key": "19718b8094",
-  "title": "葬送のフリーレン",
-  "alts": [
-   "Frieren - Nach dem Ende der Reise",
-   "Frieren e a Jornada para o Além",
-   "Frieren. U kresu drogi",
-   "Frieren: Beyond Journey's End",
-   "Frieren: Beyond Journey’s End",
-   "Frieren: Oltre la fine del viaggio",
-   "Sousou no Frieren",
-   "Sôsô no Furîren",
-   "Sōsō no Frieren",
-   "葬送のフリーレン",
-   "葬送者芙莉蓮"
-  ],
-  "year": 2023
- },
- {
-  "key": "e7b3398217",
-  "title": "幼女戦記",
-  "alts": [
-   "يوجو سنكاي: ملحمة تانيا",
-   "幼女戦記"
-  ],
-  "year": 2017
- },
- {
-  "key": "4909554d1f",
-  "title": "ヤニねこ",
-  "alts": [
-   "Chainsmoker Cat",
-   "Yani Neko",
-   "ヤニねこ",
-   "尼古喵喵",
-   "담배 고양이"
-  ],
-  "year": "2026"
- },
- {
-  "key": "7bd51cf413",
-  "title": "スーパーの裏でヤニ吸うふたり",
-  "alts": [
-   "Fumando juntos detrás del súper",
-   "Smoking Behind the Supermarket With You",
-   "Smoking Behind the Supermarket with You",
-   "Super no Ura de Yani Suu Futari",
-   "スーパーの裏でヤニ吸うふたり",
-   "躲在超市后门抽烟的两人",
-   "슈퍼 뒤에서 담배 피우는 두 사람"
-  ],
-  "year": 2026
- },
- {
-  "key": "07ebf22316",
-  "title": "ヘルモード 〜やり込み好きのゲーマーは廃設定の異世界で無双する〜",
-  "alts": [
-   "Hell Mode: Yarikomi Suki no Gamer wa Hai Settei no Isekai de Musou Suru",
-   "ヘルモード 〜やり込み好きのゲーマーは廃設定の異世界で無双する〜"
-  ],
-  "year": ""
- },
- {
-  "key": "dcddcbd70e",
-  "title": "ちいかわ",
-  "alts": [
-   "ちいかわ",
-   "吉伊卡哇",
-   "먼작귀"
-  ],
-  "year": 2022
- },
- {
-  "key": "1cdb87381d",
-  "title": "鑑定スキル",
-  "alts": [
-   "Tensei Kizoku, Kantei Skill de Nariagaru",
-   "鑑定スキル"
-  ],
-  "year": "2024"
- },
- {
-  "key": "b976c78177",
-  "title": "ここは俺に任せて先に行けと言ってから10年がたったら伝説になっていた。",
-  "alts": [
-   "I Became a Legend After My 10 Year-Long Last Stand",
-   "Koko wa Ore ni Makasete Saki ni Ike to Ittekara 10-nen ga Tattara Densetsu ni Natteita.",
-   "ここは俺に任せて先に行けと言ってから10年がたったら伝説になっていた。"
-  ],
-  "year": "2026"
- },
- {
-  "key": "edba5c3685",
-  "title": "名探偵コナン",
-  "alts": [
-   "Detective Conan",
-   "Detektiv Conan",
-   "Détective Conan",
-   "Meitantei Conan",
-   "O Detective Conan",
-   "名探偵コナン",
-   "명탐정 코난"
-  ],
-  "year": 1996
- },
- {
-  "key": "7a5970832d",
-  "title": "片田舎のおっさん、剣聖になる",
-  "alts": [
-   "Béryl : de paysan à maître d'armes",
-   "Da campagnolo stagionato a gran maestro di spada",
-   "From Old Country Bumpkin to Master Swordsman",
-   "Wieśniak mistrzem miecza",
-   "片田舎のおっさん、剣聖になる"
-  ],
-  "year": "2025"
- },
- {
-  "key": "4905cbf96c",
-  "title": "ルックバック",
-  "alts": [
-   "LOOK BACK",
-   "Look Back",
-   "ルックバック"
-  ],
-  "year": 2024
- },
- {
-  "key": "b9238ffef2",
-  "title": "本好きの下剋上 司書になるためには手段を選んでいられません",
-  "alts": [
-   "Honzuki no Gekokujou",
-   "本好きの下剋上 司書になるためには手段を選んでいられません"
-  ],
-  "year": "2019"
+  "year": 2015
  },
  {
   "key": "64d45cf919",
@@ -275,203 +134,15 @@
   "year": 2022
  },
  {
-  "key": "782567b8e0",
-  "title": "ぐらんぶる",
-  "alts": [
-   "ぐらんぶる"
-  ],
-  "year": 2018
- },
- {
-  "key": "16a35c18b6",
-  "title": "転生したらスライムだった件",
-  "alts": [
-   "Meine Wiedergeburt als Schleim in einer anderen Welt",
-   "Moi, quand je me réincarne en Slime",
-   "Tensei Shitara Suraimu Datta Ken",
-   "That Time I Got Reincarnated as a Slime",
-   "転生したらスライムだった件",
-   "關於我轉生變成史萊姆這檔事"
-  ],
-  "year": 2018
- },
- {
-  "key": "a2228945a4",
-  "title": "落第賢者の学院無双 ～二度目の転生、Ｓランクチート魔術師冒険録～",
-  "alts": [
-   "From Overshadowed to Overpowered: Second Reincarnation of a Talentless Sage",
-   "Rakudai Kenja no Gakuin Musou: Nidome no Tensei, S-Rank Cheat Majutsushi Bouken-roku",
-   "Rakudai Kenja no Gakuin Musou: Nidome no Tensei, S-Rank Cheat Majutsushi Boukenroku",
-   "落第賢者の学院無双 ～二度目の転生、Ｓランクチート魔術師冒険録～"
-  ],
-  "year": "2026"
- },
- {
-  "key": "4792c7175c",
-  "title": "ジョジョの奇妙な冒険",
-  "alts": [
-   "JoJo's Bizarre Adventure",
-   "Le bizzarre avventure di JoJo",
-   "ジョジョの奇妙な冒険"
-  ],
-  "year": "1993"
- },
- {
-  "key": "fde879dd6b",
-  "title": "黄泉のツガイ",
-  "alts": [
-   "Daemons do Reino das Sombras",
-   "Daemons of the Shadow Realm",
-   "Das Band der Unterwelt",
-   "Espíritus del Inframundo",
-   "Kontraduety z zaświatów",
-   "Tsugai - Daemons of the Shadow Realm",
-   "شياطين عالم الظلال",
-   "黄泉のツガイ",
-   "黄泉的使者",
-   "황천의 츠가이"
-  ],
-  "year": 2026
- },
- {
-  "key": "b453c3ffbb",
-  "title": "正反対な君と僕 第2期",
-  "alts": [
-   "Seihantai na Kimi to Boku 2nd Season",
-   "You and I Are Polar Opposites Season 2"
-  ],
-  "year": 2026
- },
- {
-  "key": "18687351ab",
-  "title": "薬屋のひとりごと 第3期 第1クール",
-  "alts": [],
-  "year": 2023
- },
- {
-  "key": "9d03c54f20",
-  "title": "逃げ上手の若君 第二期",
-  "alts": [],
-  "year": "2026"
- },
- {
-  "key": "0ff1284901",
-  "title": "宇宙よりも遠い場所",
-  "alts": [],
-  "year": 2018
- },
- {
-  "key": "f07746046b",
-  "title": "生徒会にも穴はある！",
-  "alts": [
-   "Even the Student Council Has Its Holes!",
-   "Seitokai ni mo Ana wa Aru!",
-   "生徒会にも穴はある!"
-  ],
-  "year": "2026"
- },
- {
-  "key": "1bf138749f",
-  "title": "FX戦士くるみちゃん",
-  "alts": [],
-  "year": "2026"
- },
- {
-  "key": "d6c7ddf7bb",
-  "title": "Re:ゼロから始める異世界生活 4th season 奪還編",
-  "alts": [],
-  "year": ""
- },
- {
-  "key": "b6db955569",
-  "title": "魔法騎士レイアース",
-  "alts": [],
-  "year": ""
- },
- {
-  "key": "d69de6a33b",
-  "title": "無職転生Ⅲ ～異世界行ったら本気だす～",
-  "alts": [
-   "Mushoku Tensei III: Isekai Ittara Honki Dasu",
-   "Mushoku Tensei: Jobless Reincarnation Season 3"
-  ],
-  "year": 2026
- },
- {
-  "key": "a99c7a75c7",
-  "title": "アオのハコ Season2",
-  "alts": [
-   "Ao no Hako Season 2",
-   "Blue Box Season 2"
-  ],
-  "year": 2024
- },
- {
-  "key": "dcb1e29e78",
-  "title": "正反対な君と僕",
-  "alts": [],
-  "year": 2026
- },
- {
-  "key": "6643c6d373",
-  "title": "氷の城壁 第2期",
-  "alts": [
-   "Koori no Jouheki 2nd Season",
-   "The Ramparts of Ice Season 2"
-  ],
-  "year": 2026
- },
- {
-  "key": "e5c207227c",
-  "title": "スティール・ボール・ラン ジョジョの奇妙な冒険 2nd & 3rd STAGE",
-  "alts": [],
-  "year": ""
- },
- {
-  "key": "f394b9a2db",
-  "title": "追放されたチート付与魔術師は気ままなセカンドライフを謳歌する。 ～俺は武器だけじゃなく、あらゆるものに『強化ポイント』を付与できるし、俺の意思でいつでも効果を解除できるけど、残った人たち大丈夫？～",
-  "alts": [
-   "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
-   "Tsuihou Sareta Cheat Fuyo Majutsushi wa Kimama na Second Life wo Ouka Suru.: Ore wa Buki dake ja Naku, Arayuru Mono ni \"Kyouka Point\" wo Fuyo Dekiru shi, Ore no Ishi de Itsudemo Kouka wo Kaijo Dekiru kedo, Nokotta Hitotachi Daijoubu?"
-  ],
-  "year": "2026"
- },
- {
-  "key": "8cd2faaade",
-  "title": "PSYREN -サイレン-",
-  "alts": [
-   "PSYREN",
-   "PSYЯEN"
-  ],
-  "year": "2026"
- },
- {
   "key": "d28645db9f",
   "title": "どうも、好きな人に惚れ薬を依頼された魔女です。",
   "alts": [
    "Doumo, Suki na Hito ni Horegusuri wo Irai Sareta Majo desu.",
-   "Hello, I am a Witch and my Crush Wants me to Make a Love Potion!"
+   "Hello, I Am a Witch and My Crush Wants Me to Make a Love Potion!",
+   "Hello, I am a Witch and my Crush Wants me to Make a Love Potion!",
+   "どうも、好きな人に惚れ薬を依頼された魔女です。"
   ],
   "year": "2026"
- },
- {
-  "key": "4d76fa22e4",
-  "title": "凶乱令嬢ニア・リストン 病弱令嬢に転生した神殺しの武人の華麗なる無双録",
-  "alts": [],
-  "year": ""
- },
- {
-  "key": "e81502a921",
-  "title": "ONE PIECE",
-  "alts": [
-   "ONE PIECE",
-   "One Piece",
-   "ون بيس",
-   "ワンピース",
-   "航海王",
-   "원피스"
-  ],
-  "year": 1999
  },
  {
   "key": "33a6f959e8",
@@ -492,6 +163,132 @@
   "year": 2013
  },
  {
+  "key": "a9a48897ef",
+  "title": "ホタルの嫁入り",
+  "alts": [
+   "Firefly Wedding",
+   "Hotaru no Yomeiri",
+   "ホタルの嫁入り",
+   "萤火虫的出嫁"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "b553a1f1b8",
+  "title": "目覚めたら最強装備と宇宙船持ちだったので、一戸建て目指して傭兵として自由に生きたい",
+  "alts": [
+   "Mezametara Saikyou Soubi to Uchuusen-mochi datta node, Ikkodate Mezashite Youhei to shite Jiyuu ni Ikitai",
+   "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship!",
+   "目覚めたら最強装備と宇宙船持ちだったので、一戸建て目指して傭兵として自由に生きたい"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "f9098d7611",
+  "title": "とある暗部の少女共棲",
+  "alts": [
+   "とある暗部の少女共棲"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "6918f2b582",
+  "title": "転生した大聖女は、聖女であることをひた隠す",
+  "alts": [
+   "Tensei Shita Daiseijo wa, Seijo de Aru Koto wo Hitakakusu",
+   "転生した大聖女は、聖女であることをひた隠す"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "a93f25b86e",
+  "title": "佐々木とピーちゃん",
+  "alts": [
+   "佐々木とピーちゃん"
+  ],
+  "year": "2024"
+ },
+ {
+  "key": "e77d4c3576",
+  "title": "彼女の友達",
+  "alts": [
+   "彼女の友達"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "37a1ae30ad",
+  "title": "探偵はもう、死んでいる。",
+  "alts": [
+   "Tantei wa Mou, Shindeiru.",
+   "探偵はもう、死んでいる。"
+  ],
+  "year": "2021"
+ },
+ {
+  "key": "acb2d2e142",
+  "title": "氷の城壁",
+  "alts": [
+   "Koori no Jyouheki",
+   "Rompiendo el hielo",
+   "The Ramparts of Ice",
+   "氷の城壁"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "c2ddb294e3",
+  "title": "桃源暗鬼",
+  "alts": [
+   "TOUGEN ANKI",
+   "Tougen Anki",
+   "桃源暗鬼",
+   "도원암귀"
+  ],
+  "year": "2025"
+ },
+ {
+  "key": "fafd71ffd2",
+  "title": "朱色の仮面",
+  "alts": [
+   "朱色の仮面"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "54f271dbc7",
+  "title": "serial experiments lain",
+  "alts": [
+   "serial experiments lain"
+  ],
+  "year": 1998
+ },
+ {
+  "key": "c4daa9e702",
+  "title": "おーばーふろぉ",
+  "alts": [
+   "Overflow",
+   "おーばーふろぉ"
+  ],
+  "year": ""
+ },
+ {
+  "key": "450877e542",
+  "title": "てつりょー！meet with 鉄道むすめ",
+  "alts": [
+   "てつりょー！meet with 鉄道むすめ"
+  ],
+  "year": ""
+ },
+ {
+  "key": "c79abf2946",
+  "title": "ワンピース",
+  "alts": [
+   "ワンピース"
+  ],
+  "year": ""
+ },
+ {
   "key": "373b128719",
   "title": "呪術廻戦",
   "alts": [
@@ -501,6 +298,192 @@
    "咒術迴戰"
   ],
   "year": 2020
+ },
+ {
+  "key": "2a3b80caaf",
+  "title": "ブラッククローバー",
+  "alts": [
+   "Black Clover",
+   "Black Clover بلاك كلوفر",
+   "ブラッククローバー",
+   "黑色五葉草",
+   "블랙클로버"
+  ],
+  "year": 2017
+ },
+ {
+  "key": "b11bfefa3c",
+  "title": "サイバーパンク: エッジランナーズ2",
+  "alts": [
+   "Cyberpunk: Edgerunners 2"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "6430f44686",
+  "title": "LONA",
+  "alts": [],
+  "year": ""
+ },
+ {
+  "key": "18687351ab",
+  "title": "薬屋のひとりごと 第3期 第1クール",
+  "alts": [],
+  "year": 2023
+ },
+ {
+  "key": "65ee70cf2a",
+  "title": "サイバーパンク エッジランナーズ",
+  "alts": [
+   "Cyberpunk: Edgerunners"
+  ],
+  "year": 2022
+ },
+ {
+  "key": "fde879dd6b",
+  "title": "黄泉のツガイ",
+  "alts": [
+   "Daemons do Reino das Sombras",
+   "Daemons of the Shadow Realm",
+   "Das Band der Unterwelt",
+   "Espíritus del Inframundo",
+   "Tsugai - Daemons of the Shadow Realm",
+   "شياطين عالم الظلال",
+   "黄泉のツガイ",
+   "黄泉的使者"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "a0567fdf90",
+  "title": "ふつつかな悪女ではございますが ～雛宮蝶鼠とりかえ伝～ 第2クール",
+  "alts": [],
+  "year": 2026
+ },
+ {
+  "key": "b453c3ffbb",
+  "title": "正反対な君と僕 第2期",
+  "alts": [
+   "Seihantai na Kimi to Boku 2nd Season",
+   "You and I Are Polar Opposites Season 2"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "7bd51cf413",
+  "title": "スーパーの裏でヤニ吸うふたり",
+  "alts": [
+   "Smoking Behind the Supermarket With You",
+   "Smoking Behind the Supermarket with You",
+   "Super no Ura de Yani Suu Futari",
+   "スーパーの裏でヤニ吸うふたり",
+   "躲在超市后门抽烟的两人",
+   "슈퍼 뒤에서 담배 피우는 두 사람"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "880980b981",
+  "title": "薬屋のひとりごと 第1期",
+  "alts": [],
+  "year": 2023
+ },
+ {
+  "key": "d69de6a33b",
+  "title": "無職転生Ⅲ ～異世界行ったら本気だす～",
+  "alts": [
+   "Mushoku Tensei III: Isekai Ittara Honki Dasu",
+   "Mushoku Tensei: Jobless Reincarnation Season 3"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "4909554d1f",
+  "title": "ヤニねこ",
+  "alts": [
+   "Chainsmoker Cat",
+   "Yani Neko",
+   "ヤニねこ"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "b0e5cca962",
+  "title": "日本三國",
+  "alts": [
+   "NIPPON SANGOKU: The Three Nations of the Crimson Sun",
+   "日本三国",
+   "日本三國"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "d286ba10bd",
+  "title": "HUNTER×HUNTER",
+  "alts": [
+   "HUNTER×HUNTER",
+   "Hunter x Hunter",
+   "Hunter × Hunter"
+  ],
+  "year": 1999
+ },
+ {
+  "key": "c2df3b7565",
+  "title": "わたしの幸せな結婚 特別篇",
+  "alts": [],
+  "year": "2026"
+ },
+ {
+  "key": "19718b8094",
+  "title": "葬送のフリーレン",
+  "alts": [
+   "Frieren: Beyond Journey's End",
+   "Frieren: Beyond Journey’s End",
+   "Sousou no Frieren",
+   "Sôsô no Furîren",
+   "Sōsō no Frieren",
+   "葬送のフリーレン",
+   "葬送者芙莉蓮"
+  ],
+  "year": 2023
+ },
+ {
+  "key": "e4e9730df9",
+  "title": "呪術廻戦 第3期 死滅回游 前編",
+  "alts": [],
+  "year": 2026
+ },
+ {
+  "key": "6643c6d373",
+  "title": "氷の城壁 第2期",
+  "alts": [
+   "Koori no Jouheki 2nd Season",
+   "The Ramparts of Ice Season 2"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "f07746046b",
+  "title": "生徒会にも穴はある！",
+  "alts": [
+   "Even the Student Council Has Its Holes!",
+   "Seitokai ni mo Ana wa Aru!",
+   "生徒会にも穴はある！"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "e81502a921",
+  "title": "ONE PIECE",
+  "alts": [
+   "ONE PIECE",
+   "One Piece",
+   "ون بيس",
+   "ワンピース",
+   "航海王",
+   "원피스"
+  ],
+  "year": 1999
  },
  {
   "key": "4c73413176",
@@ -516,16 +499,145 @@
   "year": 1997
  },
  {
-  "key": "2a3b80caaf",
-  "title": "ブラッククローバー",
+  "key": "7c6f1fb2c2",
+  "title": "BLEACH 千年血戦篇",
   "alts": [
-   "Black Clover",
-   "Black Clover  بلاك كلوفر",
-   "ブラッククローバー",
-   "黑色五葉草",
-   "블랙 클로버 1기"
+   "BLEACH 千年血戦篇",
+   "BLEACH: Sennen Kessen-hen",
+   "BLEACH: Thousand-Year Blood War",
+   "BLEACH死神 千年血戰篇-訣別譚-",
+   "Bleach: Sennen Kessen-hen",
+   "Bleach: Thousand Year Blood War",
+   "Bleach: Thousand-Year Blood War",
+   "블리치: 천년혈전편"
   ],
-  "year": 2017
+  "year": 2022
+ },
+ {
+  "key": "b445df4d7d",
+  "title": "鬼滅の刃 遊郭編",
+  "alts": [
+   "Demon Slayer - Kimetsu no yaiba",
+   "Demon Slayer: Kimetsu no Yaiba",
+   "Demon Slayer: Kimetsu no Yaiba Entertainment District Arc",
+   "Guardians de la nit: Kimetsu no Yaiba",
+   "Kimetsu no Yaiba",
+   "Kimetsu no Yaiba: Guardiões da Noite",
+   "Kimetsu no Yaiba: Yuukaku-hen",
+   "Miecz zabójcy demonów: Kimetsu no Yaiba",
+   "鬼滅の刃 遊郭編",
+   "鬼滅之刃 遊郭篇"
+  ],
+  "year": 2022
+ },
+ {
+  "key": "a09e0504f0",
+  "title": "俺だけレベルアップな件",
+  "alts": [
+   "I Level Up Alone",
+   "Ore dake Reberu Appu na Ken",
+   "Solo Leveling",
+   "Solo Leveling: Powstań z cienia",
+   "سولو ليفلينغ",
+   "俺だけレベルアップな件",
+   "我獨自升級"
+  ],
+  "year": 2024
+ },
+ {
+  "key": "9aa160c416",
+  "title": "NARUTO -ナルト-",
+  "alts": [
+   "NARUTO -ナルト-",
+   "Naruto",
+   "ناروتو",
+   "ナルト",
+   "火影忍者"
+  ],
+  "year": 2002
+ },
+ {
+  "key": "5629500575",
+  "title": "BLEACH",
+  "alts": [
+   "BLEACH",
+   "BLEACH 死神",
+   "Bleach"
+  ],
+  "year": 2004
+ },
+ {
+  "key": "d8d8ea1969",
+  "title": "ドラゴンボール",
+  "alts": [
+   "Dragon Ball",
+   "ドラゴンボール",
+   "七龍珠"
+  ],
+  "year": 1986
+ },
+ {
+  "key": "7c05a49116",
+  "title": "鋼の錬金術師",
+  "alts": [
+   "Fullmetal Alchemist: Brotherhood",
+   "Fullmetal Alchemist: Brödraskapet",
+   "Stalowy alchemik: Misja braci",
+   "鋼の錬金術師",
+   "鋼の錬金術師 FULLMETAL ALCHEMIST",
+   "钢之炼金术师 FA",
+   "강철의 연금술사 BROTHERHOOD"
+  ],
+  "year": 2003
+ },
+ {
+  "key": "7e89ecd3ac",
+  "title": "ドラゴンボール超",
+  "alts": [
+   "Dragon Ball Super",
+   "Dragonball Super",
+   "ドラゴンボール超",
+   "ドラゴンボール超（スーパー）",
+   "龙珠超",
+   "드래곤볼 슈퍼"
+  ],
+  "year": 2015
+ },
+ {
+  "key": "ceec5d5034",
+  "title": "ドラゴンボールZ",
+  "alts": [
+   "Dragon Ball Z",
+   "Dragonball Z",
+   "ドラゴンボールZ",
+   "七龍珠Z",
+   "드래곤볼 Z"
+  ],
+  "year": 1989
+ },
+ {
+  "key": "a3c773c529",
+  "title": "僕のヒーローアカデミア",
+  "alts": [
+   "Akademia bohaterów",
+   "Kahramanlık Akademim",
+   "My Hero Academia",
+   "أكاديمية بطلي",
+   "僕のヒーローアカデミア",
+   "我的英雄学院"
+  ],
+  "year": 2016
+ },
+ {
+  "key": "b518712e4f",
+  "title": "NARUTO -ナルト- 疾風伝",
+  "alts": [
+   "NARUTO -ナルト- 疾風伝",
+   "Naruto Shippuden",
+   "Naruto: Shippûden",
+   "火影忍者疾風傳"
+  ],
+  "year": 2007
  },
  {
   "key": "e03e5b77f6",
@@ -539,17 +651,6 @@
    "死亡笔记"
   ],
   "year": 2006
- },
- {
-  "key": "5629500575",
-  "title": "BLEACH",
-  "alts": [
-   "BLEACH",
-   "BLEACH 死神",
-   "Bleach",
-   "Bleach: Burîchi"
-  ],
-  "year": 2004
  },
  {
   "key": "465049d293",
@@ -568,163 +669,55 @@
   "year": 2025
  },
  {
-  "key": "a3c773c529",
-  "title": "僕のヒーローアカデミア",
+  "key": "23dff05c38",
+  "title": "スティール・ボール・ラン ジョジョの奇妙な冒険",
   "alts": [
-   "Akademia bohaterów",
-   "Kahramanlık Akademim",
-   "My Hero Academia",
-   "أكاديمية بطلي",
-   "僕のヒーローアカデミア",
-   "我的英雄学院"
+   "STEEL BALL RUN JoJo’s Bizarre Adventure",
+   "Steel Ball Run: JoJo's Bizarre Adventure",
+   "سباق الكرات الفولاذية: مغامرات جوجو العجيبة",
+   "スティール・ボール・ラン ジョジョの奇妙な冒険",
+   "飆馬野郎 JOJO的奇妙冒險",
+   "스틸 볼 런: 죠죠의 기묘한 모험"
   ],
-  "year": 2016
- },
- {
-  "key": "7c6f1fb2c2",
-  "title": "BLEACH 千年血戦篇",
-  "alts": [
-   "BLEACH 千年血戦篇",
-   "BLEACH: Sennen Kessen-hen",
-   "BLEACH: Thousand-Year Blood War",
-   "BLEACH死神 千年血戰篇-訣別譚-",
-   "Bleach: Sennen Kessen-hen",
-   "Bleach: Thousand-Year Blood War"
-  ],
-  "year": 2022
- },
- {
-  "key": "a09e0504f0",
-  "title": "俺だけレベルアップな件",
-  "alts": [
-   "I Level Up Alone",
-   "Only I Level Up",
-   "Ore dake Reberu Appu na Ken",
-   "Solo Leveling",
-   "Solo Leveling: Powstań z cienia",
-   "سولو ليفلينغ",
-   "俺だけレベルアップな件",
-   "我獨自升級"
-  ],
-  "year": 2024
- },
- {
-  "key": "8df9d46609",
-  "title": "鬼滅の刃",
-  "alts": [
-   "Demon Slayer: Kimetsu no Yaiba",
-   "Guardians de la nit: Kimetsu no Yaiba",
-   "Kimetsu no Yaiba",
-   "قاتل الشياطين",
-   "鬼滅の刃",
-   "鬼滅之刃 遊郭篇"
-  ],
-  "year": 2019
- },
- {
-  "key": "9aa160c416",
-  "title": "NARUTO -ナルト-",
-  "alts": [
-   "NARUTO -ナルト-",
-   "Naruto",
-   "ナルト",
-   "火影忍者",
-   "나루토"
-  ],
-  "year": 2002
- },
- {
-  "key": "7c05a49116",
-  "title": "鋼の錬金術師",
-  "alts": [
-   "Fullmetal Alchemist: Brotherhood",
-   "Fullmetal Alchemist: Brödraskapet",
-   "Stalowy alchemik: Misja braci",
-   "الخيميائي الفولاذي : الأخوَّة",
-   "鋼の錬金術師",
-   "鋼の錬金術師 FULLMETAL ALCHEMIST",
-   "钢之炼金术师 FA",
-   "강철의 연금술사 BROTHERHOOD"
-  ],
-  "year": 2003
- },
- {
-  "key": "d8d8ea1969",
-  "title": "ドラゴンボール",
-  "alts": [
-   "Dragon Ball",
-   "ドラゴンボール",
-   "七龍珠"
-  ],
-  "year": 1986
+  "year": ""
  },
  {
   "key": "d6c3c6499f",
   "title": "君の名は。",
   "alts": [
    "Kimi no Na wa.",
-   "Twoje imię.",
+   "O Teu Nome",
    "Your Name.",
+   "你的名字。",
    "君の名は。"
   ],
   "year": 2016
  },
  {
-  "key": "b518712e4f",
-  "title": "NARUTO -ナルト- 疾風伝",
+  "key": "b8e173d3ce",
+  "title": "ヴィンランド・サガ",
   "alts": [
-   "NARUTO -ナルト- 疾風伝",
-   "Naruto Shippuden",
-   "Naruto: Shippûden",
-   "ناروتو شيبودن",
-   "火影忍者疾風傳"
+   "VINLAND SAGA",
+   "Vinland Saga",
+   "ヴィンランド・サガ",
+   "冰海战记"
   ],
-  "year": 2007
+  "year": 2019
  },
  {
-  "key": "16fbd39c7d",
-  "title": "トム・ソーヤーの冒険",
+  "key": "2c228efbb4",
+  "title": "Re: ゼロから始める異世界生活",
   "alts": [
-   "Las aventuras de Tom Sawyer",
-   "The Adventures of Tom Sawyer",
-   "Tom Sawyer",
-   "توم سوير",
-   "トム・ソーヤーの冒険",
-   "톰 소여의 모험"
+   "Re: Zero - Empezar de cero en un mundo diferente",
+   "Re: Zero - Starting Life in Another World",
+   "Re: Życie od zera w innym świecie",
+   "Re: ゼロから始める異世界生活",
+   "Re: 제로부터 시작하는 이세계 생활",
+   "Re:ZERO -Starting Life in Another World-",
+   "Re:Zero kara Hajimeru Isekai Seikatsu",
+   "Re：從零開始的異世界生活"
   ],
-  "year": "1980"
- },
- {
-  "key": "96eea1fa04",
-  "title": "AKIRA",
-  "alts": [
-   "AKIRA",
-   "Akira"
-  ],
-  "year": 1988
- },
- {
-  "key": "ceec5d5034",
-  "title": "ドラゴンボールZ",
-  "alts": [
-   "Dragon Ball Z",
-   "Dragonball Z",
-   "ドラゴンボールZ",
-   "七龍珠Z",
-   "드래곤볼 Z"
-  ],
-  "year": 1989
- },
- {
-  "key": "5524f46680",
-  "title": "東京リベンジャーズ",
-  "alts": [
-   "Tokyo Revengers",
-   "Tôkyô Ribenjâzu",
-   "東京リベンジャーズ",
-   "東京復仇者"
-  ],
-  "year": 2021
+  "year": 2016
  },
  {
   "key": "859b4e9321",
@@ -739,10 +732,8 @@
   "key": "537ea106d2",
   "title": "銀魂゜",
   "alts": [
-   "Gintama",
    "Gintama Season 3",
-   "Gintama°",
-   "銀魂"
+   "Gintama°"
   ],
   "year": 2015
  },
@@ -756,15 +747,6 @@
   "year": 2026
  },
  {
-  "key": "bee74d6d4d",
-  "title": "チェンソーマン レゼ篇",
-  "alts": [
-   "Chainsaw Man – The Movie: Reze Arc",
-   "Chainsaw Man: Reze-hen"
-  ],
-  "year": 2025
- },
- {
   "key": "c3f77a9d01",
   "title": "鋼の錬金術師 FULLMETAL ALCHEMIST",
   "alts": [
@@ -774,6 +756,15 @@
   "year": 2009
  },
  {
+  "key": "bee74d6d4d",
+  "title": "チェンソーマン レゼ篇",
+  "alts": [
+   "Chainsaw Man – The Movie: Reze Arc",
+   "Chainsaw Man: Reze-hen"
+  ],
+  "year": 2025
+ },
+ {
   "key": "7d7618a681",
   "title": "進撃の巨人 Season３ Part.2",
   "alts": [
@@ -781,15 +772,6 @@
    "Shingeki no Kyojin Season 3 Part 2"
   ],
   "year": 2019
- },
- {
-  "key": "1cc4b7182d",
-  "title": "BLEACH 千年血戦篇-禍進譚-",
-  "alts": [
-   "BLEACH: Sennen Kessen-hen - Kashin-tan",
-   "BLEACH: Thousand-Year Blood War - The Calamity"
-  ],
-  "year": 2026
  },
  {
   "key": "7189f5a679",
@@ -803,8 +785,7 @@
   "key": "f81bf16c98",
   "title": "シュタインズ・ゲート",
   "alts": [
-   "Steins;Gate",
-   "슈타인즈 게이트"
+   "Steins;Gate"
   ],
   "year": 2011
  },
@@ -854,15 +835,6 @@
   "year": 2011
  },
  {
-  "key": "1965d9953b",
-  "title": "３月のライオン 第2シリーズ",
-  "alts": [
-   "3-gatsu no Lion 2nd Season",
-   "March comes in like a lion Season 2"
-  ],
-  "year": 2017
- },
- {
   "key": "ca6d5c4861",
   "title": "あしたのジョー２",
   "alts": [
@@ -870,6 +842,15 @@
    "Tomorrow's Joe 2"
   ],
   "year": 1980
+ },
+ {
+  "key": "1965d9953b",
+  "title": "３月のライオン 第2シリーズ",
+  "alts": [
+   "3-gatsu no Lion 2nd Season",
+   "March comes in like a lion Season 2"
+  ],
+  "year": 2017
  },
  {
   "key": "e893ae5f8f",
@@ -888,6 +869,15 @@
    "Kaguya-sama: Love is War -Ultra Romantic-"
   ],
   "year": 2022
+ },
+ {
+  "key": "1cc4b7182d",
+  "title": "BLEACH 千年血戦篇-禍進譚-",
+  "alts": [
+   "BLEACH: Sennen Kessen-hen - Kashin-tan",
+   "BLEACH: Thousand-Year Blood War - The Calamity"
+  ],
+  "year": 2026
  },
  {
   "key": "287df4de48",
@@ -922,10 +912,18 @@
   "alts": [
    "MONSTER",
    "Monster",
-   "الوحش",
-   "怪物"
+   "الوحش"
   ],
   "year": 2004
+ },
+ {
+  "key": "8b1b2a95be",
+  "title": "新劇場版 銀魂 -吉原大炎上-",
+  "alts": [
+   "Gintama the Movie 2026: Yoshiwara in Flames",
+   "Shin Gintama Movie: Yoshiwara Daienjou"
+  ],
+  "year": 2026
  },
  {
   "key": "5da53581b9",
@@ -955,21 +953,13 @@
   "year": 2016
  },
  {
-  "key": "ff0afa1edb",
-  "title": "ジョジョの奇妙な冒険 スティール・ボール・ラン 1st STAGE",
+  "key": "76c816b045",
+  "title": "銀魂. 銀ノ魂篇2",
   "alts": [
-   "JoJo no Kimyou na Bouken: Steel Ball Run - 1st STAGE",
-   "STEEL BALL RUN JoJo's Bizarre Adventure 1st STAGE"
+   "Gintama.: Shirogane no Tamashii-hen - Kouhan-sen",
+   "Gintama.: Silver Soul Arc - Second Half War"
   ],
-  "year": 2026
- },
- {
-  "key": "cbcbb74a0f",
-  "title": "モブサイコ100 II",
-  "alts": [
-   "Mob Psycho 100 II"
-  ],
-  "year": 2019
+  "year": 2018
  },
  {
   "key": "8ea2bf8da3",
@@ -981,33 +971,21 @@
   "year": 2026
  },
  {
-  "key": "8b1b2a95be",
-  "title": "新劇場版 銀魂 -吉原大炎上-",
+  "key": "b274342a47",
+  "title": "劇場版 銀魂 完結篇 万事屋よ永遠なれ",
   "alts": [
-   "Gintama the Movie 2026: Yoshiwara in Flames",
-   "Shin Gintama Movie: Yoshiwara Daienjou"
+   "Gintama: Kanketsu-hen - Yorozuya yo Eien Nare",
+   "Gintama: The Final Chapter - Be Forever Yorozuya"
   ],
-  "year": 2026
+  "year": 2013
  },
  {
-  "key": "b8e173d3ce",
-  "title": "ヴィンランド・サガ",
+  "key": "cbcbb74a0f",
+  "title": "モブサイコ100 II",
   "alts": [
-   "VINLAND SAGA",
-   "Vinland Saga",
-   "ملحمة فينلاند",
-   "ヴィンランド・サガ"
+   "Mob Psycho 100 II"
   ],
   "year": 2019
- },
- {
-  "key": "76c816b045",
-  "title": "銀魂. 銀ノ魂篇2",
-  "alts": [
-   "Gintama.: Shirogane no Tamashii-hen - Kouhan-sen",
-   "Gintama.: Silver Soul Arc - Second Half War"
-  ],
-  "year": 2018
  },
  {
   "key": "62ae2901c6",
@@ -1019,13 +997,13 @@
   "year": 2024
  },
  {
-  "key": "b274342a47",
-  "title": "劇場版 銀魂 完結篇 万事屋よ永遠なれ",
+  "key": "ff0afa1edb",
+  "title": "ジョジョの奇妙な冒険 スティール・ボール・ラン 1st STAGE",
   "alts": [
-   "Gintama: Kanketsu-hen - Yorozuya yo Eien Nare",
-   "Gintama: The Final Chapter - Be Forever Yorozuya"
+   "JoJo no Kimyou na Bouken: Steel Ball Run - 1st STAGE",
+   "STEEL BALL RUN JoJo's Bizarre Adventure 1st STAGE"
   ],
-  "year": 2013
+  "year": 2026
  },
  {
   "key": "6c5d49e9ee",
@@ -1090,13 +1068,13 @@
   "year": 2016
  },
  {
-  "key": "53c91611dd",
-  "title": "劇場版 ヴァイオレット・エヴァーガーデン",
+  "key": "a10cb1be2f",
+  "title": "劇場版 少女☆歌劇 レヴュースタァライト",
   "alts": [
-   "Violet Evergarden Movie",
-   "Violet Evergarden: the Movie"
+   "Revue Starlight: The Movie",
+   "Shoujo☆Kageki Revue Starlight Movie"
   ],
-  "year": 2020
+  "year": 2021
  },
  {
   "key": "2c6d42e678",
@@ -1108,11 +1086,20 @@
   "year": 2026
  },
  {
-  "key": "a10cb1be2f",
-  "title": "劇場版 少女☆歌劇 レヴュースタァライト",
+  "key": "53c91611dd",
+  "title": "劇場版 ヴァイオレット・エヴァーガーデン",
   "alts": [
-   "Revue Starlight: The Movie",
-   "Shoujo☆Kageki Revue Starlight Movie"
+   "Violet Evergarden Movie",
+   "Violet Evergarden: the Movie"
+  ],
+  "year": 2020
+ },
+ {
+  "key": "264c8789a2",
+  "title": "進撃の巨人 The Final Season",
+  "alts": [
+   "Attack on Titan Final Season",
+   "Shingeki no Kyojin: The Final Season"
   ],
   "year": 2021
  },
@@ -1135,15 +1122,6 @@
   "year": 2000
  },
  {
-  "key": "264c8789a2",
-  "title": "進撃の巨人 The Final Season",
-  "alts": [
-   "Attack on Titan Final Season",
-   "Shingeki no Kyojin: The Final Season"
-  ],
-  "year": 2021
- },
- {
   "key": "20da6204c8",
   "title": "THE FIRST SLAM DUNK",
   "alts": [
@@ -1159,6 +1137,15 @@
    "86: Eighty Six Part 2"
   ],
   "year": 2021
+ },
+ {
+  "key": "b691d9607e",
+  "title": "记忆管理局 (2026)",
+  "alts": [
+   "False Memory (2026)",
+   "Jiyi Guanli Ju (2026)"
+  ],
+  "year": null
  },
  {
   "key": "338433f8ac",
@@ -1179,15 +1166,6 @@
   "year": 2022
  },
  {
-  "key": "4890668c6d",
-  "title": "ウマ娘 プリティーダービー 新時代の扉",
-  "alts": [
-   "Uma Musume: Pretty Derby - Shin Jidai no Tobira",
-   "Umamusume: Pretty Derby - Beginning of a New Era"
-  ],
-  "year": 2024
- },
- {
   "key": "260af58d9e",
   "title": "進撃の巨人 The Final Season Part 2",
   "alts": [
@@ -1197,20 +1175,11 @@
   "year": 2022
  },
  {
-  "key": "b691d9607e",
-  "title": "记忆管理局 (2026)",
+  "key": "4890668c6d",
+  "title": "ウマ娘 プリティーダービー 新時代の扉",
   "alts": [
-   "False Memory (2026)",
-   "Jiyi Guanli Ju (2026)"
-  ],
-  "year": null
- },
- {
-  "key": "4ca61e98da",
-  "title": "BLEACH 千年血戦篇-相剋譚-",
-  "alts": [
-   "BLEACH: Sennen Kessen-hen - Soukoku-tan",
-   "BLEACH: Thousand-Year Blood War - The Conflict"
+   "Uma Musume: Pretty Derby - Shin Jidai no Tobira",
+   "Umamusume: Pretty Derby - Beginning of a New Era"
   ],
   "year": 2024
  },
@@ -1224,6 +1193,15 @@
   "year": 2025
  },
  {
+  "key": "da2813a902",
+  "title": "诡秘之主 特别篇",
+  "alts": [
+   "Guimi Zhi Zhu Specials",
+   "Lord of Mysteries Specials"
+  ],
+  "year": null
+ },
+ {
   "key": "291d0e503d",
   "title": "蟲師 続章 2",
   "alts": [
@@ -1231,6 +1209,15 @@
    "Mushishi Zoku Shou 2"
   ],
   "year": 2014
+ },
+ {
+  "key": "fa763dc460",
+  "title": "銀魂. 銀ノ魂篇",
+  "alts": [
+   "Gintama.: Shirogane no Tamashii-hen",
+   "Gintama.: Silver Soul Arc"
+  ],
+  "year": 2018
  },
  {
   "key": "620b182377",
@@ -1242,13 +1229,13 @@
   "year": 2020
  },
  {
-  "key": "da2813a902",
-  "title": "诡秘之主 特别篇",
+  "key": "4ca61e98da",
+  "title": "BLEACH 千年血戦篇-相剋譚-",
   "alts": [
-   "Guimi Zhi Zhu Specials",
-   "Lord of Mysteries Specials"
+   "BLEACH: Sennen Kessen-hen - Soukoku-tan",
+   "BLEACH: Thousand-Year Blood War - The Conflict"
   ],
-  "year": null
+  "year": 2024
  },
  {
   "key": "67afa5c398",
@@ -1258,15 +1245,6 @@
    "Shouwa Genroku Rakugo Shinjuu: Sukeroku Futatabi-hen"
   ],
   "year": 2017
- },
- {
-  "key": "fa763dc460",
-  "title": "銀魂. 銀ノ魂篇",
-  "alts": [
-   "Gintama.: Shirogane no Tamashii-hen",
-   "Gintama.: Silver Soul Arc"
-  ],
-  "year": 2018
  },
  {
   "key": "257510bfe3",
@@ -1332,15 +1310,6 @@
   "year": 2026
  },
  {
-  "key": "d27e09bb89",
-  "title": "〈物語〉シリーズ オフ&モンスターシーズン",
-  "alts": [
-   "MONOGATARI Series: OFF & MONSTER Season",
-   "Monogatari Series: Off & Monster Season"
-  ],
-  "year": 2024
- },
- {
   "key": "61c80c11ec",
   "title": "ウマ娘 シンデレラグレイ 第2クール",
   "alts": [
@@ -1348,6 +1317,26 @@
    "Umamusume: Cinderella Gray 2nd Cour"
   ],
   "year": 2025
+ },
+ {
+  "key": "44cf4f601b",
+  "title": "罗小黑战记 2",
+  "alts": [
+   "Luo Xiaohei Zhan Ji 2",
+   "The Legend of Hei 2"
+  ],
+  "year": null
+ },
+ {
+  "key": "4905cbf96c",
+  "title": "ルックバック",
+  "alts": [
+   "LOOK BACK",
+   "Look Back",
+   "ルックバック",
+   "룩백"
+  ],
+  "year": 2024
  },
  {
   "key": "ce76733bde",
@@ -1359,6 +1348,15 @@
   "year": null
  },
  {
+  "key": "d27e09bb89",
+  "title": "〈物語〉シリーズ オフ&モンスターシーズン",
+  "alts": [
+   "MONOGATARI Series: OFF & MONSTER Season",
+   "Monogatari Series: Off & Monster Season"
+  ],
+  "year": 2024
+ },
+ {
   "key": "b09622a65d",
   "title": "カウボーイビバップ",
   "alts": [
@@ -1368,18 +1366,10 @@
   "year": 1998
  },
  {
-  "key": "2b49018ec3",
-  "title": "呪術廻戦 死滅回游 前編",
-  "alts": [
-   "JUJUTSU KAISEN Season 3: The Culling Game Part 1",
-   "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen"
-  ],
-  "year": 2026
- },
- {
   "key": "a19afb5ac4",
   "title": "千と千尋の神隠し",
   "alts": [
+   "El viaje de Chihiro",
    "Sen to Chihiro no Kamikakushi",
    "Spirited Away",
    "千と千尋の神隠し"
@@ -1393,24 +1383,6 @@
    "ARIA The ORIGINATION"
   ],
   "year": 2008
- },
- {
-  "key": "d35d4e4872",
-  "title": "涼宮ハルヒの消失",
-  "alts": [
-   "Suzumiya Haruhi no Shoushitsu",
-   "The Disappearance of Haruhi Suzumiya"
-  ],
-  "year": 2010
- },
- {
-  "key": "45321fdba6",
-  "title": "蟲師 続章",
-  "alts": [
-   "MUSHI-SHI The Next Passage",
-   "Mushishi Zoku Shou"
-  ],
-  "year": 2014
  },
  {
   "key": "11e4b2b8b9",
@@ -1431,13 +1403,31 @@
   "year": 2018
  },
  {
-  "key": "002d580981",
-  "title": "天官赐福 第二季",
+  "key": "2b49018ec3",
+  "title": "呪術廻戦 死滅回游 前編",
   "alts": [
-   "Heaven Official's Blessing Season 2",
-   "Tian Guan Ci Fu 2"
+   "JUJUTSU KAISEN Season 3: The Culling Game Part 1",
+   "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen"
   ],
-  "year": null
+  "year": 2026
+ },
+ {
+  "key": "d35d4e4872",
+  "title": "涼宮ハルヒの消失",
+  "alts": [
+   "Suzumiya Haruhi no Shoushitsu",
+   "The Disappearance of Haruhi Suzumiya"
+  ],
+  "year": 2010
+ },
+ {
+  "key": "45321fdba6",
+  "title": "蟲師 続章",
+  "alts": [
+   "MUSHI-SHI The Next Passage",
+   "Mushishi Zoku Shou"
+  ],
+  "year": 2014
  },
  {
   "key": "e7c9ef30f2",
@@ -1458,21 +1448,22 @@
   "year": null
  },
  {
-  "key": "b445df4d7d",
-  "title": "鬼滅の刃 遊郭編",
+  "key": "002d580981",
+  "title": "天官赐福 第二季",
   "alts": [
-   "Demon Slayer: Kimetsu no Yaiba Entertainment District Arc",
-   "Kimetsu no Yaiba: Yuukaku-hen"
-  ],
-  "year": 2022
- },
- {
-  "key": "2116ccf696",
-  "title": "アイドル",
-  "alts": [
-   "Idol"
+   "Heaven Official's Blessing Season 2",
+   "Tian Guan Ci Fu 2"
   ],
   "year": null
+ },
+ {
+  "key": "a641e713fc",
+  "title": "ジョジョの奇妙な冒険 スティール・ボール・ラン 2nd＆3rd STAGE",
+  "alts": [
+   "JoJo no Kimyou na Bouken: Steel Ball Run - 2nd & 3rd STAGE",
+   "STEEL BALL RUN JoJo's Bizarre Adventure 2nd - 3rd STAGE"
+  ],
+  "year": 2026
  },
  {
   "key": "3f099d1de8",
@@ -1493,6 +1484,14 @@
   "year": 2009
  },
  {
+  "key": "2116ccf696",
+  "title": "アイドル",
+  "alts": [
+   "Idol"
+  ],
+  "year": null
+ },
+ {
   "key": "cb331e5b6c",
   "title": "ヴァイオレット・エヴァーガーデン",
   "alts": [
@@ -1501,30 +1500,13 @@
   "year": 2018
  },
  {
-  "key": "52d5e04dab",
-  "title": "かぐや様は告らせたい？～天才たちの恋愛頭脳戦～",
+  "key": "c01a108837",
+  "title": "キングダム 第5シリーズ",
   "alts": [
-   "Kaguya-sama wa Kokurasetai?: Tensaitachi no Renai Zunousen",
-   "Kaguya-sama: Love is War?"
+   "Kingdom 5th Season",
+   "Kingdom Season 5"
   ],
-  "year": 2020
- },
- {
-  "key": "65ee70cf2a",
-  "title": "サイバーパンク エッジランナーズ",
-  "alts": [
-   "Cyberpunk: Edgerunners"
-  ],
-  "year": 2022
- },
- {
-  "key": "44cf4f601b",
-  "title": "罗小黑战记 2",
-  "alts": [
-   "Luo Xiaohei Zhan Ji 2",
-   "The Legend of Hei 2"
-  ],
-  "year": null
+  "year": 2024
  },
  {
   "key": "21b50aa478",
@@ -1545,20 +1527,10 @@
   "year": 2020
  },
  {
-  "key": "cb14b77f2d",
-  "title": "Fate/stay night[Heaven's Feel] ⅠⅠⅠ.spring song",
-  "alts": [
-   "Fate/stay night [Heaven's Feel] III. spring song",
-   "Fate/stay night [Heaven’s Feel] III. spring song"
-  ],
-  "year": 2020
- },
- {
   "key": "a571ddfed2",
   "title": "ダンダダン",
   "alts": [
    "DAN DA DAN",
-   "Dan Da Dan",
    "Dandadan",
    "단다단"
   ],
@@ -1571,6 +1543,14 @@
    "SAKAMOTO DAYS"
   ],
   "year": 2025
+ },
+ {
+  "key": "8df9d46609",
+  "title": "鬼滅の刃",
+  "alts": [
+   "Demon Slayer: Kimetsu no Yaiba"
+  ],
+  "year": 2019
  },
  {
   "key": "9f5e7cc203",
@@ -1608,17 +1588,10 @@
   "key": "ffe0b88392",
   "title": "終末のワルキューレ",
   "alts": [
-   "Record of Ragnarok"
+   "Record of Ragnarok",
+   "終末のワルキューレ"
   ],
   "year": "2021"
- },
- {
-  "key": "6387621a9b",
-  "title": "ブラッククローバー 魔法帝の剣",
-  "alts": [
-   "Black Clover: Sword of the Wizard King"
-  ],
-  "year": "2023"
  },
  {
   "key": "627bb5ff4d",
@@ -1627,6 +1600,14 @@
    "Demon Slayer: Kimetsu no Yaiba Infinity Castle I"
   ],
   "year": ""
+ },
+ {
+  "key": "6387621a9b",
+  "title": "ブラッククローバー 魔法帝の剣",
+  "alts": [
+   "Black Clover: Sword of the Wizard King"
+  ],
+  "year": "2023"
  },
  {
   "key": "10755814d7",
@@ -1710,6 +1691,7 @@
   "key": "11a27b77b9",
   "title": "ワンパンマン",
   "alts": [
+   "One Punch Man",
    "One Punch Man: Wanpanman",
    "One-Punch Man"
   ],
@@ -1722,15 +1704,6 @@
    "Pokémon Concierge"
   ],
   "year": ""
- },
- {
-  "key": "c2ddb294e3",
-  "title": "桃源暗鬼",
-  "alts": [
-   "Tougen Anki",
-   "桃源暗鬼"
-  ],
-  "year": "2025"
  },
  {
   "key": "dc5e2bc560",
@@ -1765,21 +1738,16 @@
   "year": 2025
  },
  {
-  "key": "32e10f3970",
-  "title": "君たちはどう生きるか",
+  "key": "16a35c18b6",
+  "title": "転生したらスライムだった件",
   "alts": [
-   "The Boy and the Heron"
+   "Moi, quand je me réincarne en Slime",
+   "Tensei Shitara Suraimu Datta Ken",
+   "That Time I Got Reincarnated as a Slime",
+   "転生したらスライムだった件",
+   "關於我轉生變成史萊姆這檔事"
   ],
-  "year": "2023"
- },
- {
-  "key": "683c44cd50",
-  "title": "すずめの戸締まり",
-  "alts": [
-   "Suzume",
-   "すずめの戸締まり"
-  ],
-  "year": 2022
+  "year": 2018
  },
  {
   "key": "6fb8c7cf84",
@@ -1818,8 +1786,7 @@
   "key": "8aec39995c",
   "title": "地獄楽",
   "alts": [
-   "Hell's Paradise: Jigokuraku",
-   "Jigokuraku"
+   "Hell's Paradise: Jigokuraku"
   ],
   "year": 2023
  },
@@ -1848,135 +1815,80 @@
   "year": "2024"
  },
  {
-  "key": "795d956f2f",
-  "title": "二十世紀電氣目録-ユーレカ・エヴリカ-",
+  "key": "4792c7175c",
+  "title": "ジョジョの奇妙な冒険",
   "alts": [
-   "20세기 전기 목록",
-   "Destellos del mañana",
-   "Nijusseiki Denki Mokuroku: Eureka Evrika",
-   "Sparks of Tomorrow",
-   "二十世紀電氣目録-ユーレカ・エヴリカ-",
-   "二十世纪电气目录"
+   "JoJo's Bizarre Adventure",
+   "Le bizzarre avventure di JoJo",
+   "مغامرات جوجو العجيبة",
+   "ジョジョの奇妙な冒険"
+  ],
+  "year": "1993"
+ },
+ {
+  "key": "59b056a7f3",
+  "title": "新世紀エヴァンゲリオン",
+  "alts": [
+   "Neon Genesis Evangelion",
+   "新世紀エヴァンゲリオン",
+   "新世纪福音战士"
+  ],
+  "year": 1995
+ },
+ {
+  "key": "f0586a38b7",
+  "title": "転生したら剣でした",
+  "alts": [
+   "Reincarnated as a Sword",
+   "転生したら剣でした"
+  ],
+  "year": "2022"
+ },
+ {
+  "key": "dc2ef16a5d",
+  "title": "アオのハコ",
+  "alts": [
+   "Blue Box",
+   "アオのハコ",
+   "푸른 상자"
+  ],
+  "year": 2024
+ },
+ {
+  "key": "76cb12372b",
+  "title": "マジカル★エクスプローラー",
+  "alts": [
+   "マジカル★エクスプローラー"
+  ],
+  "year": ""
+ },
+ {
+  "key": "0fad3cfcf0",
+  "title": "地球チ",
+  "alts": [
+   "Chi. Chikyuu no Undou ni Tsuite",
+   "地球チ"
+  ],
+  "year": 2024
+ },
+ {
+  "key": "a2228945a4",
+  "title": "落第賢者の学院無双 ～二度目の転生、Ｓランクチート魔術師冒険録～",
+  "alts": [
+   "From Overshadowed to Overpowered: Second Reincarnation of a Talentless Sage",
+   "Rakudai Kenja no Gakuin Musou: Nidome no Tensei, S-Rank Cheat Majutsushi Bouken-roku",
+   "Rakudai Kenja no Gakuin Musou: Nidome no Tensei, S-Rank Cheat Majutsushi Boukenroku",
+   "落第賢者の学院無双 ～二度目の転生、Ｓランクチート魔術師冒険録～"
   ],
   "year": "2026"
  },
  {
-  "key": "d286ba10bd",
-  "title": "HUNTER×HUNTER",
+  "key": "782567b8e0",
+  "title": "ぐらんぶる",
   "alts": [
-   "HUNTER×HUNTER",
-   "Hunter x Hunter",
-   "Hunter × Hunter",
-   "全职猎人"
+   "ぐらんぶる"
   ],
-  "year": 1999
- },
- {
-  "key": "23dff05c38",
-  "title": "スティール・ボール・ラン ジョジョの奇妙な冒険",
-  "alts": [
-   "STEEL BALL RUN JoJo’s Bizarre Adventure",
-   "Steel Ball Run: JoJo's Bizarre Adventure",
-   "سباق الكرات الفولاذية: مغامرات جوجو العجيبة",
-   "スティール・ボール・ラン ジョジョの奇妙な冒険",
-   "飆馬野郎 JOJO的奇妙冒險"
-  ],
-  "year": ""
- },
- {
-  "key": "c79abf2946",
-  "title": "ワンピース",
-  "alts": [
-   "ワンピース"
-  ],
-  "year": ""
- },
- {
-  "key": "1d5c5b6674",
-  "title": "マオ",
-  "alts": [
-   "Mao",
-   "マオ"
-  ],
-  "year": "2026"
- },
- {
-  "key": "be0fb289d3",
-  "title": "野生のラスボスが現れた！",
-  "alts": [
-   "Yasei no Rasu Bosu ga Arawareta!",
-   "野生のラスボスが現れた！"
-  ],
-  "year": "2025"
- },
- {
-  "key": "7dc80c71f6",
-  "title": "LV999の村人",
-  "alts": [
-   "LV999 no Murabito",
-   "LV999の村人",
-   "Level 999 no Murabito",
-   "The Villager of Level 999"
-  ],
-  "year": "2026"
- },
- {
-  "key": "f8faee467c",
-  "title": "どろろ",
-  "alts": [
-   "どろろ",
-   "多罗罗"
-  ],
-  "year": 2019
- },
- {
-  "key": "69e0ca0541",
-  "title": "からくりサーカス",
-  "alts": [
-   "からくりサーカス"
-  ],
-  "year": "2018"
- },
- {
-  "key": "b0e5cca962",
-  "title": "日本三國",
-  "alts": [
-   "NIPPON SANGOKU: The Three Nations of the Crimson Sun",
-   "日本三國"
-  ],
-  "year": 2026
- },
- {
-  "key": "3c68d69144",
-  "title": "マロニエ王国の七人の騎士",
-  "alts": [
-   "マロニエ王国の七人の騎士"
-  ],
-  "year": ""
- },
- {
-  "key": "9f32a4e1a6",
-  "title": "PSYCHO-PASS サイコパス",
-  "alts": [
-   "PSYCHO-PASS サイコパス"
-  ],
-  "year": 2012
- },
- {
-  "key": "4abe50941e",
-  "title": "北斗の拳",
-  "alts": [
-   "北斗の拳 -FIST OF THE NORTH STAR-"
-  ],
-  "year": "1984"
- },
- {
-  "key": "55df618e91",
-  "title": "Kabushiki Gaisha Majirumie",
-  "alts": [
-   "Kabushiki Gaisha Majirumie"
-  ],
-  "year": ""
+  "year": 2018
  },
  {
   "key": "30b326ea7f",
@@ -1987,6 +1899,63 @@
   "year": ""
  },
  {
+  "key": "7a5970832d",
+  "title": "片田舎のおっさん、剣聖になる",
+  "alts": [
+   "片田舎のおっさん、剣聖になる"
+  ],
+  "year": "2025"
+ },
+ {
+  "key": "f8faee467c",
+  "title": "どろろ",
+  "alts": [
+   "どろろ"
+  ],
+  "year": 2019
+ },
+ {
+  "key": "3c68d69144",
+  "title": "マロニエ王国の七人の騎士",
+  "alts": [
+   "マロニエ王国の七人の騎士"
+  ],
+  "year": ""
+ },
+ {
+  "key": "69e0ca0541",
+  "title": "からくりサーカス",
+  "alts": [
+   "からくりサーカス"
+  ],
+  "year": "2018"
+ },
+ {
+  "key": "9f32a4e1a6",
+  "title": "PSYCHO-PASS サイコパス",
+  "alts": [
+   "PSYCHO-PASS サイコパス",
+   "心理测量者"
+  ],
+  "year": 2012
+ },
+ {
+  "key": "55df618e91",
+  "title": "Kabushiki Gaisha Majirumie",
+  "alts": [
+   "Kabushiki Gaisha Majirumie"
+  ],
+  "year": ""
+ },
+ {
+  "key": "4abe50941e",
+  "title": "北斗の拳",
+  "alts": [
+   "北斗の拳 -FIST OF THE NORTH STAR-"
+  ],
+  "year": "1984"
+ },
+ {
   "key": "78d91c7be3",
   "title": "バビロン",
   "alts": [
@@ -1995,28 +1964,12 @@
   "year": "2019"
  },
  {
-  "key": "f8b249c2de",
-  "title": "呪術廻戦 0",
-  "alts": [
-   "劇場版 呪術廻戦 0"
-  ],
-  "year": 2021
- },
- {
   "key": "cef78400d6",
   "title": "ダーウィン事変",
   "alts": [
    "ダーウィン事変"
   ],
   "year": "2026"
- },
- {
-  "key": "a7608f2bed",
-  "title": "クレヨンしんちゃん外伝",
-  "alts": [
-   "クレヨンしんちゃん外伝"
-  ],
-  "year": ""
  },
  {
   "key": "c0dcbc7beb",
@@ -2035,12 +1988,29 @@
   "year": "2025"
  },
  {
+  "key": "f8b249c2de",
+  "title": "呪術廻戦 0",
+  "alts": [
+   "劇場版 呪術廻戦 0"
+  ],
+  "year": 2021
+ },
+ {
   "key": "182f9e0dd1",
   "title": "遊☆戯☆王",
   "alts": [
    "Yu-Gi-Oh!"
   ],
   "year": "1998"
+ },
+ {
+  "key": "683c44cd50",
+  "title": "すずめの戸締まり",
+  "alts": [
+   "Suzume",
+   "すずめの戸締まり"
+  ],
+  "year": 2022
  },
  {
   "key": "a6dca4aaf5",
@@ -2051,20 +2021,28 @@
   "year": "2025"
  },
  {
-  "key": "c85855ebab",
-  "title": "キルアオ",
+  "key": "78d5f655c7",
+  "title": "CITY THE ANIMATION",
   "alts": [
-   "キルアオ"
+   "CITY THE ANIMATION"
   ],
-  "year": "2026"
+  "year": 2025
  },
  {
-  "key": "e2cf97d9d6",
-  "title": "Übel Blatt～ユーベルブラット～",
+  "key": "820e5bcde8",
+  "title": "頭文字D",
   "alts": [
-   "Übel Blatt～ユーベルブラット～"
+   "頭文字D"
   ],
-  "year": "2025"
+  "year": ""
+ },
+ {
+  "key": "2642185aab",
+  "title": "転生ゴブリンだけど質問ある？",
+  "alts": [
+   "転生ゴブリンだけど質問ある？"
+  ],
+  "year": "2026"
  },
  {
   "key": "c1a57efef7",
@@ -2086,10 +2064,18 @@
   "key": "b98ca7872f",
   "title": "Star Wars: Visions Presents - The Ninth Jedi",
   "alts": [
-   "Star Wars: Visions Presents - The Ninth Jedi",
-   "星球大战：幻境 — 第九个绝地武士"
+   "Star Wars: Visions Presents - The Ninth Jedi"
   ],
   "year": ""
+ },
+ {
+  "key": "109876fe43",
+  "title": "天国大魔境",
+  "alts": [
+   "TENGOKU-DAIMAKYO",
+   "天国大魔境"
+  ],
+  "year": 2023
  },
  {
   "key": "9f05aa4202",
@@ -2106,14 +2092,6 @@
    "サマータイムレンダ"
   ],
   "year": 2022
- },
- {
-  "key": "109876fe43",
-  "title": "天国大魔境",
-  "alts": [
-   "天国大魔境"
-  ],
-  "year": 2023
  },
  {
   "key": "9344cde8fb",
@@ -2133,6 +2111,14 @@
   "year": 2022
  },
  {
+  "key": "a6dcc7f9ea",
+  "title": "夜桜さんちの大作戦",
+  "alts": [
+   "Yozakura-san Chi no Daisakusen"
+  ],
+  "year": "2024"
+ },
+ {
   "key": "06c19eb22f",
   "title": "ガチアクタ",
   "alts": [
@@ -2149,75 +2135,57 @@
   "year": ""
  },
  {
-  "key": "ce0e6ca4b8",
-  "title": "Beyblade X",
+  "key": "6f34e180a0",
+  "title": "ダイヤのA",
   "alts": [
-   "Beyblade X"
+   "Ace of the Diamond",
+   "ダイヤのA"
+  ],
+  "year": "2013"
+ },
+ {
+  "key": "dcb1e29e78",
+  "title": "正反対な君と僕",
+  "alts": [
+   "Seihantai na Kimi to Boku",
+   "正反対な君と僕"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "dad5639777",
+  "title": "逃げ若",
+  "alts": [
+   "Nige jôzu no wakagimi",
+   "逃げ若"
   ],
   "year": ""
  },
  {
-  "key": "81394620f9",
-  "title": "ディズニー ツイステッドワンダーランド ザ アニメーション シーズン1「エピソード オブ ハーツラビュル」",
+  "key": "8bd8ce57b7",
+  "title": "塩対応の佐藤さんが俺にだけ甘い",
   "alts": [
-   "ディズニー ツイステッドワンダーランド ザ アニメーション"
-  ],
-  "year": "2025"
- },
- {
-  "key": "086438714d",
-  "title": "クレバテス-魔獣の王と赤子と屍の勇者",
-  "alts": [
-   "Clevatess",
-   "クレバテス-魔獣の王と赤子と屍の勇者"
-  ],
-  "year": "2025"
- },
- {
-  "key": "b540ad6fe8",
-  "title": "鬼の花嫁",
-  "alts": [
-   "The Ogre's Bride",
-   "鬼の花嫁"
+   "塩対応の佐藤さんが俺にだけ甘い"
   ],
   "year": "2026"
  },
  {
-  "key": "f80077a7f9",
-  "title": "ソードアート・オンライン",
+  "key": "e7a4a1ae6d",
+  "title": "DARK MACHINE THE ANIMATION",
   "alts": [
-   "ソードアート・オンライン"
+   "DARK MACHINE THE ANIMATION"
   ],
-  "year": 2012
+  "year": ""
  },
  {
-  "key": "7e89ecd3ac",
-  "title": "ドラゴンボール超",
+  "key": "a6d6c3a4dd",
+  "title": "美少女戦士セーラームーン",
   "alts": [
-   "Dragon Ball Super",
-   "ドラゴンボール超（スーパー）",
-   "龙珠超",
-   "드래곤볼 슈퍼"
+   "Ay Savaşçısı",
+   "Sailor Moon",
+   "美少女戦士セーラームーン"
   ],
-  "year": 2015
- },
- {
-  "key": "f130309896",
-  "title": "Dr.STONE",
-  "alts": [
-   "Dr.STONE"
-  ],
-  "year": 2019
- },
- {
-  "key": "0fc9bd4e38",
-  "title": "BLACK TORCH",
-  "alts": [
-   "BLACK TORCH",
-   "Black Torch",
-   "Tocha Negra"
-  ],
-  "year": "2026"
+  "year": "1992"
  },
  {
   "key": "2c3babc438",
@@ -2236,14 +2204,6 @@
   "year": ""
  },
  {
-  "key": "6824616d45",
-  "title": "異世界スーサイド・スクワッド",
-  "alts": [
-   "異世界スーサイド・スクワッド"
-  ],
-  "year": "2024"
- },
- {
   "key": "b779701021",
   "title": "Ninja Kamui",
   "alts": [
@@ -2252,12 +2212,12 @@
   "year": "2024"
  },
  {
-  "key": "966f810e16",
-  "title": "フリクリ",
+  "key": "6824616d45",
+  "title": "異世界スーサイド・スクワッド",
   "alts": [
-   "フリクリ"
+   "異世界スーサイド・スクワッド"
   ],
-  "year": 2000
+  "year": "2024"
  },
  {
   "key": "a957a395b9",
@@ -2266,6 +2226,14 @@
    "Lazarus"
   ],
   "year": "2025"
+ },
+ {
+  "key": "966f810e16",
+  "title": "フリクリ",
+  "alts": [
+   "フリクリ"
+  ],
+  "year": 2000
  },
  {
   "key": "704f845f64",
@@ -2284,12 +2252,46 @@
   "year": "2024"
  },
  {
+  "key": "f8e822535e",
+  "title": "ALL YOU NEED IS KILL",
+  "alts": [
+   "ALL YOU NEED IS KILL",
+   "All You Need Is Kill"
+  ],
+  "year": ""
+ },
+ {
   "key": "6ebf0d87d7",
   "title": "C団地",
   "alts": [
    "Housing Complex C"
   ],
   "year": "2022"
+ },
+ {
+  "key": "80392b265e",
+  "title": "Sôsô no Furîren",
+  "alts": [
+   "Sôsô no Furîren"
+  ],
+  "year": ""
+ },
+ {
+  "key": "ddf11740e3",
+  "title": "ドラゴンボール改",
+  "alts": [
+   "Dragon Ball Z Kai",
+   "ドラゴンボール改「カイ」"
+  ],
+  "year": "2009"
+ },
+ {
+  "key": "a96779f2e2",
+  "title": "バットマン マスク・オブ・ファンタズム",
+  "alts": [
+   "Batman: Mask of the Phantasm"
+  ],
+  "year": ""
  },
  {
   "key": "5214505e86",
@@ -2302,80 +2304,28 @@
   "year": 2014
  },
  {
-  "key": "89f26b277b",
-  "title": "果てしなきスカーレット",
+  "key": "cb5a4585f5",
+  "title": "ドラゴンボール改 (2014)",
   "alts": [
-   "果てしなきスカーレット"
+   "Dragon Ball Z Kai: The Final Chapters"
   ],
-  "year": "2025"
+  "year": "2014"
  },
  {
-  "key": "ddf11740e3",
-  "title": "ドラゴンボール改",
+  "key": "7c9a29a15f",
+  "title": "信者ゼロの女神サマと始める異世界攻略",
   "alts": [
-   "ドラゴンボール改「カイ」"
-  ],
-  "year": "2009"
- },
- {
-  "key": "4399a6b810",
-  "title": "PERFECT BLUE",
-  "alts": [
-   "PERFECT BLUE",
-   "Perfect Blue"
-  ],
-  "year": 1998
- },
- {
-  "key": "a9a82a2ce0",
-  "title": "GHOST IN THE SHELL / 攻殻機動隊",
-  "alts": [
-   "GHOST IN THE SHELL",
-   "GHOST IN THE SHELL / 攻殻機動隊",
-   "Ghost in the Shell"
-  ],
-  "year": 1995
- },
- {
-  "key": "ecea120417",
-  "title": "ドラえもん",
-  "alts": [
-   "ドラえもん"
-  ],
-  "year": "1973"
- },
- {
-  "key": "824b8076bc",
-  "title": "さよならララ",
-  "alts": [
-   "Goodbye, Lara",
-   "Sayonara Lara",
-   "さよならララ"
+   "信者ゼロの女神サマと始める異世界攻略"
   ],
   "year": "2026"
  },
  {
-  "key": "f0586a38b7",
-  "title": "転生したら剣でした",
+  "key": "4deaa1c88c",
+  "title": "僕だけがいない街",
   "alts": [
-   "Reincarnated as a Sword",
-   "転生したら剣でした"
+   "僕だけがいない街"
   ],
-  "year": "2022"
- },
- {
-  "key": "c94b1fbf1f",
-  "title": "ブチ切れ令嬢は報復を誓いました。～魔導書の力で祖国を叩き潰します～",
-  "alts": [
-   "ブチ切れ令嬢は報復を誓いました。～魔導書の力で祖国を叩き潰します～"
-  ],
-  "year": "2026"
- },
- {
-  "key": "2642185aab",
-  "title": "転生ゴブリンだけど質問ある？",
-  "alts": [],
-  "year": "2026"
+  "year": 2016
  },
  {
   "key": "cda35c5e8a",
@@ -2384,10 +2334,10 @@
   "year": "2026"
  },
  {
-  "key": "6918f2b582",
-  "title": "転生した大聖女は、聖女であることをひた隠す",
+  "key": "be0fb289d3",
+  "title": "野生のラスボスが現れた！",
   "alts": [],
-  "year": "2026"
+  "year": "2025"
  },
  {
   "key": "6263da22fe",
@@ -2401,6 +2351,12 @@
  {
   "key": "b59fcd6eb3",
   "title": "生徒会にも穴はある！【規制解除版】",
+  "alts": [],
+  "year": "2026"
+ },
+ {
+  "key": "c94b1fbf1f",
+  "title": "ブチ切れ令嬢は報復を誓いました。 ～魔導書の力で祖国を叩き潰します～",
   "alts": [],
   "year": "2026"
  },
@@ -2459,25 +2415,29 @@
   "year": 2017
  },
  {
+  "key": "ecea120417",
+  "title": "ドラえもん",
+  "alts": [
+   "Doraemon",
+   "ドラえもん",
+   "신 도라에몽"
+  ],
+  "year": "1973"
+ },
+ {
+  "key": "7dc80c71f6",
+  "title": "LV999の村人",
+  "alts": [
+   "LV999 no Murabito",
+   "The Villager of Level 999"
+  ],
+  "year": "2026"
+ },
+ {
   "key": "f834ea20c9",
   "title": "幻想水滸伝",
   "alts": [],
   "year": ""
- },
- {
-  "key": "69dec21648",
-  "title": "『ヤマトよ永遠に REBEL3199』 第六章 碧い迷宮",
-  "alts": [],
-  "year": ""
- },
- {
-  "key": "1423e5b43d",
-  "title": "領民0人スタートの辺境領主様",
-  "alts": [
-   "Ryoumin 0-Nin Start no Henkyou Ryoushu-sama",
-   "The Frontier Lord Begins with Zero Subjects"
-  ],
-  "year": "2026"
  },
  {
   "key": "ab83250f09",
@@ -2486,79 +2446,97 @@
   "year": "2000"
  },
  {
+  "key": "88dc77d36d",
+  "title": "転生したら剣でしたII",
+  "alts": [],
+  "year": ""
+ },
+ {
+  "key": "644d7c9084",
+  "title": "とある魔術の禁書目録III",
+  "alts": [],
+  "year": "2018"
+ },
+ {
+  "key": "3ea502a28d",
+  "title": "機動戦士ガンダムSEED FREEDOM",
+  "alts": [],
+  "year": ""
+ },
+ {
+  "key": "1b4927390b",
+  "title": "遊☆戯☆王デュエルモンスターズ　ドーマ編",
+  "alts": [],
+  "year": ""
+ },
+ {
   "key": "daf2290f57",
   "title": "エレメントハンター",
   "alts": [],
   "year": "2009"
  },
  {
-  "key": "99852da4e1",
-  "title": "貧乏神が！",
+  "key": "0a40ea8b7a",
+  "title": "GATE 自衛隊　彼の地にて、斯く戦えり",
   "alts": [],
-  "year": "2012"
+  "year": 2015
  },
  {
-  "key": "443d2d5cf7",
-  "title": "異世界のんびり農家２",
-  "alts": [],
-  "year": "2026"
- },
- {
-  "key": "83d61e9ccd",
-  "title": "劇場版 転生したらスライムだった件 蒼海の涙編",
+  "key": "28ed7c7a76",
+  "title": "いびってこない義母と義姉",
   "alts": [],
   "year": "2026"
  },
  {
-  "key": "f3e603b335",
-  "title": "天官賜福 貮（日本語吹替版）",
+  "key": "871d8f54f1",
+  "title": "聖闘士星矢Ω　第27話～第51話",
   "alts": [],
   "year": ""
  },
  {
-  "key": "d29ed5ff80",
-  "title": "ヱヴァンゲリヲン新劇場版：破",
+  "key": "3422f3307b",
+  "title": "鉄腕バーディー DECODE",
   "alts": [],
-  "year": 2009
+  "year": "2008"
  },
  {
-  "key": "c17e856307",
-  "title": "烈火澆愁（日本語吹替版）",
-  "alts": [],
-  "year": ""
- },
- {
-  "key": "d2ba309536",
-  "title": "スペース・コブラ",
-  "alts": [],
-  "year": "1982"
- },
- {
-  "key": "327a6c4304",
-  "title": "FLAG",
-  "alts": [],
-  "year": "2006"
- },
- {
-  "key": "320c019b35",
-  "title": "クズ悪役の自己救済システム（日本語吹替版）",
+  "key": "bdc82479e3",
+  "title": "神のみぞ知るセカイＩＩ",
   "alts": [],
   "year": ""
  },
  {
-  "key": "94368d3513",
-  "title": "機動戦士ガンダムUC　全7章",
+  "key": "15ce0203cf",
+  "title": "銀河鉄道物語〜永遠への分岐点〜",
   "alts": [],
-  "year": "2010"
+  "year": ""
  },
  {
-  "key": "16fd7eebff",
-  "title": "도굴왕",
+  "key": "b80a7c9d91",
+  "title": "シン・エヴァンゲリオン劇場版",
+  "alts": [],
+  "year": ""
+ },
+ {
+  "key": "dcddcbd70e",
+  "title": "ちいかわ",
   "alts": [
-   "Tomb Raider King",
-   "도굴왕"
+   "ちいかわ",
+   "먼작귀"
   ],
-  "year": ""
+  "year": 2022
+ },
+ {
+  "key": "16fbd39c7d",
+  "title": "トム・ソーヤーの冒険",
+  "alts": [
+   "The Adventures of Tom Sawyer",
+   "Tom Sawyer",
+   "توم سوير",
+   "トム・ソーヤーの冒険",
+   "톰 소여의 모험"
+  ],
+  "year": "1980"
  },
  {
   "key": "1ced4a5c1c",
@@ -2570,51 +2548,48 @@
   "year": "1995"
  },
  {
-  "key": "5423003d1b",
-  "title": "コタローは1人暮らし",
+  "key": "4a23d01c9b",
+  "title": "デジモンアドベンチャー",
   "alts": [
-   "コタローは1人暮らし",
-   "코타로는 1인 가구"
+   "Digimon Adventure",
+   "Dijimon Eodeubencheo"
+  ],
+  "year": "1999"
+ },
+ {
+  "key": "16fd7eebff",
+  "title": "도굴왕",
+  "alts": [
+   "도굴왕"
   ],
   "year": ""
  },
  {
-  "key": "a6d6c3a4dd",
-  "title": "美少女戦士セーラームーン",
+  "key": "c335f277c1",
+  "title": "君のことが大大大大大好きな100人の彼女",
   "alts": [
-   "Czarodziejka z Księżyca",
-   "Sailor Moon",
-   "美少女戦士セーラームーン",
-   "달의 요정 세일러문"
+   "Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo",
+   "너를 너무너무너무너무 좋아하는 100명의 그녀"
   ],
-  "year": "1992"
+  "year": "2023"
  },
  {
-  "key": "7e510c5f79",
-  "title": "マリッジトキシン",
+  "key": "03de9f1aec",
+  "title": "異世界のんびり農家",
   "alts": [
-   "マリッジトキシン",
-   "婚姻剧毒"
+   "异世界悠闲农家",
+   "異世界のんびり農家"
   ],
-  "year": "2026"
+  "year": "2023"
  },
  {
-  "key": "f811344c34",
-  "title": "ハズレ枠の【状態異常スキル】で最強になった俺がすべてを蹂躙するまで",
+  "key": "26b25cb10a",
+  "title": "約束のネバーランド",
   "alts": [
-   "ハズレ枠の【状態異常スキル】で最強になった俺がすべてを蹂躙するまで",
-   "靠废柴技能【状态异常】成为最强的我将蹂躏一切"
+   "約束のネバーランド",
+   "约定的梦幻岛"
   ],
-  "year": "2024"
- },
- {
-  "key": "67f08ea582",
-  "title": "Back Street Girls -ゴクドルズ-",
-  "alts": [
-   "Back Street Girls -ゴクドルズ-",
-   "后街女孩"
-  ],
-  "year": "2018"
+  "year": 2019
  },
  {
   "key": "c45375e73e",
@@ -2626,20 +2601,49 @@
   "year": "1985"
  },
  {
-  "key": "f720456e65",
-  "title": "映像研には手を出すな！",
+  "key": "d2821ffc78",
+  "title": "ふつつかな悪女ではございますが ～雛宮蝶鼠とりかえ伝～",
   "alts": [
-   "Eizouken ni wa Te wo Dasu na!",
-   "別對映像研出手！"
+   "Futsutsuka na Akujo de wa Gozaimasu ga: Suuguu Chouso Torikae Den",
+   "Though I Am an Inept Villainess",
+   "ふつつかな悪女ではございますが ～雛宮蝶鼠とりかえ伝～",
+   "我是不才恶女～雏宫蝶鼠互换传～"
   ],
-  "year": "2020"
+  "year": 2026
  },
  {
-  "key": "9d3008f90f",
-  "title": "けいおん!",
+  "key": "7bf067833e",
+  "title": "紫雲寺家の子供たち",
   "alts": [
-   "けいおん!",
-   "轻音少女"
+   "紫云寺家的兄弟姐妹",
+   "紫雲寺家の子供たち"
+  ],
+  "year": "2025"
+ },
+ {
+  "key": "419d5b4b13",
+  "title": "天元突破グレンラガン",
+  "alts": [
+   "天元突破グレンラガン",
+   "天元突破：红莲螺岩"
+  ],
+  "year": 2007
+ },
+ {
+  "key": "31f65aadea",
+  "title": "魔法少女まどか☆マギカ",
+  "alts": [
+   "魔法少女まどか☆マギカ",
+   "魔法少女小圆"
+  ],
+  "year": 2011
+ },
+ {
+  "key": "80f57b8daa",
+  "title": "デュラララ!!",
+  "alts": [
+   "デュラララ!!",
+   "无头骑士异闻录"
   ],
   "year": 2010
  },
@@ -2647,29 +2651,19 @@
   "key": "0212155112",
   "title": "とんがり帽子のアトリエ",
   "alts": [
-   "Witch Hat Atelier",
-   "とんがり帽子のアトリエ"
+   "とんがり帽子のアトリエ",
+   "尖帽子的魔法工房"
   ],
   "year": 2026
  },
  {
-  "key": "ef2ad400ac",
-  "title": "コードギアス 反逆のルルーシュ",
+  "key": "f1596bf6b0",
+  "title": "メイドインアビス",
   "alts": [
-   "Code Geass: Lelouch of the Rebellion",
-   "كود غياس",
-   "コードギアス 反逆のルルーシュ"
+   "Made in Abyss",
+   "メイドインアビス"
   ],
-  "year": 2006
- },
- {
-  "key": "34e41e0e38",
-  "title": "キングダム",
-  "alts": [
-   "Kingdom",
-   "キングダム"
-  ],
-  "year": "2012"
+  "year": 2017
  },
  {
   "key": "73a5efcc8f",
@@ -2684,127 +2678,21 @@
   "key": "6d85a15f8d",
   "title": "ぬきたし the Animation",
   "alts": [
-   "Nukitashi the Animation",
+   "Nukitashi: The Animation",
    "ぬきたし the Animation"
   ],
   "year": ""
  },
  {
-  "key": "698ec539d5",
-  "title": "愛の若草物語",
+  "key": "dffedd3c98",
+  "title": "貸した魔力は【リボ払い】で強制徴収",
   "alts": [
-   "Eine fröhliche Familie",
-   "Tales of Little Women",
-   "愛の若草物語"
+   "Kashita Maryoku wa [Revo Barai] de Kyousei Choushuu",
+   "Magic Repo Man: Dumped by My Party, I'll Cash In with a Cute Support Fairy to Become the Strongest!",
+   "Magic Repo Man: Dumped by My Party, I’ll Cash In With a Cute Support Fairy to Become the Strongest!",
+   "貸した魔力は【リボ払い】で強制徴収"
   ],
-  "year": "1987"
- },
- {
-  "key": "f4437f931f",
-  "title": "最強の王様、二度目の人生は 何をする?",
-  "alts": [
-   "The Beginning After the End",
-   "最強の王様、二度目の人生は何をする？"
-  ],
-  "year": "2025"
- },
- {
-  "key": "a8378dc90b",
-  "title": "月が導く異世界道中",
-  "alts": [
-   "TSUKIMICHI -Moonlit Fantasy-",
-   "月が導く異世界道中"
-  ],
-  "year": 2021
- },
- {
-  "key": "3169ff497d",
-  "title": "うちの弟どもがすみません",
-  "alts": [
-   "Please Excuse My Younger Brothers",
-   "うちの弟どもがすみません"
-  ],
-  "year": ""
- },
- {
-  "key": "6b1d9ff6e2",
-  "title": "クレヨンしんちゃん 嵐を呼ぶ モーレツ！オトナ帝国の逆襲",
-  "alts": [
-   "Crayon Shin-chan: The Storm Called: The Adult Empire Strikes Back",
-   "クレヨンしんちゃん 嵐を呼ぶ モーレツ！オトナ帝国の逆襲"
-  ],
-  "year": ""
- },
- {
-  "key": "2bfa2807a8",
-  "title": "マッシュル-MASHLE-",
-  "alts": [
-   "MASHLE: MAGIC AND MUSCLES",
-   "マッシュル-MASHLE-"
-  ],
-  "year": 2023
- },
- {
-  "key": "9d404c29c0",
-  "title": "バーテンダー 神のグラス",
-  "alts": [
-   "BARTENDER Glass of God",
-   "バーテンダー 神のグラス"
-  ],
-  "year": "2024"
- },
- {
-  "key": "2623cb31cb",
-  "title": "Sono bisuku dôru wa koi o suru",
-  "alts": [
-   "Sono bisuku dôru wa koi o suru"
-  ],
-  "year": ""
- },
- {
-  "key": "acb2d2e142",
-  "title": "氷の城壁",
-  "alts": [
-   "The Ramparts of Ice",
-   "氷の城壁"
-  ],
-  "year": 2026
- },
- {
-  "key": "6f34e180a0",
-  "title": "ダイヤのA",
-  "alts": [
-   "Ace of the Diamond",
-   "ダイヤのA"
-  ],
-  "year": "2013"
- },
- {
-  "key": "b1958380df",
-  "title": "食戟のソーマ",
-  "alts": [
-   "Food Wars! Shokugeki no Soma",
-   "食戟のソーマ"
-  ],
-  "year": 2015
- },
- {
-  "key": "89a86b3b06",
-  "title": "神様はじめました◎",
-  "alts": [
-   "Kamisama Kiss",
-   "神様はじめました"
-  ],
-  "year": 2015
- },
- {
-  "key": "d4713cbc77",
-  "title": "一瞬で治療していたのに役立たずと追放された天才治癒師、闇ヒーラーとして楽しく生きる",
-  "alts": [
-   "The Brilliant Healer's New Life in the Shadows",
-   "一瞬で治療していたのに役立たずと追放された天才治癒師、闇ヒーラーとして楽しく生きる"
-  ],
-  "year": "2025"
+  "year": "2026"
  },
  {
   "key": "74505838a3",
@@ -2816,13 +2704,48 @@
   "year": "2023"
  },
  {
-  "key": "c4daa9e702",
-  "title": "おーばーふろぉ",
+  "key": "3169ff497d",
+  "title": "うちの弟どもがすみません",
   "alts": [
-   "Overflow",
-   "おーばーふろぉ"
+   "Please Excuse My Younger Brothers",
+   "うちの弟どもがすみません"
   ],
   "year": ""
+ },
+ {
+  "key": "579689b616",
+  "title": "終末のハーレム",
+  "alts": [
+   "World's End Harem",
+   "終末のハーレム"
+  ],
+  "year": ""
+ },
+ {
+  "key": "2623cb31cb",
+  "title": "Sono bisuku dôru wa koi o suru",
+  "alts": [
+   "Sono bisuku dôru wa koi o suru"
+  ],
+  "year": ""
+ },
+ {
+  "key": "2ec2dc6a7d",
+  "title": "弱虫ペダル",
+  "alts": [
+   "Yowamushi Pedal",
+   "弱虫ペダル"
+  ],
+  "year": "2013"
+ },
+ {
+  "key": "89a86b3b06",
+  "title": "神様はじめました◎",
+  "alts": [
+   "Kamisama Kiss",
+   "神様はじめました"
+  ],
+  "year": 2015
  },
  {
   "key": "f04bfd3f2d",
@@ -2834,30 +2757,22 @@
   "year": 2006
  },
  {
-  "key": "f9549ece50",
-  "title": "UFOロボグレンダイザー",
+  "key": "cf7009048d",
+  "title": "BORUTO-ボルト- NARUTO NEXT GENERATIONS",
   "alts": [
-   "UFO Robot Grendizer",
-   "UFOロボグレンダイザー"
+   "BORUTO-ボルト- NARUTO NEXT GENERATIONS",
+   "Boruto: Naruto Next Generations"
   ],
-  "year": ""
+  "year": 2017
  },
  {
-  "key": "304be330ae",
-  "title": "SLAM DUNK",
+  "key": "2cacaf22a3",
+  "title": "七つの大罪",
   "alts": [
-   "Slam Dunk",
-   "スラムダンク"
+   "Nanatsu no Taizai (Los Siete Pecados Capitales)",
+   "Nanatsu no taizai"
   ],
-  "year": 1993
- },
- {
-  "key": "b85a606b9e",
-  "title": "Izure Saikyô no Renkinjutsushi?",
-  "alts": [
-   "Izure Saikyô no Renkinjutsushi?"
-  ],
-  "year": ""
+  "year": 2014
  },
  {
   "key": "a9ae784912",
@@ -2865,41 +2780,6 @@
   "alts": [
    "Doraemon the Movie: New Nobita and the Castle of the Undersea Devil",
    "映画ドラえもん 新・のび太の海底鬼岩城"
-  ],
-  "year": ""
- },
- {
-  "key": "8c1e1c9fd4",
-  "title": "Yoasobi Gurashi!",
-  "alts": [
-   "Yoasobi Gurashi!"
-  ],
-  "year": ""
- },
- {
-  "key": "055c63716a",
-  "title": "ようこそ実力至上主義の教室へ",
-  "alts": [
-   "Classroom of the Elite",
-   "ようこそ実力至上主義の教室へ"
-  ],
-  "year": 2017
- },
- {
-  "key": "60004c4a36",
-  "title": "Ookii Onnanoko wa Suki Desuka?",
-  "alts": [
-   "Do You Like Big Girls?",
-   "Ookii Onnanoko wa Suki Desuka?"
-  ],
-  "year": ""
- },
- {
-  "key": "9b493f1eaa",
-  "title": "悶えてよ、アダムくん",
-  "alts": [
-   "Adam's Sweet Agony",
-   "悶えてよ、アダムくん"
   ],
   "year": ""
  },
@@ -2913,31 +2793,75 @@
   "year": 2022
  },
  {
-  "key": "59b056a7f3",
-  "title": "新世紀エヴァンゲリオン",
+  "key": "055c63716a",
+  "title": "ようこそ実力至上主義の教室へ",
   "alts": [
-   "Neon Genesis Evangelion",
-   "新世紀エヴァンゲリオン"
+   "Classroom of the Elite",
+   "ようこそ実力至上主義の教室へ"
+  ],
+  "year": 2017
+ },
+ {
+  "key": "5a21b16380",
+  "title": "爆転シュート　ベイブレード",
+  "alts": [
+   "Beyblade",
+   "爆転シュートベイブレード"
+  ],
+  "year": "2001"
+ },
+ {
+  "key": "bcaac9214a",
+  "title": "Mad Monster Party?",
+  "alts": [
+   "Mad Monster Party?"
+  ],
+  "year": ""
+ },
+ {
+  "key": "1d65a994a3",
+  "title": "スクービー・ドゥーの魔女の幽霊",
+  "alts": [
+   "Scooby-Doo! and the Witch's Ghost"
+  ],
+  "year": ""
+ },
+ {
+  "key": "96eea1fa04",
+  "title": "AKIRA",
+  "alts": [
+   "AKIRA",
+   "Akira"
+  ],
+  "year": 1988
+ },
+ {
+  "key": "4399a6b810",
+  "title": "PERFECT BLUE",
+  "alts": [
+   "PERFECT BLUE",
+   "Perfect Blue"
+  ],
+  "year": 1998
+ },
+ {
+  "key": "a9a82a2ce0",
+  "title": "GHOST IN THE SHELL / 攻殻機動隊",
+  "alts": [
+   "GHOST IN THE SHELL",
+   "GHOST IN THE SHELL / 攻殻機動隊",
+   "Ghost in the Shell"
   ],
   "year": 1995
  },
  {
-  "key": "d35069b36a",
-  "title": "家族ロビンソン漂流記 ふしぎな島のフローネ",
+  "key": "31cdc3e4d6",
+  "title": "攻殻機動隊 STAND ALONE COMPLEX",
   "alts": [
-   "La familia Robinson",
-   "家族ロビンソン漂流記 ふしぎな島のフローネ"
+   "Ghost in the Shell: Stand Alone Complex",
+   "攻殻機動隊 STAND ALONE COMPLEX"
   ],
-  "year": "1981"
- },
- {
-  "key": "31f65aadea",
-  "title": "魔法少女まどか☆マギカ",
-  "alts": [
-   "Puella Magi Madoka Magica",
-   "魔法少女まどか☆マギカ"
-  ],
-  "year": 2011
+  "year": 2002
  },
  {
   "key": "1a270688d7",
@@ -2951,64 +2875,39 @@
   "year": "1986"
  },
  {
-  "key": "32c5fa0487",
-  "title": "火垂るの墓",
-  "alts": [
-   "O Túmulo dos Pirilampos",
-   "火垂るの墓"
-  ],
-  "year": 1988
- },
- {
-  "key": "3eed34174f",
-  "title": "Ansatsu kyôshitsu",
-  "alts": [
-   "Ansatsu kyôshitsu"
-  ],
-  "year": ""
- },
- {
   "key": "fad269890a",
   "title": "となりのトトロ",
   "alts": [
-   "Min granne Totoro",
    "My Neighbor Totoro",
    "となりのトトロ"
   ],
   "year": 1988
  },
  {
-  "key": "08544ffb8d",
-  "title": "おおかみこどもの雨と雪",
+  "key": "caf439a976",
+  "title": "棺姫のチャイカ",
   "alts": [
-   "Les Enfants loups, Ame & Yuki",
-   "おおかみこどもの雨と雪"
+   "Chaika - Die Sargprinzessin",
+   "棺姫のチャイカ"
   ],
-  "year": 2012
+  "year": "2014"
  },
  {
-  "key": "f8e822535e",
-  "title": "ALL YOU NEED IS KILL",
+  "key": "698ec539d5",
+  "title": "愛の若草物語",
   "alts": [
-   "ALL YOU NEED IS KILL",
-   "All You Need Is Kill"
+   "Tales of Little Women",
+   "نساء صغيرات",
+   "愛の若草物語"
   ],
-  "year": ""
+  "year": "1987"
  },
  {
-  "key": "4a23d01c9b",
-  "title": "デジモンアドベンチャー",
+  "key": "6ac7a781ae",
+  "title": "８６―エイティシックス―",
   "alts": [
-   "Digimon Adventure",
-   "デジモンアドベンチャー"
-  ],
-  "year": "1999"
- },
- {
-  "key": "c7d6866eb8",
-  "title": "Hauru no ugoku shiro",
-  "alts": [
-   "Hauru no ugoku shiro"
+   "86",
+   "８６―エイティシックス―"
   ],
   "year": ""
  },
@@ -3022,22 +2921,39 @@
   "year": "1983"
  },
  {
-  "key": "cf7009048d",
-  "title": "BORUTO-ボルト- NARUTO NEXT GENERATIONS",
+  "key": "0fc9bd4e38",
+  "title": "BLACK TORCH",
   "alts": [
-   "BORUTO-ボルト- NARUTO NEXT GENERATIONS",
-   "Boruto: Naruto Next Generations"
+   "BLACK TORCH",
+   "Black Torch"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "ef2ad400ac",
+  "title": "コードギアス 反逆のルルーシュ",
+  "alts": [
+   "أمير التمرّد",
+   "コードギアス 反逆のルルーシュ"
+  ],
+  "year": 2006
+ },
+ {
+  "key": "e7b3398217",
+  "title": "幼女戦記",
+  "alts": [
+   "يوجو سنكاي: ملحمة تانيا",
+   "幼女戦記"
   ],
   "year": 2017
  },
  {
-  "key": "3064b1821f",
-  "title": "時々ボソッとロシア語でデレる隣のアーリャさん",
+  "key": "5e84996d9d",
+  "title": "The Lorax",
   "alts": [
-   "Alya Sometimes Hides Her Feelings in Russian",
-   "時々ボソッとロシア語でデレる隣のアーリャさん"
+   "The Lorax"
   ],
-  "year": 2024
+  "year": ""
  },
  {
   "key": "a147cdd69d",
@@ -3049,14 +2965,6 @@
   "year": 2026
  },
  {
-  "key": "b11bfefa3c",
-  "title": "サイバーパンク: エッジランナーズ2",
-  "alts": [
-   "Cyberpunk: Edgerunners 2"
-  ],
-  "year": "2026"
- },
- {
   "key": "6503b0fc91",
   "title": "転生したら剣でした 第2期",
   "alts": [
@@ -3064,6 +2972,24 @@
    "Tensei Shitara Ken Deshita 2nd Season"
   ],
   "year": "2026"
+ },
+ {
+  "key": "8a6520c409",
+  "title": "テムパル～アイテムの力～",
+  "alts": [
+   "Overgeared",
+   "Tempal: Item no Chikara"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "60ccd45970",
+  "title": "アオのハコ Season２",
+  "alts": [
+   "Ao no Hako Season 2",
+   "Blue Box Season 2"
+  ],
+  "year": 2026
  },
  {
   "key": "0be23253fe",
@@ -3083,48 +3009,13 @@
   "year": "2026"
  },
  {
-  "key": "a641e713fc",
-  "title": "ジョジョの奇妙な冒険 スティール・ボール・ラン 2nd＆3rd STAGE",
-  "alts": [
-   "JoJo no Kimyou na Bouken: Steel Ball Run - 2nd & 3rd STAGE",
-   "STEEL BALL RUN JoJo's Bizarre Adventure 2nd - 3rd STAGE"
-  ],
-  "year": 2026
- },
- {
   "key": "dd5057c322",
   "title": "青春ブタ野郎はディアフレンドの夢を見ない",
   "alts": [
    "Rascal Does Not Dream of a Dear Friend",
    "Seishun Buta Yarou wa Dear Friend no Yume wo Minai"
   ],
-  "year": "2026"
- },
- {
-  "key": "8a6520c409",
-  "title": "テムパル～アイテムの力～",
-  "alts": [
-   "Overgeared",
-   "Tempal: Item no Chikara"
-  ],
-  "year": "2026"
- },
- {
-  "key": "100f09193d",
-  "title": "薬屋のひとりごと 亡妃の秘宝",
-  "alts": [
-   "Kusuriya no Hitorigoto: Bouhi no Hihou"
-  ],
-  "year": "2026"
- },
- {
-  "key": "a9a48897ef",
-  "title": "ホタルの嫁入り",
-  "alts": [
-   "Firefly Wedding",
-   "Hotaru no Yomeiri"
-  ],
-  "year": "2026"
+  "year": 2026
  },
  {
   "key": "624903e5af",
@@ -3132,6 +3023,42 @@
   "alts": [
    "A Returner's Magic Should be Special Season 2",
    "Kikansha no Mahou wa Tokubetsu desu 2nd Season"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "100f09193d",
+  "title": "薬屋のひとりごと 亡妃の秘宝",
+  "alts": [
+   "Kusuriya no Hitorigoto: Bouhi no Hihou",
+   "The Apothecary Diaries: The Late Lady’s Treasure"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "9281d5cc17",
+  "title": "凶乱令嬢ニア・リストン",
+  "alts": [
+   "Kyouran Reijou Nia Liston",
+   "Nia Liston: The Merciless Maiden"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "3dc47a369f",
+  "title": "ダークサモナーとデキている",
+  "alts": [
+   "Dark Summoner to Dekiteiru",
+   "I'm Dating a Dark Summoner"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "9649f5e9ac",
+  "title": "アオアシ 第2期",
+  "alts": [
+   "Aoashi 2nd Season",
+   "Aoashi Season 2"
   ],
   "year": "2026"
  },
@@ -3153,11 +3080,11 @@
   "year": "2026"
  },
  {
-  "key": "9649f5e9ac",
-  "title": "アオアシ 第2期",
+  "key": "de6c71ab0a",
+  "title": "マジカル★エクスプローラー　エロゲの友人キャラに転生したけど、ゲーム知識使って自由に生きる",
   "alts": [
-   "Aoashi 2nd Season",
-   "Aoashi Season 2"
+   "Magical Explorer",
+   "Magical★Explorer: Eroge no Yuujin Chara ni Tensei Shitakedo, Game Chishiki Tsukatte Jiyuu ni Ikiru"
   ],
   "year": "2026"
  },
@@ -3171,55 +3098,11 @@
   "year": "2026"
  },
  {
-  "key": "3dc47a369f",
-  "title": "ダークサモナーとデキている",
+  "key": "8cd2faaade",
+  "title": "PSYREN -サイレン-",
   "alts": [
-   "Dark Summoner to Dekiteiru",
-   "I'm Dating a Dark Summoner"
-  ],
-  "year": "2026"
- },
- {
-  "key": "2f2c9d8ff0",
-  "title": "目覚めたら最強装備と宇宙船持ちだったので、一戸建て目指して傭兵として自由に生きたい",
-  "alts": [
-   "Mezametara Saikyou Soubi to Uchuusen-mochi datta node, Ikkodate Mezashite Youhei to shite Jiyuu ni Ikitai",
-   "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship!"
-  ],
-  "year": "2026"
- },
- {
-  "key": "641a863254",
-  "title": "桃源暗鬼 日光・華厳の滝編",
-  "alts": [
-   "TOUGEN ANKI: Nikko Kegon Falls Arc",
-   "Tougen Anki: Nikko・Kegon no Taki-hen"
-  ],
-  "year": "2026"
- },
- {
-  "key": "de6c71ab0a",
-  "title": "マジカル★エクスプローラー　エロゲの友人キャラに転生したけど、ゲーム知識使って自由に生きる",
-  "alts": [
-   "Magical Explorer",
-   "Magical★Explorer: Eroge no Yuujin Chara ni Tensei Shitakedo, Game Chishiki Tsukatte Jiyuu ni Ikiru"
-  ],
-  "year": "2026"
- },
- {
-  "key": "4824054cb5",
-  "title": "らんま1/2 (2024) 第3期",
-  "alts": [
-   "Ranma 1/2 (2024) 3rd Season",
-   "Ranma1/2 (2024) Season 3"
-  ],
-  "year": "2026"
- },
- {
-  "key": "ec5a269152",
-  "title": "ドラゴンボール超 ビルス",
-  "alts": [
-   "Dragon Ball Super: Beerus"
+   "PSYREN",
+   "PSYЯEN"
   ],
   "year": "2026"
  },
@@ -3230,14 +3113,14 @@
    "Saga of Tanya the Evil Season 2",
    "Youjo Senki II"
   ],
-  "year": 2026
+  "year": "2026"
  },
  {
-  "key": "1e33520a90",
-  "title": "きみが死ぬまで恋をしたい",
+  "key": "795d956f2f",
+  "title": "二十世紀電氣目録-ユーレカ・エヴリカ-",
   "alts": [
-   "I Want to Love You Till Your Dying Day",
-   "Kimi ga Shinu made Koi wo Shitai"
+   "Nijusseiki Denki Mokuroku: Eureka Evrika",
+   "Sparks of Tomorrow"
   ],
   "year": "2026"
  },
@@ -3247,6 +3130,15 @@
   "alts": [
    "Otomege Sekai wa Mob ni Kibishii Sekai desu 2",
    "Trapped in a Dating Sim: The World of Otome Games is Tough for Mobs Season 2"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "1e33520a90",
+  "title": "きみが死ぬまで恋をしたい",
+  "alts": [
+   "I Want to Love You Till Your Dying Day",
+   "Kimi ga Shinu made Koi wo Shitai"
   ],
   "year": "2026"
  },
@@ -3278,15 +3170,6 @@
   "year": "2026"
  },
  {
-  "key": "776e30cd1b",
-  "title": "劇場版 魔法少女まどか☆マギカ〈ワルプルギスの廻天〉",
-  "alts": [
-   "Mahou Shoujo Madoka☆Magica: Walpurgis no Kaiten",
-   "Puella Magi Madoka Magica the Movie -Walpurgisnacht: Rising-"
-  ],
-  "year": 2026
- },
- {
   "key": "35417c2810",
   "title": "クレバテスⅡ-魔獣の王と偽りの勇者伝承-",
   "alts": [
@@ -3296,6 +3179,15 @@
   "year": "2026"
  },
  {
+  "key": "776e30cd1b",
+  "title": "劇場版 魔法少女まどか☆マギカ〈ワルプルギスの廻天〉",
+  "alts": [
+   "Mahou Shoujo Madoka☆Magica: Walpurgis no Kaiten",
+   "Puella Magi Madoka Magica the Movie -Walpurgisnacht: Rising-"
+  ],
+  "year": 2026
+ },
+ {
   "key": "cec130e103",
   "title": "片田舎のおっさん、剣聖になるII",
   "alts": [
@@ -3303,6 +3195,15 @@
    "Katainaka no Ossan, Kensei ni Naru II"
   ],
   "year": "2026"
+ },
+ {
+  "key": "1d995a663e",
+  "title": "天幕のジャードゥーガル",
+  "alts": [
+   "Jaadugar: A Witch in Mongolia",
+   "Tenmaku no Jaadugar"
+  ],
+  "year": 2026
  },
  {
   "key": "db230a565f",
@@ -3350,11 +3251,38 @@
   "year": "2026"
  },
  {
+  "key": "53841d86e4",
+  "title": "ここは俺に任せて先に行けと言ってから１０年がたったら伝説になっていた。",
+  "alts": [
+   "I Became a Legend After My 10 Year-Long Last Stand",
+   "Koko wa Ore ni Makasete Saki ni Ike to Ittekara 10-nen ga Tattara Densetsu ni Natteita."
+  ],
+  "year": "2026"
+ },
+ {
   "key": "e5196c841f",
   "title": "乙女怪獣キャラメリゼ",
   "alts": [
    "KAIJU GIRL CARAMELISE",
    "Otome Kaijuu Caraméliser"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "824b8076bc",
+  "title": "さよならララ",
+  "alts": [
+   "Goodbye, Lara",
+   "Sayonara Lara"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "1423e5b43d",
+  "title": "領民0人スタートの辺境領主様",
+  "alts": [
+   "Ryoumin 0-Nin Start no Henkyou Ryoushu-sama",
+   "The Frontier Lord Begins with Zero Subjects"
   ],
   "year": "2026"
  }
