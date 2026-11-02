@@ -2328,61 +2328,48 @@
   "year": 2016
  },
  {
-  "key": "cda35c5e8a",
-  "title": "本好きの下剋上 領主の養女",
+  "key": "4d76fa22e4",
+  "title": "凶乱令嬢ニア・リストン 病弱令嬢に転生した神殺しの武人の華麗なる無双録",
   "alts": [],
-  "year": "2026"
+  "year": ""
  },
  {
-  "key": "be0fb289d3",
-  "title": "野生のラスボスが現れた！",
+  "key": "b15c91c5c4",
+  "title": "追放されたチート付与魔術師は気ままなセカンドライフを謳歌する。",
   "alts": [],
-  "year": "2025"
+  "year": ""
  },
  {
-  "key": "6263da22fe",
-  "title": "転生貴族、鑑定スキルで成り上がる 第3期",
+  "key": "dffedd3c98",
+  "title": "貸した魔力は【リボ払い】で強制徴収",
   "alts": [
-   "As a Reincarnated Aristocrat, I'll Use My Appraisal Skill to Rise in the World Season 3",
-   "Tensei Kizoku, Kantei Skill de Nariagaru 3rd Season"
+   "Kashita Maryoku wa [Revo Barai] de Kyousei Choushuu",
+   "Magic Repo Man: Dumped by My Party, I'll Cash In with a Cute Support Fairy to Become the Strongest!",
+   "Magic Repo Man: Dumped by My Party, I’ll Cash In With a Cute Support Fairy to Become the Strongest!",
+   "貸した魔力は【リボ払い】で強制徴収"
   ],
   "year": "2026"
+ },
+ {
+  "key": "331fd9b9f8",
+  "title": "弱気MAX令嬢なのに、辣腕婚約者様の賭けに乗ってしまった",
+  "alts": [],
+  "year": "2026"
+ },
+ {
+  "key": "a147cdd69d",
+  "title": "薬屋のひとりごと 第3期",
+  "alts": [
+   "Kusuriya no Hitorigoto 3rd Season",
+   "The Apothecary Diaries Season 3"
+  ],
+  "year": 2026
  },
  {
   "key": "b59fcd6eb3",
   "title": "生徒会にも穴はある！【規制解除版】",
   "alts": [],
   "year": "2026"
- },
- {
-  "key": "c94b1fbf1f",
-  "title": "ブチ切れ令嬢は報復を誓いました。 ～魔導書の力で祖国を叩き潰します～",
-  "alts": [],
-  "year": "2026"
- },
- {
-  "key": "c106d25512",
-  "title": "ブラッククローバー 「ブラッククローバー」2nd Season",
-  "alts": [],
-  "year": 2017
- },
- {
-  "key": "d8ce471233",
-  "title": "魔法騎士レイアース（2026）",
-  "alts": [],
-  "year": "2026"
- },
- {
-  "key": "957c1d5aee",
-  "title": "人付き合いが苦手な未亡人の雪女さんと呪いの指輪【オンエア版】",
-  "alts": [],
-  "year": ""
- },
- {
-  "key": "3950a4cbb2",
-  "title": "本好きの下剋上 司書になるためには手段を選んでいられません 第4期",
-  "alts": [],
-  "year": "2019"
  },
  {
   "key": "880690415d",
@@ -2403,18 +2390,6 @@
   "year": "1992"
  },
  {
-  "key": "729bdda2c1",
-  "title": "世界最高の暗殺者、異世界貴族に転生する",
-  "alts": [],
-  "year": 2021
- },
- {
-  "key": "e1d1745795",
-  "title": "ブラッククローバー 2nd Season",
-  "alts": [],
-  "year": 2017
- },
- {
   "key": "ecea120417",
   "title": "ドラえもん",
   "alts": [
@@ -2425,17 +2400,14 @@
   "year": "1973"
  },
  {
-  "key": "7dc80c71f6",
-  "title": "LV999の村人",
-  "alts": [
-   "LV999 no Murabito",
-   "The Villager of Level 999"
-  ],
-  "year": "2026"
+  "key": "60bbf4892d",
+  "title": "それいけ！アンパンマン",
+  "alts": [],
+  "year": "1988"
  },
  {
-  "key": "f834ea20c9",
-  "title": "幻想水滸伝",
+  "key": "aec179a990",
+  "title": "名探偵プリキュア！",
   "alts": [],
   "year": ""
  },
@@ -2682,17 +2654,6 @@
    "ぬきたし the Animation"
   ],
   "year": ""
- },
- {
-  "key": "dffedd3c98",
-  "title": "貸した魔力は【リボ払い】で強制徴収",
-  "alts": [
-   "Kashita Maryoku wa [Revo Barai] de Kyousei Choushuu",
-   "Magic Repo Man: Dumped by My Party, I'll Cash In with a Cute Support Fairy to Become the Strongest!",
-   "Magic Repo Man: Dumped by My Party, I’ll Cash In With a Cute Support Fairy to Become the Strongest!",
-   "貸した魔力は【リボ払い】で強制徴収"
-  ],
-  "year": "2026"
  },
  {
   "key": "74505838a3",
@@ -2956,15 +2917,6 @@
   "year": ""
  },
  {
-  "key": "a147cdd69d",
-  "title": "薬屋のひとりごと 第3期",
-  "alts": [
-   "Kusuriya no Hitorigoto 3rd Season",
-   "The Apothecary Diaries Season 3"
-  ],
-  "year": 2026
- },
- {
   "key": "6503b0fc91",
   "title": "転生したら剣でした 第2期",
   "alts": [
@@ -3032,6 +2984,15 @@
   "alts": [
    "Kusuriya no Hitorigoto: Bouhi no Hihou",
    "The Apothecary Diaries: The Late Lady’s Treasure"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "6263da22fe",
+  "title": "転生貴族、鑑定スキルで成り上がる 第3期",
+  "alts": [
+   "As a Reincarnated Aristocrat, I'll Use My Appraisal Skill to Rise in the World Season 3",
+   "Tensei Kizoku, Kantei Skill de Nariagaru 3rd Season"
   ],
   "year": "2026"
  },
@@ -3265,6 +3226,15 @@
   "alts": [
    "KAIJU GIRL CARAMELISE",
    "Otome Kaijuu Caraméliser"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "7dc80c71f6",
+  "title": "LV999の村人",
+  "alts": [
+   "LV999 no Murabito",
+   "The Villager of Level 999"
   ],
   "year": "2026"
  },
