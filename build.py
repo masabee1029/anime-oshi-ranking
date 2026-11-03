@@ -791,6 +791,7 @@ def season_items(rows, n=30, hot_flag=True):
 season_label = "%d年%sアニメ" % (SEASON_Y, SEASON_C)
 COUR_EN = {"冬": "winter", "春": "spring", "夏": "summer", "秋": "fall"}
 COUR_ORDER = ["冬", "春", "夏", "秋"]
+TITLE_PAGES_FROM = 2026   # この年からの季節の作品は、すべて作品ページを作る（毎年増える）
 ARCHIVE_FROM = (1970, "冬")   # データのある全シーズンの保存ページを作る（2026-10-13 ユーザー指定でまとめページを追加）
 def season_slug(y, c): return "%d-%s" % (y, COUR_EN[c])
 def seasons_since(start, end):
@@ -884,8 +885,10 @@ def season_body(y, c, kind):
             "prev": "見逃した作品を、配信でまとめて観るのに役立ちます。前期（%d年%sクール）に放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べました。" % (y, c),
             "archive": "あの頃夢中だった作品に、また会えます。%d年%sクールに放送が始まったアニメを、世界の視聴者の注目度（AniList の人気）順に並べた記録です。" % (y, c)}[kind]
     # 個別ページを作るのは今季・前季の作品だけ（過去の全シーズン分は数が多すぎるため）
-    label = lab if kind in ("current", "prev") else None
-    href = {"current": "season.html", "prev": "prev-season.html"}.get(kind)
+    # 2026-11-03: 今年（2026年〜）の季節は、今季・前季が過ぎても作品ページを残して増やしていく
+    keep = kind == "archive" and y >= TITLE_PAGES_FROM
+    label = lab if kind in ("current", "prev") or keep else None
+    href = {"current": "season.html", "prev": "prev-season.html"}.get(kind) or ("season/%s.html" % season_slug(y, c) if keep else None)
     return "<h1>%s 人気ランキング TOP30</h1><p class=\"lead\">%s</p>%s%s" % (esc(lab), lead,
            rank_chart(y, c) if kind in ("current", "prev") else pop_chart(rows, "その季節の人気の大きさ（TOP10）"),
            rank_list(season_items(rows, hot_flag=(kind == "current")), label=label, href=href))
@@ -914,12 +917,40 @@ for y, c in ARCHIVE:
     body = ('<p class="crumb"><a href="../seasons.html">シーズン別</a> › %d年%s</p>' % (y, c)) + pn + season_body(y, c, kind) + pn + nav_cards("../")
     write("season/%s.html" % season_slug(y, c), page("%s 人気ランキング" % lab, body, "%sの人気ランキングTOP30" % lab, 1,
                                                      banner="season-" + season_slug(y, c), hero=True))
+# 年まとめページ（2026-11-03 追加）: 年が終わったら、その年の冬・春・夏・秋を 1 ページにまとめる。季節のページはそのまま残す
+def year_rows(y):
+    seen = {}
+    for c in COUR_ORDER:
+        for r in season_rows(y, c):
+            if r["anilist_id"] not in seen: seen[r["anilist_id"]] = dict(r, _c=c)
+    return sorted(seen.values(), key=lambda r: -int(r["popularity"] or 0))
+DONE_YEARS = sorted({y for y, c in ARCHIVE if y < SEASON_Y})
+for y in DONE_YEARS:
+    rows = year_rows(y)
+    if len(rows) < 5: continue
+    cs = [c for c in COUR_ORDER if (y, c) in ARCHIVE]
+    items = season_items(rows, hot_flag=False)
+    for it, r in zip(items, rows):
+        it["meta"] = ("%sアニメ" % r["_c"]) + ((" / " + it["meta"]) if it.get("meta") else "")
+    lab = "%d年アニメまとめ" % y
+    pn = '<p class="pn">%s%s</p>' % (('<a href="%d.html">← %d年</a>' % (y - 1, y - 1)) if (y - 1) in DONE_YEARS else "<span></span>",
+                                     ('<a href="%d.html">%d年 →</a>' % (y + 1, y + 1)) if (y + 1) in DONE_YEARS else "")
+    cards = '<div class="grid">%s</div>' % "".join(mini(season_items(season_rows(y, c), hot_flag=False), "%s.html" % season_slug(y, c), "%d年%sアニメ" % (y, c)) for c in cs)
+    body = ('<p class="crumb"><a href="../seasons.html">シーズン別</a> › %d年まとめ</p>' % y + pn
+            + "<h1>%s 人気ランキング TOP%d</h1><p class=\"lead\">%d年をまるごと振り返れます。%d年の冬・春・夏・秋に放送が始まったアニメをひとつにまとめ、世界の視聴者の注目度（AniList の人気）順に並べました。季節ごとのランキングは下のカードから見られます。</p>" % (lab, len(items), y, y)
+            + cards + pop_chart(rows, "%d年いちばん注目の10本" % y)
+            + rank_list(items, label=lab if y >= TITLE_PAGES_FROM else None, href=("season/%d.html" % y) if y >= TITLE_PAGES_FROM else None)
+            + pn + nav_cards("../"))
+    write("season/%d.html" % y, page("%s 人気ランキング" % lab, body, "%d年の冬・春・夏・秋のアニメをまとめた人気ランキングTOP%d" % (y, len(items)), 1, banner="seasons", hero=False))
+
 # まとめページ
 by_y = collections.OrderedDict()
 for y, c in reversed(ARCHIVE):
     by_y.setdefault(y, []).append(c)
-rows_html = "".join('<div class="yrow"><span class="ydec">%d年</span><div class="ylinks spl">%s</div></div>' % (
-    y, "".join('<a href="season/%s.html">%s</a>' % (season_slug(y, c), c) for c in COUR_ORDER if c in cs)) for y, cs in by_y.items())
+rows_html = "".join('<div class="yrow"><span class="ydec">%s</span><div class="ylinks spl">%s</div></div>' % (
+    ('<a href="season/%d.html">%d年</a>' % (y, y)) if y in DONE_YEARS else "%d年" % y,
+    "".join('<a href="season/%s.html">%s</a>' % (season_slug(y, c), c) for c in COUR_ORDER if c in cs)
+    + ('<a href="season/%d.html">まとめ</a>' % y if y in DONE_YEARS else "")) for y, cs in by_y.items())
 body = ("<h1>シーズン別アニメランキング</h1><p class=\"lead\">あなたが観ていたあの季節のアニメに、すぐたどり着けます。1970年から今期まで、クール（冬・春・夏・秋）ごとに放送が始まったアニメの人気ランキングをまとめました。</p>"
         + '<div class="grid">%s%s</div>' % (mini(season_items(season_rows(SEASON_Y, SEASON_C)), "season.html", "今季：" + season_label),
                                            mini(season_items(season_rows(PREV_Y, PREV_C), hot_flag=False), "prev-season.html", "前季：" + prev_label))

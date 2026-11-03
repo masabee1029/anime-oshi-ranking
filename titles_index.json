@@ -229,6 +229,7 @@
   "key": "acb2d2e142",
   "title": "氷の城壁",
   "alts": [
+   "Koori no Jouheki",
    "Koori no Jyouheki",
    "Rompiendo el hielo",
    "The Ramparts of Ice",
@@ -348,6 +349,7 @@
    "Das Band der Unterwelt",
    "Espíritus del Inframundo",
    "Tsugai - Daemons of the Shadow Realm",
+   "Yomi no Tsugai",
    "شياطين عالم الظلال",
    "黄泉のツガイ",
    "黄泉的使者"
@@ -412,6 +414,7 @@
   "title": "日本三國",
   "alts": [
    "NIPPON SANGOKU: The Three Nations of the Crimson Sun",
+   "Nippon Sangoku",
    "日本三国",
    "日本三國"
   ],
@@ -1725,6 +1728,7 @@
   "key": "e7df6d1573",
   "title": "超かぐや姫！",
   "alts": [
+   "Chou Kaguya-hime!",
    "Cosmic Princess Kaguya!"
   ],
   "year": 2026
@@ -2148,6 +2152,7 @@
   "title": "正反対な君と僕",
   "alts": [
    "Seihantai na Kimi to Boku",
+   "You and I Are Polar Opposites",
    "正反対な君と僕"
   ],
   "year": 2026
@@ -2623,6 +2628,8 @@
   "key": "0212155112",
   "title": "とんがり帽子のアトリエ",
   "alts": [
+   "Tongari Boushi no Atelier",
+   "Witch Hat Atelier",
    "とんがり帽子のアトリエ",
    "尖帽子的魔法工房"
   ],
@@ -2642,6 +2649,8 @@
   "title": "春夏秋冬代行者 春の舞",
   "alts": [
    "Agents of the Four Seasons Dance of Spring",
+   "Agents of the Four Seasons: Dance of Spring",
+   "Shunkashuutou Daikousha: Haru no Mai",
    "春夏秋冬代行者 春の舞"
   ],
   "year": "2026"
@@ -3253,6 +3262,422 @@
   "alts": [
    "Ryoumin 0-Nin Start no Henkyou Ryoushu-sama",
    "The Frontier Lord Begins with Zero Subjects"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "2ca8fa04e4",
+  "title": "地獄楽 第二期",
+  "alts": [
+   "Hell’s Paradise Season 2",
+   "Jigokuraku 2nd Season"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "f9d5a9ad70",
+  "title": "勇者刑に処す 懲罰勇者9004隊刑務記録",
+  "alts": [
+   "Sentenced to Be a Hero",
+   "Yuusha Kei ni Shosu: Choubatsu Yuusha 9004-tai Keimu Kiroku"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "d79b75b142",
+  "title": "炎炎ノ消防隊 参ノ章 第2クール",
+  "alts": [
+   "Enen no Shouboutai: San no Shou Part 2",
+   "Fire Force Season 3 Part 2"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "d15966dffb",
+  "title": "Fate/strange Fake",
+  "alts": [
+   "Fate/strange Fake"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "94bdbe41ba",
+  "title": "勇者パーティを追い出された器用貧乏",
+  "alts": [
+   "Jack-of-All-Trades, Party of None",
+   "Yuusha Party wo Oidasareta Kiyou Binbou"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "504a2d06f7",
+  "title": "ヘルモード ～やり込み好きのゲーマーは廃設定の異世界で無双する～",
+  "alts": [
+   "HELL MODE: The Hardcore Gamer Dominates in Another World with Garbage Balancing",
+   "Hell Mode: Yarikomi-zuki no Gamer wa Haisettei no Isekai de Musou Suru"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "f8a2a10626",
+  "title": "魔都精兵のスレイブ2",
+  "alts": [
+   "Chained Soldier Season 2",
+   "Mato Seihei no Slave 2"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "b156036dd8",
+  "title": "真夜中ハートチューン",
+  "alts": [
+   "Mayonaka Heart Tune",
+   "Tune In to the Midnight Heart"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "82e591b95f",
+  "title": "死亡遊戯で飯を食う。",
+  "alts": [
+   "SHIBOYUGI: Playing Death Games to Put Food on the Table",
+   "Shibou Yuugi de Meshi wo Kuu."
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "5bec01acd0",
+  "title": "勇者パーティーにかわいい子がいたので、告白してみた。",
+  "alts": [
+   "There was a Cute Girl in the Hero’s Party, so I Tried Confessing to Her",
+   "Yuusha Party ni Kawaii Ko ga Ita no de, Kokuhaku Shitemita."
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "83d61e9ccd",
+  "title": "劇場版 転生したらスライムだった件 蒼海の涙編",
+  "alts": [
+   "Tensei Shitara Slime Datta Ken: Soukai no Namida-hen",
+   "That Time I Got Reincarnated as a Slime the Movie: Tears of the Azure Sea"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "e32a2d9fe0",
+  "title": "多聞くん今どっち！？",
+  "alts": [
+   "Tamon's B-Side",
+   "Tamon-kun Ima Docchi!?"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "13d223d67e",
+  "title": "貴族転生 ～恵まれた生まれから最強の力を得る～",
+  "alts": [
+   "Kizoku Tensei: Megumareta Umare kara Saikyou no Chikara wo Eru",
+   "Noble Reincarnation: Born Blessed, So I'll Obtain Ultimate Power"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "c4f2dce3f6",
+  "title": "うるわしの宵の月",
+  "alts": [
+   "In the Clear Moonlit Dusk",
+   "Uruwashi no Yoi no Tsuki"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "75c262a150",
+  "title": "ヴィジランテ -僕のヒーローアカデミア ILLEGALS- 第2期",
+  "alts": [
+   "My Hero Academia: Vigilantes Season 2",
+   "Vigilante: Boku no Hero Academia ILLEGALS 2nd Season"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "a14c4cf647",
+  "title": "お気楽領主の楽しい領地防衛～生産系魔術で名もなき村を最強の城塞都市に～",
+  "alts": [
+   "Easygoing Territory Defense by the Optimistic Lord",
+   "Okiraku Ryoushu no Tanoshii Ryouchi Bouei: Seisan-kei Majutsu de Na mo na Kimura wo Saikyou no Jousai Toshi ni"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "0db1066c07",
+  "title": "プリズム輪舞曲",
+  "alts": [
+   "Love Through A Prism",
+   "Prism Rondo"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "077caa674f",
+  "title": "魔術師クノンは見えている",
+  "alts": [
+   "Kunon the Sorcerer Can See",
+   "Majutsushi Kunon wa Mieteiru"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "31f171e5e0",
+  "title": "TRIGUN STARGAZE",
+  "alts": [
+   "TRIGUN STARGAZE"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "ae6c52ab07",
+  "title": "異世界でチート能力を手にした俺は、現実世界をも無双する ～レベルアップは人生を変えた～",
+  "alts": [
+   "I Got a Cheat Skill in Another World and Became Unrivaled in The Real World, Too (Special) - The Legendary Dragon—Awakens",
+   "Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta"
+  ],
+  "year": 2023
+ },
+ {
+  "key": "b578476d10",
+  "title": "劇場版 僕の心のヤバイやつ",
+  "alts": [
+   "Boku no Kokoro no Yabai Yatsu Movie",
+   "The Dangers in My Heart: The Movie"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "69263f017c",
+  "title": "幼馴染とはラブコメにならない",
+  "alts": [
+   "Osananajimi to wa Love Kome ni Naranai",
+   "You Can't Be In a Rom-Com with Your Childhood Friends!"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "9ef10e3620",
+  "title": "「お前ごときが魔王に勝てると思うな」と勇者パーティを追放されたので、王都で気ままに暮らしたい",
+  "alts": [
+   "\"Omae Gotoki ga Maou ni Kateru to Omou na\" to Yuusha Party wo Tsuihou Sareta node, Outo de Kimama ni Kurashitai",
+   "ROLL OVER AND DIE: I Will Fight for an Ordinary Life with My Love and Cursed Sword!"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "5cb120c6bf",
+  "title": "転生したらスライムだった件 第4期 第1&2クール",
+  "alts": [
+   "Tensei Shitara Slime Datta Ken 4th Season Part 1 & 2",
+   "That Time I Got Reincarnated as a Slime Season 4"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "25275ef106",
+  "title": "杖と剣のウィストリア Season2",
+  "alts": [
+   "Tsue to Tsurugi no Wistoria Season 2",
+   "Wistoria: Wand and Sword Season 2"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "7a16932e00",
+  "title": "ようこそ実力至上主義の教室へ 4th Season 2年生編1学期",
+  "alts": [
+   "Classroom of the Elite 4th Season: Second Year, First Semester",
+   "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e 4th Season 2-nensei-hen Ichi Gakki"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "991197e64f",
+  "title": "クラスで２番目に可愛い女の子と友だちになった",
+  "alts": [
+   "Class de 2-banme ni Kawaii Onnanoko to Tomodachi ni Natta",
+   "I Made Friends with the Second Prettiest Girl in My Class"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "7e510c5f79",
+  "title": "マリッジトキシン",
+  "alts": [
+   "MARRIAGETOXIN"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "7b8cc82135",
+  "title": "Dr.STONE SCIENCE FUTURE 3クール",
+  "alts": [
+   "Dr. STONE SCIENCE FUTURE Cour 3",
+   "Dr. STONE: SCIENCE FUTURE Part 3"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "d26e887af3",
+  "title": "お隣の天使様にいつの間にか駄目人間にされていた件 第2期",
+  "alts": [
+   "Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken 2nd Season",
+   "The Angel Next Door Spoils Me Rotten2"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "dd583ca601",
+  "title": "オタクに優しいギャルはいない!?",
+  "alts": [
+   "Gals Can't Be Kind to Otaku!?",
+   "Otaku ni Yasashii Gal wa Inai!?"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "3a46929f79",
+  "title": "愛してるゲームを終わらせたい",
+  "alts": [
+   "Aishiteru Game wo Owarasetai",
+   "I Want to End this Love Game"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "0b2b518199",
+  "title": "姫騎士は蛮族の嫁",
+  "alts": [
+   "Hime Kishi wa Barbaroi no Yome",
+   "The Warrior Princess and the Barbaric King"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "443d2d5cf7",
+  "title": "異世界のんびり農家２",
+  "alts": [
+   "Farming Life in Another World 2",
+   "Isekai Nonbiri Nouka 2"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "c85855ebab",
+  "title": "キルアオ",
+  "alts": [
+   "KILL BLUE",
+   "Kill Ao"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "328add8140",
+  "title": "カナン様はあくまでチョロい",
+  "alts": [
+   "Kanan-sama wa Akumade Choroi",
+   "Mistress Kanan is Devilishly Easy"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "f1d1f7d549",
+  "title": "最強の王様、二度目の人生は 何をする? 第2期",
+  "alts": [
+   "Saikyou no Ousama, Nidome no Jinsei wa Nani wo Suru? 2nd Season",
+   "The Beginning After the End Season 2"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "b2ea4742bc",
+  "title": "ドロヘドロ Season 2",
+  "alts": [
+   "Dorohedoro Season 2"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "dde6a5cae5",
+  "title": "LIAR GAME",
+  "alts": [
+   "LIAR GAME"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "ac07e37b21",
+  "title": "魔入りました！入間くん 第4シリーズ",
+  "alts": [
+   "Mairimashita! Iruma-kun 4",
+   "Welcome to Demon School! Iruma-kun Season 4"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "cda35c5e8a",
+  "title": "本好きの下剋上 領主の養女",
+  "alts": [
+   "Ascendance of a Bookworm: Adopted Daughter of an Archduke",
+   "Honzuki no Gekokujou: Ryoushu no Youjo"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "23ae06640a",
+  "title": "NEEDY GIRL OVERDOSE",
+  "alts": [
+   "NEEDY GIRL OVERDOSE"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "ca827c0a70",
+  "title": "あかね噺",
+  "alts": [
+   "Akane-banashi"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "248ada862b",
+  "title": "僕のヒーローアカデミア No. 170+1 「More」",
+  "alts": [
+   "Boku no Hero Academia No. 170+1: More",
+   "My Hero Academia More"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "cd0b2da1bb",
+  "title": "ポンコツ風紀委員とスカート丈が不適切なJKの話",
+  "alts": [
+   "Ponkotsu Fuuki Iin to Skirt take ga Futekisetsu na JK no Hanashi",
+   "The Klutzy Class Monitor and the Girl with the Short Skirt"
+  ],
+  "year": "2026"
+ },
+ {
+  "key": "e2a28e68ba",
+  "title": "上伊那ぼたん、酔へる姿は百合の花",
+  "alts": [
+   "Botan Kamiina Fully Blossoms When Drunk",
+   "Kamiina Botan, Yoeru Sugata wa Yuri no Hana"
+  ],
+  "year": 2026
+ },
+ {
+  "key": "12bb4677c4",
+  "title": "最強の職業は勇者でも賢者でもなく鑑定士（仮）らしいですよ？",
+  "alts": [
+   "Saikyou no Shokugyou wa Yuusha demo Kenja demo Naku Kanteishi (Kari) Rashii desu yo?",
+   "The strongest job is apparently not a hero or a sage, but an appraiser (provisional)!"
   ],
   "year": "2026"
  }
