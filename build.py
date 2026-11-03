@@ -1317,9 +1317,9 @@ for sid_, (nm_, jl_) in WIDE_LISTS.items():
     for it in jl_[:10]:
         d_ = TITLE_DB.get(tkey(it["title"]))
         n_ = len({a[0] for a in d_["apps"]}) if d_ else 1
-        rows_.append((tlink(it["title"]), n_, "%dつ" % n_, ""))
-    ch_ = bar_chart("%sの人気作は、ほかのランキングにもいくつ入っている？" % esc(nm_), rows_,
-                    "このサイトのランキング（配信サービス・国・季節など）のうち、その作品が入っている数です。多いほど、いろいろな場所で人気です。", mx=max([r[1] for r in rows_] + [1]))
+        rows_.append((tlink(it["title"]), n_, "%d個" % n_, ""))
+    ch_ = bar_chart("%sの人気作は、いくつのランキングに入っている？" % esc(nm_), rows_,
+                    "このサイトのランキング（配信サービス・国・季節など）のうち、その作品が入っている数です（%sのランキングも 1 個に数えています）。多いほど、いろいろな場所で人気です。" % esc(nm_), mx=max([r[1] for r in rows_] + [1]))
     PAGES["service/%s.html" % sid_] = PAGES["service/%s.html" % sid_].replace("\x00WIDE:%s\x00" % sid_, ch_)
 for old_, new_ in ALIAS.items():
     if new_ in TITLE_PAGES:
