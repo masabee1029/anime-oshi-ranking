@@ -4,7 +4,7 @@
 ~/knowledge-os/raw/anime のデータから docs/ 以下の HTML を生成する。
 使い方: python3 build.py
 """
-import csv, json, os, html, urllib.parse, datetime, collections
+import time, csv, json, os, html, urllib.parse, datetime, collections
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.expanduser("~/knowledge-os/raw/anime")
@@ -142,9 +142,9 @@ def prime_link(title):
 #   ABEMA・DMM TV（JustWatch に無い）: 毎月の全作品検索（svc_search_runner.js → svc_apply.py → services.json）と on_abema()
 # 提携している広告（affiliate.json の streaming）があるサービスは広告のリンク、無いサービスは作品ページへ直接飛ぶ。
 SERVICES = read_json(os.path.join(HERE, "services.json")) if os.path.exists(os.path.join(HERE, "services.json")) else {}
-VOD_ORDER = ["ABEMA", "DMM TV", "U-NEXT", "Netflix", "Prime Video", "dアニメストア", "Hulu", "Disney+", "FOD", "Lemino", "TELASA", "WeTV"]
+VOD_ORDER = ["ABEMA", "DMM TV", "U-NEXT", "Netflix", "Prime Video", "dアニメストア", "Hulu", "Disney+", "FOD", "Lemino", "TELASA", "WeTV", "TVer"]
 VOD_COLOR = {"ABEMA": "#3fd46b", "DMM TV": "#0a74da", "U-NEXT": "#2b8fd6", "Netflix": "#e50914", "Prime Video": "#00a8e1",
-             "dアニメストア": "#f28c00", "Hulu": "#1ce783", "Disney+": "#1f80e0", "FOD": "#e6007e", "Lemino": "#8c6cff", "TELASA": "#ff5a5f", "WeTV": "#ff6a00"}
+             "dアニメストア": "#f28c00", "Hulu": "#1ce783", "Disney+": "#1f80e0", "FOD": "#e6007e", "Lemino": "#8c6cff", "TELASA": "#ff5a5f", "WeTV": "#ff6a00", "TVer": "#00a0e9"}
 def vod_list(title):
     k = tkey(title)
     w = WATCH.get(k) or {}
@@ -157,15 +157,23 @@ def vod_list(title):
     if sv.get("ABEMA"): got.setdefault("ABEMA", "https://abema.tv/video/title/%s" % sv["ABEMA"]["id"])
     elif on_abema(title): got.setdefault("ABEMA", "https://abema.tv/")
     if sv.get("DMM TV"): got.setdefault("DMM TV", "https://tv.dmm.com/vod/detail/?season=%s" % sv["DMM TV"]["id"])
+    # TVer は見逃し配信（話ごとに期限あり）。期限（end, UNIX 秒）が過ぎていたら出さない。ページ上でも期限切れで消す（vod_buttons）
+    tv = sv.get("TVer") or {}
+    if tv.get("id") and int(tv.get("end") or 0) > time.time():
+        got.setdefault("TVer", "https://tver.jp/series/%s" % tv["id"])
     aff = {x["name"].replace("で観る", ""): x["url"] for x in CFG.get("streaming", []) if x.get("url")}
     out = []
     for nm in sorted(got, key=lambda n: (n not in aff, VOD_ORDER.index(n) if n in VOD_ORDER else 99)):
         url = aff.get(nm) or (prime_link(title) if nm == "Prime Video" else "") or got[nm]
         out.append((nm, url, bool(aff.get(nm)) or (nm == "Prime Video" and bool(prime_link(title)))))
     return out
+TVER_HIDE = '<script>document.querySelectorAll("a[data-end]").forEach(function(a){if(+a.dataset.end*1000<Date.now())a.remove()})</script>'
 def vod_buttons(title):
-    return "".join('<a class="btn vod" style="--bc:%s" href="%s" target="_blank" rel="nofollow%s noopener">%sで観る</a>'
-                   % (VOD_COLOR.get(nm, "#888"), esc(url), " sponsored" if pr else "", esc(nm)) for nm, url, pr in vod_list(title))
+    tv_end = int(((SERVICES.get(tkey(title)) or {}).get("TVer") or {}).get("end") or 0)
+    items = vod_list(title)
+    html = "".join('<a class="btn vod" style="--bc:%s" href="%s" target="_blank" rel="nofollow%s noopener"%s>%sで観る</a>'
+                   % (VOD_COLOR.get(nm, "#888"), esc(url), " sponsored" if pr else "", ' data-end="%d"' % tv_end if nm == "TVer" else "", esc(nm)) for nm, url, pr in items)
+    return html + (TVER_HIDE if any(nm == "TVer" for nm, _, _ in items) else "")
 
 def shop_buttons(title):
     def a(cls, url, label, style=""):

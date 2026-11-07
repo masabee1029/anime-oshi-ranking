@@ -3,6 +3,7 @@
 """ABEMA・DMM TV の全作品検索の結果（runner の window.__svout を写した TSV）を services.json に入れる（2026-11-07）。
   python3 svc_apply.py ABEMA 結果.tsv
   python3 svc_apply.py "DMM TV" 結果.tsv
+  python3 svc_apply.py TVer 結果.tsv   （4 列目 = 期限の UNIX 秒）
 1 行 = 作品キー<TAB>サービスの作品ID<TAB>サービス上の作品名。今回見つからなかった作品は、そのサービスの記録を消す（配信が終わった扱い）。
 """
 import json, os, sys, datetime
@@ -11,10 +12,11 @@ OUT = os.path.join(HERE, "services.json")
 svc, path = sys.argv[1], sys.argv[2]
 data = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {}
 rows = [l.rstrip("\n").split("\t") for l in open(path, encoding="utf-8") if l.strip()]
-if len(rows) < 5:
+if len(rows) < (1 if svc == "TVer" else 5):
     sys.exit("結果が少なすぎます（%d 行）。読み取りの失敗かもしれないので書き込みません" % len(rows))
 today = datetime.date.today().isoformat()
-hit = {r[0]: {"id": r[1], "name": r[2] if len(r) > 2 else "", "date": today} for r in rows if len(r) >= 2}
+# 4 列目があれば配信の期限（UNIX 秒。TVer の見逃し配信用）
+hit = {r[0]: dict({"id": r[1], "name": r[2] if len(r) > 2 else "", "date": today}, **({"end": int(r[3])} if len(r) > 3 and r[3].isdigit() else {})) for r in rows if len(r) >= 2}
 before = sum(1 for v in data.values() if svc in v)
 for k in list(data):
     data[k].pop(svc, None)
