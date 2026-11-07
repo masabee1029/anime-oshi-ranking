@@ -10,10 +10,10 @@ IDX = os.path.join(HERE, "titles_index.json")
 OUT = os.path.join(HERE, "watch.json")
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/126 Safari/537.36"
 TODAY = datetime.date.today()
-MAX_PER_RUN = 450
+MAX_PER_RUN = 600
 Q = """query($q:String!){popularTitles(country:JP,first:4,filter:{searchQuery:$q}){edges{node{objectType
 content(country:JP,language:"ja"){title originalTitle originalReleaseYear}
-offers(country:JP,platform:WEB){monetizationType package{clearName}}}}}}"""
+offers(country:JP,platform:WEB){monetizationType standardWebURL package{clearName}}}}}}"""
 
 def norm(t):
     return re.sub(r"[\s　:：・!！?？\-－~～「」『』()（）]", "", (t or "")).lower()
@@ -81,7 +81,7 @@ cache = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {}
 todo = []
 for it in idx:
     c = cache.get(it["key"])
-    if c and (TODAY - datetime.date.fromisoformat(c["date"])).days < 30 and (c.get("jw_title") or c.get("series_tried")): continue
+    if c and (TODAY - datetime.date.fromisoformat(c["date"])).days < 30 and (c.get("jw_title") or c.get("series_tried")) and ("urls" in c or not c.get("jw_title")): continue
     todo.append(it)
 print("titles", len(idx), "to fetch", len(todo[:MAX_PER_RUN]))
 for n, it in enumerate(todo[:MAX_PER_RUN], 1):
@@ -94,15 +94,14 @@ for n, it in enumerate(todo[:MAX_PER_RUN], 1):
     series = None
     if not node:
         # 続編・劇場版はシリーズ名で探し直す（JustWatch はシーズンを 1 作品にまとめているため）
-        base = series_name(it["title"])
         seq = re.sub(r"\s*[0-9０-９]{1,2}$", "", strip_extra(it["title"]) or it["title"]).strip()
-        if seq and norm(seq) != norm(it["title"]) and len(norm(seq)) >= 4:
-            base = seq   # 「サイバーパンク: エッジランナーズ2」→「サイバーパンク: エッジランナーズ」で探す（2026-11-07）
-        if base and norm(base) != norm(it["title"]):
+        # シリーズ名で探し、無ければ末尾の数字を外した名前（「サイバーパンク: エッジランナーズ2」→「…エッジランナーズ」）で探す（2026-11-07）
+        for base in dict.fromkeys([series_name(it["title"]), seq if len(norm(seq)) >= 4 else None]):
+            if not base or norm(base) == norm(it["title"]): continue
             node = pick(query(base), [base], None)
             time.sleep(0.4)
-            if node: series = base
-    rec = {"date": TODAY.isoformat(), "flatrate": [], "free": [], "rent_buy": [], "series_tried": True}
+            if node: series = base; break
+    rec = {"date": TODAY.isoformat(), "flatrate": [], "free": [], "rent_buy": [], "series_tried": True, "urls": {}}
     if series: rec["series"] = series
     if node:
         rec["jw_title"] = node["content"]["title"]; rec["jw_year"] = node["content"].get("originalReleaseYear")
@@ -110,6 +109,8 @@ for n, it in enumerate(todo[:MAX_PER_RUN], 1):
             nm = pkg_name(o["package"]["clearName"]); mt = o["monetizationType"]
             slot = "flatrate" if mt == "FLATRATE" else ("free" if mt in ("FREE", "ADS") else ("rent_buy" if mt in ("RENT", "BUY") else None))
             if slot and nm not in rec[slot]: rec[slot].append(nm)
+            if slot and o.get("standardWebURL"):
+                rec.setdefault("urls", {}).setdefault(nm, o["standardWebURL"])   # サービスの作品ページ（ボタンの行き先。2026-11-07）
         # 見放題にあるものは無料・レンタル側から外す
         rec["free"] = [x for x in rec["free"] if x not in rec["flatrate"]]
         rec["rent_buy"] = [x for x in rec["rent_buy"] if x not in rec["flatrate"]]

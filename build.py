@@ -128,6 +128,45 @@ def on_abema(title):
             return True
     return False
 
+# ---------- Prime Video の作品リンク（affiliate.json の prime_video: {作品名: Amazon アソシエイトの URL}。2026-10-25 追加） ----------
+_PV = {norm(k): v for k, v in (CFG.get("prime_video") or {}).items()}
+def prime_link(title):
+    n = norm(title)
+    for k, v in _PV.items():
+        if k and (k == n or (k in n and len(n) - len(k) <= 6)):
+            return v
+    return ""
+# ---------- 作品ごとの「正しい配信サービス」ボタン（2026-11-07 ユーザー「毎月全作品確認して正しい配信サービスボタンを配置する。でないと観に行けない」） ----------
+# 見放題・無料で観られると確かめられたサービスだけを、その作品のページへのボタンにする。
+#   JustWatch（fetch_watch.py → watch.json の flatrate/free と urls）: Netflix・Prime Video・U-NEXT・Hulu・Disney+・FOD など
+#   ABEMA・DMM TV（JustWatch に無い）: 毎月の全作品検索（svc_search_runner.js → svc_apply.py → services.json）と on_abema()
+# 提携している広告（affiliate.json の streaming）があるサービスは広告のリンク、無いサービスは作品ページへ直接飛ぶ。
+SERVICES = read_json(os.path.join(HERE, "services.json")) if os.path.exists(os.path.join(HERE, "services.json")) else {}
+VOD_ORDER = ["ABEMA", "DMM TV", "U-NEXT", "Netflix", "Prime Video", "dアニメストア", "Hulu", "Disney+", "FOD", "Lemino", "TELASA", "WeTV"]
+VOD_COLOR = {"ABEMA": "#3fd46b", "DMM TV": "#0a74da", "U-NEXT": "#2b8fd6", "Netflix": "#e50914", "Prime Video": "#00a8e1",
+             "dアニメストア": "#f28c00", "Hulu": "#1ce783", "Disney+": "#1f80e0", "FOD": "#e6007e", "Lemino": "#8c6cff", "TELASA": "#ff5a5f", "WeTV": "#ff6a00"}
+def vod_list(title):
+    k = tkey(title)
+    w = WATCH.get(k) or {}
+    urls = w.get("urls") or {}
+    got = collections.OrderedDict()
+    for nm in (w.get("flatrate") or []) + (w.get("free") or []):
+        if nm in VOD_COLOR and urls.get(nm):
+            got.setdefault(nm, urls[nm])
+    sv = SERVICES.get(k) or {}
+    if sv.get("ABEMA"): got.setdefault("ABEMA", "https://abema.tv/video/title/%s" % sv["ABEMA"]["id"])
+    elif on_abema(title): got.setdefault("ABEMA", "https://abema.tv/")
+    if sv.get("DMM TV"): got.setdefault("DMM TV", "https://tv.dmm.com/vod/detail/?season=%s" % sv["DMM TV"]["id"])
+    aff = {x["name"].replace("で観る", ""): x["url"] for x in CFG.get("streaming", []) if x.get("url")}
+    out = []
+    for nm in sorted(got, key=lambda n: (n not in aff, VOD_ORDER.index(n) if n in VOD_ORDER else 99)):
+        url = aff.get(nm) or (prime_link(title) if nm == "Prime Video" else "") or got[nm]
+        out.append((nm, url, bool(aff.get(nm)) or (nm == "Prime Video" and bool(prime_link(title)))))
+    return out
+def vod_buttons(title):
+    return "".join('<a class="btn vod" style="--bc:%s" href="%s" target="_blank" rel="nofollow%s noopener">%sで観る</a>'
+                   % (VOD_COLOR.get(nm, "#888"), esc(url), " sponsored" if pr else "", esc(nm)) for nm, url, pr in vod_list(title))
+
 def shop_buttons(title):
     def a(cls, url, label, style=""):
         return '<a class="btn %s" %shref="%s" target="_blank" rel="nofollow sponsored noopener">%s</a>' % (
@@ -139,11 +178,10 @@ def shop_buttons(title):
         shops.append(a("neo", neowing_link(title), "NEOWING", "background:#0a7bc2;color:#fff"))
     html_ = ('<div class="shop"><span class="shop-lb">Blu-ray・原作・グッズを探す</span>'
              '<div class="shop-btns">%s</div></div>' % "".join(shops))
-    vods = [a("vod", sv["url"], esc(sv["name"]), "--bc:%s" % esc(sv.get("color") or "#888"))
-            for sv in CFG.get("streaming", []) if sv.get("url") and (not sv["name"].startswith("ABEMA") or on_abema(title))]
+    vods = vod_buttons(title)
     if vods:
-        html_ += ('<div class="shop"><span class="shop-lb">配信で観る（無料体験あり）</span>'
-                  '<div class="shop-btns">%s</div></div>' % "".join(vods))
+        html_ += ('<div class="shop"><span class="shop-lb">この作品を配信で観る</span>'
+                  '<div class="shop-btns">%s</div></div>' % vods)
     return html_
 
 GOODS = read_json(os.path.join(HERE, "goods.json")) if os.path.exists(os.path.join(HERE, "goods.json")) else {}
@@ -416,7 +454,7 @@ def rank_list(items, show_shop=True, label=None, href=None):
                         esc(it["rank"]), it.get("chg", ""), img(it.get("img"), it["title"]), tlink(it["title"]), badge, esc(sub_),
                         ('<div class="meta">%s</div>' % esc(it["meta"])) if it.get("meta") else "",
                         quote_html(kg, "kg") if kg else "",
-                        watch_line(it["title"]),
+                        "" if (show_shop and vod_list(it["title"])) else watch_line(it["title"]),
                         shop_buttons(it["title"]) if show_shop else ""))
     return '<ol class="rank">%s</ol>' % "".join(rows)
 
@@ -1064,14 +1102,6 @@ def meta_for(d):
         if m: return m
     return None
 
-# ---------- Prime Video の作品リンク（affiliate.json の prime_video: {作品名: Amazon アソシエイトの URL}。2026-10-25 追加） ----------
-_PV = {norm(k): v for k, v in (CFG.get("prime_video") or {}).items()}
-def prime_link(title):
-    n = norm(title)
-    for k, v in _PV.items():
-        if k and (k == n or (k in n and len(n) - len(k) <= 6)):
-            return v
-    return ""
 SVC_FROM_RANK = {"ABEMA 日本": "ABEMA", "DMM TV 日本": "DMM TV", "TVer 日本": "TVer", "バンダイチャンネル 日本": "バンダイチャンネル"}
 index_out = []
 # 作品ページの「世界評価くらべ」用に、ジャンルごとの平均点（ある程度観られている作品だけ）
@@ -1203,7 +1233,7 @@ for k, d in TITLE_DB.items():
     kg = kakugen(t)
     w = WATCH.get(k) or {}
     extra = [v for lab, v in SVC_FROM_RANK.items() if any(a[0] == lab for a in d["apps"])]
-    flat = list(dict.fromkeys((w.get("flatrate") or []) + extra))
+    flat = list(dict.fromkeys((w.get("flatrate") or []) + extra + [nm for nm, _, _ in vod_list(t)]))
     rent = w.get("rent_buy") or []
     free = w.get("free") or []
     watch = ""
@@ -1216,6 +1246,8 @@ for k, d in TITLE_DB.items():
         pv = prime_link(t)
         if pv:
             rows_.append('<div class="wrow"><span class="wlb">Prime Video</span><a class="btn amz" rel="nofollow sponsored noopener" target="_blank" href="%s">Prime Video で観る（レンタル・購入）</a></div>' % esc(pv))
+        vb = vod_buttons(t)
+        if vb: rows_.insert(0, '<div class="shop"><span class="shop-lb">この作品を配信で観る</span><div class="shop-btns">%s</div></div>' % vb)
         watch = ('<h2>どこで観られる？（日本）</h2>%s<p class="note">%sJustWatch と各サービスのランキングから集計（%s 時点）。配信状況は変わることがあるので、最新は各サービスで確認してください。</p>'
                  % ("".join(rows_), series_note, esc(w.get("date") or snap)))
     else:
