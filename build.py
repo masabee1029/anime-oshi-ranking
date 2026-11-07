@@ -110,7 +110,15 @@ def _abema_names():
         for r in read_csv(vf):
             if r.get("service") == "ABEMA":
                 names.update([r.get("title") or "", r.get("title_native") or ""])
-    return {norm(n) for n in names if norm(n)}
+    out = {norm(n) for n in names if norm(n)}
+    # 毎月の確認（abema_check.py）でエピソードが 0 本だった作品は外す。いまの ABEMA ランキングに出ている作品は残す
+    ck = os.path.join(HERE, "abema_check.json")
+    if os.path.exists(ck):
+        cur = {norm(r.get("title") or "") for r in read_csv(os.path.join(DATA, "streaming", "abema_anime_ranking.csv"))}
+        for it in json.load(open(ck, encoding="utf-8")).get("items", []):
+            if not it.get("ok"):
+                out -= {norm(n) for n in it.get("names", [])} - cur
+    return out
 ABEMA_NAMES = _abema_names()
 def on_abema(title):
     n = norm(title)
