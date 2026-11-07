@@ -5,7 +5,7 @@
   const idx = await (await fetch('https://raw.githubusercontent.com/masabee1029/anime-oshi-ranking/main/titles_index.json?' + Date.now())).json();
   const norm = t => (t || '').normalize('NFKC').replace(/[\s:：・!！?？\-－~～「」『』()（）【】\[\]〈〉.,、。'’"”/／★☆♪&＆]/g, '').toLowerCase();
   const strip = t => (t || '').replace(/[【\[（(「『].*?[】\]）)」』]/g, ' ').replace(/(第\s*\d+\s*(期|章|クール|シーズン)|\d+(st|nd|rd|th)\s*Season|Season\s*[0-9０-９]+|シーズン\s*[0-9０-９]+|劇場版|総集編)/gi, ' ').replace(/\s*[0-9０-９]{1,2}$/, '').trim();
-  const SEASON = /^(第?[0-9一二三四五六七八九十]+(期|章|クール|シーズン|部)?|season[0-9]+|[0-9]+(st|nd|rd|th)season|part[0-9]+|ⅱ|ⅲ|ⅳ|ⅴ|ii|iii|iv|総集編|劇場版|前編|後編|新章|final(season)?|thefinalseason|ノ章|参ノ章|弐ノ章|[゜°'])+$/;
+  const SEASON = /^(第?([1-9][0-9]?|[一二三四五六七八九十]+)(期|章|クール|シーズン|部)?|season[0-9]+|[0-9]+(st|nd|rd|th)season|part[0-9]+|ⅱ|ⅲ|ⅳ|ⅴ|ii|iii|iv|総集編|前編|後編|新章|final(season)?|thefinalseason|ノ章|参ノ章|弐ノ章|[゜°'])+$/;
   const H = {headers: {Authorization: 'bearer ' + localStorage.getItem('abm_token')}};
   const same = (want, n) => want.some(w => { if (w === n) return true; const [a, b] = w.length < n.length ? [w, n] : [n, w];
     return a.length >= 4 && b.startsWith(a) && SEASON.test(b.slice(a.length)); });

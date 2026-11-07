@@ -10,7 +10,7 @@
   const idOf = h => SV === 'abema' ? (h.match(/title\/([0-9a-z_-]+)/) || [])[1] : (h.match(/season=([a-z0-9]+)/) || [])[1];
   const nameOf = x => SV === 'abema' ? (x.innerText.trim() || (x.querySelector('img') || {}).alt || '') : ((x.querySelector('img') || {}).alt || '').replace(/のサムネイル画像$/, '');
   const url = q => SV === 'abema' ? 'https://abema.tv/search?q=' + encodeURIComponent(q) : 'https://tv.dmm.com/vod/list/?keyword=' + encodeURIComponent(q);
-  const SEASON = /^(第?[0-9一二三四五六七八九十]+(期|章|クール|シーズン|部)?|season[0-9]+|[0-9]+(st|nd|rd|th)season|part[0-9]+|ⅱ|ⅲ|ⅳ|ⅴ|ii|iii|iv|総集編|劇場版|前編|後編|新章|final(season)?|thefinalseason|ノ章|参ノ章|弐ノ章|[゜°'])+$/;
+  const SEASON = /^(第?([1-9][0-9]?|[一二三四五六七八九十]+)(期|章|クール|シーズン|部)?|season[0-9]+|[0-9]+(st|nd|rd|th)season|part[0-9]+|ⅱ|ⅲ|ⅳ|ⅴ|ii|iii|iv|総集編|前編|後編|新章|final(season)?|thefinalseason|ノ章|参ノ章|弐ノ章|[゜°'])+$/;
   const out = [];
   for (const it of idx.slice(window.__svstart || 0)) {
     window.__svprog++;

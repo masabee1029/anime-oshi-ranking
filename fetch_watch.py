@@ -3,7 +3,7 @@
 """作品ごとの「日本でどこで観られるか」を JustWatch から取って watch.json にためる。
 build.py が書き出す titles_index.json の作品が対象。30 日以内に取ったものは飛ばす。
 """
-import json, os, re, subprocess, time, datetime, hashlib
+import json, os, re, subprocess, time, datetime, hashlib, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 IDX = os.path.join(HERE, "titles_index.json")
@@ -53,7 +53,10 @@ def query(q):
             return d["data"]["popularTitles"]["edges"]
         except Exception:
             time.sleep(5)
+    global NET_FAIL
+    NET_FAIL = True   # 3 回とも答えが返らなかった（「見つからない」とは別。前回の記録を消さない）
     return []
+NET_FAIL = False
 
 def pick(edges, names, year):
     want = {norm(n) for n in names if n} | {norm(strip_extra(n)) for n in names if n}
@@ -79,14 +82,16 @@ def pick(edges, names, year):
 idx = json.load(open(IDX, encoding="utf-8"))
 cache = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {}
 todo = []
+FORCE = "--all" in sys.argv   # 毎月の配信ボタン確認では全作品を取り直す（2026-11-07）
 for it in idx:
     c = cache.get(it["key"])
-    if c and (TODAY - datetime.date.fromisoformat(c["date"])).days < 30 and (c.get("jw_title") or c.get("series_tried")) and ("urls" in c or not c.get("jw_title")): continue
+    if c and not FORCE and (TODAY - datetime.date.fromisoformat(c["date"])).days < 30 and (c.get("jw_title") or c.get("series_tried")) and ("urls" in c or not c.get("jw_title")): continue
     todo.append(it)
 print("titles", len(idx), "to fetch", len(todo[:MAX_PER_RUN]))
 for n, it in enumerate(todo[:MAX_PER_RUN], 1):
     names = [it["title"]] + it.get("alts", [])
     node = None
+    NET_FAIL = False
     for q in dict.fromkeys([strip_extra(it["title"]) or it["title"]] + [a for a in it.get("alts", []) if a][:1]):
         node = pick(query(q), names, it.get("year"))
         time.sleep(0.4)
@@ -114,6 +119,8 @@ for n, it in enumerate(todo[:MAX_PER_RUN], 1):
         # 見放題にあるものは無料・レンタル側から外す
         rec["free"] = [x for x in rec["free"] if x not in rec["flatrate"]]
         rec["rent_buy"] = [x for x in rec["rent_buy"] if x not in rec["flatrate"]]
+    if NET_FAIL and not node and cache.get(it["key"], {}).get("jw_title"):
+        print("  通信の失敗のため前回の記録を残す:", it["title"]); continue
     cache[it["key"]] = rec
     if n % 20 == 0:
         json.dump(cache, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=1); print("  ", n)
