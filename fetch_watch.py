@@ -27,6 +27,7 @@ def series_name(t):
     t = re.sub(r"[「」【】『』]", "", t)
     m = re.split(r"[ 　’'。.\-－～~（(〈]|第|Season|SEASON|The Final|FINAL|THE FINAL|[ⅡⅢⅣ]|II|\d+(st|nd|rd|th)", t)
     base = (m[0] or "").strip()
+    base = re.sub(r"\s*[0-9０-９]{1,2}$", "", base).strip()   # 「エッジランナーズ2」のような末尾の数字の続編（2026-11-07）
     if re.fullmatch(r"[\x00-\x7f]+", base) and len(base) < 4: return None   # THE / 86 など短い英数字は誤一致しやすい
     return base if len(base) >= 2 else None
 
@@ -94,6 +95,9 @@ for n, it in enumerate(todo[:MAX_PER_RUN], 1):
     if not node:
         # 続編・劇場版はシリーズ名で探し直す（JustWatch はシーズンを 1 作品にまとめているため）
         base = series_name(it["title"])
+        seq = re.sub(r"\s*[0-9０-９]{1,2}$", "", strip_extra(it["title"]) or it["title"]).strip()
+        if seq and norm(seq) != norm(it["title"]) and len(norm(seq)) >= 4:
+            base = seq   # 「サイバーパンク: エッジランナーズ2」→「サイバーパンク: エッジランナーズ」で探す（2026-11-07）
         if base and norm(base) != norm(it["title"]):
             node = pick(query(base), [base], None)
             time.sleep(0.4)

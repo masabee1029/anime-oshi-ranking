@@ -96,6 +96,30 @@ def neowing_link(title):
     dest = "https://www.neowing.co.jp/searchuni?q=" + urllib.parse.quote(title)
     return "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=%s&pid=%s&vc_url=%s" % (nv["sid"], nv["pid"], urllib.parse.quote(dest, safe=""))
 
+# ---------- ABEMA で配信していると確かめられた作品（2026-11-07 ユーザー「サイバーパンクどこで見れるの？」） ----------
+# JustWatch の日本データに ABEMA は無いので、ABEMA のランキング画面（毎回の記録）と自分の ABEMA 視聴履歴に出た作品だけを「ABEMA にある」とする。
+# affiliate.json の abema_titles に作品名を足せば手で追加できる。ここに無い作品には「ABEMAで観る」ボタンを出さない。
+import glob as _glob
+def _abema_names():
+    names = set(CFG.get("abema_titles") or [])
+    for f in [os.path.join(DATA, "streaming", "abema_anime_ranking.csv")] + _glob.glob(os.path.join(DATA, "streaming", "history", "*", "abema_anime_ranking.csv")):
+        for r in read_csv(f):
+            names.add(r.get("title") or "")
+    vf = os.path.join(DATA, "my_viewing", "watched_titles.csv")
+    if os.path.exists(vf):
+        for r in read_csv(vf):
+            if r.get("service") == "ABEMA":
+                names.update([r.get("title") or "", r.get("title_native") or ""])
+    return {norm(n) for n in names if norm(n)}
+ABEMA_NAMES = _abema_names()
+def on_abema(title):
+    n = norm(title)
+    if not n: return False
+    for k in ABEMA_NAMES:
+        if k == n or (len(k) >= 4 and (n.startswith(k) or k.startswith(n)) and abs(len(n) - len(k)) <= 6):
+            return True
+    return False
+
 def shop_buttons(title):
     def a(cls, url, label, style=""):
         return '<a class="btn %s" %shref="%s" target="_blank" rel="nofollow sponsored noopener">%s</a>' % (
@@ -108,7 +132,7 @@ def shop_buttons(title):
     html_ = ('<div class="shop"><span class="shop-lb">Blu-ray・原作・グッズを探す</span>'
              '<div class="shop-btns">%s</div></div>' % "".join(shops))
     vods = [a("vod", sv["url"], esc(sv["name"]), "--bc:%s" % esc(sv.get("color") or "#888"))
-            for sv in CFG.get("streaming", []) if sv.get("url")]
+            for sv in CFG.get("streaming", []) if sv.get("url") and (not sv["name"].startswith("ABEMA") or on_abema(title))]
     if vods:
         html_ += ('<div class="shop"><span class="shop-lb">配信で観る（無料体験あり）</span>'
                   '<div class="shop-btns">%s</div></div>' % "".join(vods))
