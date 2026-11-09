@@ -9927,30 +9927,11 @@
  },
  "9f05aa4202": {
   "date": "2026-11-09",
-  "flatrate": [
-   "Prime Video",
-   "Disney+",
-   "Hulu",
-   "U-NEXT"
-  ],
+  "flatrate": [],
   "free": [],
-  "rent_buy": [
-   "Amazon",
-   "FOD",
-   "Apple TV"
-  ],
+  "rent_buy": [],
   "series_tried": true,
-  "urls": {
-   "Prime Video": "https://watch.amazon.co.jp/detail?gti=amzn1.dv.gti.16a9f6fd-c82a-d83d-6bfc-0265e317f307",
-   "Disney+": "https://www.disneyplus.com/browse/entity-f82b95f5-13da-4acd-b378-7d3f6864919f",
-   "Hulu": "https://www.hulu.jp/watch/40021312",
-   "U-NEXT": "https://video.unext.jp/title/SID0015358",
-   "Amazon": "https://watch.amazon.co.jp/detail?gti=amzn1.dv.gti.16a9f6fd-c82a-d83d-6bfc-0265e317f307",
-   "FOD": "https://fod.fujitv.co.jp/title/f2qy/",
-   "Apple TV": "https://tv.apple.com/jp/movie/%E3%82%B9%E3%83%8F%E3%82%A4%E3%82%BF%E3%83%BC%E3%83%9E%E3%83%B3/umc.cmc.5phzpxxmktrfukrvil304pg8e?at=1000l3V2&ct=app_tv&itscg=30200&itsct=justwatch_tv&playableId=tvs.sbd.9001%3A397054186"
-  },
-  "jw_title": "スパイダーマン",
-  "jw_year": 2002
+  "urls": {}
  },
  "6ebf0d87d7": {
   "date": "2026-11-09",
