@@ -1,6 +1,32 @@
 {
- "checked": "2026-11-08",
+ "checked": "2026-11-09",
  "items": [
+  {
+   "url": "https://abema.tv/video/title/11-46",
+   "names": [
+    "転生したら剣でした",
+    "転生したら剣でした 第2期"
+   ],
+   "episodes": 12,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/13-216",
+   "names": [
+    "転生貴族、鑑定スキルで成り上がる",
+    "転生貴族、鑑定スキルで成り上がる 第3期"
+   ],
+   "episodes": 12,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/189-92",
+   "names": [
+    "世界最強の魔女、始めました"
+   ],
+   "episodes": 5,
+   "ok": true
+  },
   {
    "url": "https://abema.tv/video/title/420-78",
    "names": [
@@ -104,7 +130,7 @@
     "野生のラスボスが現れた！",
     "野生のラスボスが現れた！ 第2期"
    ],
-   "episodes": 13,
+   "episodes": 12,
    "ok": true
   },
   {
@@ -112,7 +138,7 @@
    "names": [
     "信者ゼロの女神サマと始める異世界攻略"
    ],
-   "episodes": 5,
+   "episodes": 4,
    "ok": true
   },
   {
@@ -121,7 +147,7 @@
     "マジカル★エクスプローラー",
     "マジカル★エクスプローラー　エロゲの友人キャラに転生したけど、ゲーム知識使って自由に生きる"
    ],
-   "episodes": 8,
+   "episodes": 7,
    "ok": true
   },
   {
@@ -129,7 +155,7 @@
    "names": [
     "貸した魔力は【リボ払い】で強制徴収"
    ],
-   "episodes": 7,
+   "episodes": 6,
    "ok": true
   },
   {
@@ -137,7 +163,7 @@
    "names": [
     "転生した大聖女は、聖女であることをひた隠す"
    ],
-   "episodes": 8,
+   "episodes": 7,
    "ok": true
   },
   {
@@ -172,7 +198,7 @@
    "names": [
     "弱気MAX令嬢なのに、辣腕婚約者様の賭けに乗ってしまった"
    ],
-   "episodes": 6,
+   "episodes": 5,
    "ok": true
   },
   {
@@ -180,7 +206,7 @@
    "names": [
     "とある暗部の少女共棲"
    ],
-   "episodes": 6,
+   "episodes": 5,
    "ok": true
   },
   {
@@ -188,33 +214,7 @@
    "names": [
     "追放された転生重騎士はゲーム知識で無双する"
    ],
-   "episodes": 20,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/189-92",
-   "names": [
-    "世界最強の魔女、始めました"
-   ],
-   "episodes": 5,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/11-46",
-   "names": [
-    "転生したら剣でした",
-    "転生したら剣でした 第2期"
-   ],
-   "episodes": 12,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/13-216",
-   "names": [
-    "転生貴族、鑑定スキルで成り上がる",
-    "転生貴族、鑑定スキルで成り上がる 第3期"
-   ],
-   "episodes": 12,
+   "episodes": 19,
    "ok": true
   },
   {
