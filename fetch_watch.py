@@ -61,15 +61,17 @@ NET_FAIL = False
 def pick(edges, names, year):
     want = {norm(n) for n in names if n} | {norm(strip_extra(n)) for n in names if n}
     want.discard("")
-    best = None
+    best = near = None
     for e in edges:
         c = e["node"]["content"]
         cand = {norm(c.get("title")), norm(c.get("originalTitle"))}
         y = c.get("originalReleaseYear")
         exact = bool(cand & want)
         yok = (not year) or (y and abs(int(y) - int(year)) <= 1)
-        if exact and yok: return e["node"]
+        if exact and yok and (not year or (y and int(y) == int(year))): return e["node"]   # 年まで同じものを最優先（2026-11-10 SAKAMOTO DAYS が 2026 年の別エントリに結びついた）
+        if exact and yok and near is None: near = e["node"]
         if exact and best is None: best = e["node"]
+    if near: return near
     if best: return best
     # 完全一致が無ければ、年が合う先頭の結果を部分一致で採用
     for e in edges[:1]:
@@ -83,15 +85,21 @@ idx = json.load(open(IDX, encoding="utf-8"))
 cache = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {}
 todo = []
 FORCE = "--all" in sys.argv   # 毎月の配信ボタン確認では全作品を取り直す（2026-11-07）
+ONLY = {a.split("=", 1)[1] for a in sys.argv if a.startswith("--key=")}   # --key=<key> で指定した作品だけ取り直す（2026-11-10）
+# JustWatch で別作品（実写映画など）にしか結びつかない作品。空の記録にしてボタンを出さない（2026-11-09 Spider-Man → 実写映画）
+NO_MATCH = {"Spider-Man"}
 for it in idx:
     c = cache.get(it["key"])
-    if c and not FORCE and (TODAY - datetime.date.fromisoformat(c["date"])).days < 30 and (c.get("jw_title") or c.get("series_tried")) and ("urls" in c or not c.get("jw_title")): continue
+    if ONLY and it["key"] not in ONLY: continue
+    if c and not FORCE and not ONLY and (TODAY - datetime.date.fromisoformat(c["date"])).days < 30 and (c.get("jw_title") or c.get("series_tried")) and ("urls" in c or not c.get("jw_title")): continue
     todo.append(it)
 print("titles", len(idx), "to fetch", len(todo[:MAX_PER_RUN]))
 for n, it in enumerate(todo[:MAX_PER_RUN], 1):
     names = [it["title"]] + it.get("alts", [])
     node = None
     NET_FAIL = False
+    if it["title"] in NO_MATCH:
+        cache[it["key"]] = {"date": TODAY.isoformat(), "flatrate": [], "free": [], "rent_buy": [], "series_tried": True, "urls": {}, "no_match": True}; continue
     for q in dict.fromkeys([strip_extra(it["title"]) or it["title"]] + [a for a in it.get("alts", []) if a][:1]):
         node = pick(query(q), names, it.get("year"))
         time.sleep(0.4)
