@@ -1,78 +1,85 @@
 {
- "_comment": "ASP登録後にここを埋めて python3 build.py を実行すると全リンクが差し替わる",
- "amazon_tag": "masabee00001-22",
- "rakuten_affiliate_id": "151a9587.4904a96c.151a9588.d0d13240/_RTLink155215",
- "site_url": "https://masabee1029.github.io/anime-oshi-ranking/",
- "site_name": "推しアニメランキング",
- "contact_url": "",
- "_streaming_comment": "配信サービスの紹介リンク。name=ボタン名, url=もしも等で発行したリンク。並び順どおりに表示。urlが空のものは出さない",
- "streaming": [
-  {
-   "name": "ABEMAで観る",
-   "url": "https://px.a8.net/svt/ejp?a8mat=4BENDR+6XGRVM+4EKC+5YJRM",
-   "color": "#3fd46b"
+  "_comment": "ASP登録後にここを埋めて python3 build.py を実行すると全リンクが差し替わる",
+  "amazon_tag": "masabee00001-22",
+  "rakuten_affiliate_id": "151a9587.4904a96c.151a9588.d0d13240/_RTLink155215",
+  "site_url": "https://masabee1029.github.io/anime-oshi-ranking/",
+  "site_name": "推しアニメランキング",
+  "contact_url": "",
+  "_streaming_comment": "配信サービスの紹介リンク。name=ボタン名, url=もしも等で発行したリンク。並び順どおりに表示。urlが空のものは出さない",
+  "streaming": [
+    {
+      "name": "ABEMAで観る",
+      "url": "https://px.a8.net/svt/ejp?a8mat=4BENDR+6XGRVM+4EKC+5YJRM",
+      "color": "#3fd46b"
+    },
+    {
+      "name": "DMM TVで観る",
+      "url": "",
+      "color": "#0a74da"
+    },
+    {
+      "name": "U-NEXTで観る",
+      "url": "",
+      "color": "#1b1f66"
+    }
+  ],
+  "moshimo_yahoo": {
+    "a_id": "5842872",
+    "p_id": "1225",
+    "pc_id": "1925",
+    "pl_id": "18502"
   },
-  {
-   "name": "DMM TVで観る",
-   "url": "",
-   "color": "#0a74da"
+  "_moshimo_yahoo_comment": "もしも経由 Yahoo!ショッピングのどこでもリンク。SNS・YouTube への掲載は不可（サイトのみ）",
+  "use_anilist_covers": false,
+  "_use_anilist_covers_comment": "AniList の作品画像を表示するか。著作権の整理（2026-10-12）により false。true に戻すと画像が出る",
+  "google_site_verification": "",
+  "_google_site_verification_comment": "Google Search Console の「HTML タグ」で出る content=\"...\" の中身を入れると全ページに確認タグが入る",
+  "ga_measurement_id": "G-EHWF25C1RB",
+  "_ga_measurement_id_comment": "Google アナリティクス 4 の測定 ID（G-XXXXXXX）。入れると全ページに計測タグが入り、プライバシーポリシーも「利用しています」に変わる",
+  "_prime_video_comment": "Prime Video の作品ページへのアソシエイトリンク（Amazon バーで作ったもの）。作品名をキーに、作品ページの「どこで観られる？」にボタンとして出る。2026-10-25 本人提供",
+  "prime_video": {
+    "チェンソーマン レゼ篇": "https://www.amazon.co.jp/gp/video/detail/0RWIZNU5S5IQ8IRCU4EOW7JNVZ?&linkCode=sl2&tag=masabee00001-22&linkId=11bcf13b770fc5419fb45c8c1a8ab36a&ref_=as_li_ss_tl"
   },
-  {
-   "name": "U-NEXTで観る",
-   "url": "",
-   "color": "#1b1f66"
+  "vc_ads": [
+    {
+      "name": "Anime Store.JP",
+      "note": "アニメ・ゲームのキャラクターグッズを公式に買える",
+      "btn": "グッズを探す",
+      "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732677",
+      "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732677"
+    },
+    {
+      "name": "レコチョク",
+      "note": "アニメの主題歌やサントラを1曲から買える",
+      "btn": "曲を探す",
+      "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732678",
+      "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732678"
+    },
+    {
+      "name": "コロムビアミュージックショップ",
+      "note": "特典つきのアニメCD・DVDがそろう",
+      "btn": "CD・DVDを探す",
+      "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732679",
+      "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732679"
+    },
+    {
+      "name": "ぷりんと楽譜",
+      "note": "アニソンの楽譜を1曲からダウンロードできる",
+      "btn": "楽譜を探す",
+      "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732680",
+      "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732680"
+    },
+    {
+      "name": "ポケドラ（ポケットドラマCD）",
+      "note": "アニメの声優が演じるドラマCDをスマホで聴ける",
+      "btn": "ドラマCDを探す",
+      "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892746438",
+      "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892746438"
+    }
+  ],
+  "_neowing_vc_comment": "NEOWING（VC プログラム 2052956、報酬 購入 1.1%）。推しアニメランキング（サイト ID 3785496）で 2026-10-28 提携済み。テキスト広告 2856596 で発行した pid に vc_url で作品名の検索ページを付ける",
+  "neowing_vc": {
+    "sid": "3785496",
+    "pid": "892735093"
   }
- ],
- "moshimo_yahoo": {
-  "a_id": "5842872",
-  "p_id": "1225",
-  "pc_id": "1925",
-  "pl_id": "18502"
- },
- "_moshimo_yahoo_comment": "もしも経由 Yahoo!ショッピングのどこでもリンク。SNS・YouTube への掲載は不可（サイトのみ）",
- "use_anilist_covers": false,
- "_use_anilist_covers_comment": "AniList の作品画像を表示するか。著作権の整理（2026-10-12）により false。true に戻すと画像が出る",
- "google_site_verification": "",
- "_google_site_verification_comment": "Google Search Console の「HTML タグ」で出る content=\"...\" の中身を入れると全ページに確認タグが入る",
- "ga_measurement_id": "G-EHWF25C1RB",
- "_ga_measurement_id_comment": "Google アナリティクス 4 の測定 ID（G-XXXXXXX）。入れると全ページに計測タグが入り、プライバシーポリシーも「利用しています」に変わる",
- "_prime_video_comment": "Prime Video の作品ページへのアソシエイトリンク（Amazon バーで作ったもの）。作品名をキーに、作品ページの「どこで観られる？」にボタンとして出る。2026-10-25 本人提供",
- "prime_video": {
-  "チェンソーマン レゼ篇": "https://www.amazon.co.jp/gp/video/detail/0RWIZNU5S5IQ8IRCU4EOW7JNVZ?&linkCode=sl2&tag=masabee00001-22&linkId=11bcf13b770fc5419fb45c8c1a8ab36a&ref_=as_li_ss_tl"
- },
- "vc_ads": [
-  {
-   "name": "Anime Store.JP",
-   "note": "アニメ・ゲームのキャラクターグッズを公式に買える",
-   "btn": "グッズを探す",
-   "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732677",
-   "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732677"
-  },
-  {
-   "name": "レコチョク",
-   "note": "アニメの主題歌やサントラを1曲から買える",
-   "btn": "曲を探す",
-   "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732678",
-   "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732678"
-  },
-  {
-   "name": "コロムビアミュージックショップ",
-   "note": "特典つきのアニメCD・DVDがそろう",
-   "btn": "CD・DVDを探す",
-   "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732679",
-   "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732679"
-  },
-  {
-   "name": "ぷりんと楽譜",
-   "note": "アニソンの楽譜を1曲からダウンロードできる",
-   "btn": "楽譜を探す",
-   "url": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785496&pid=892732680",
-   "beacon": "https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785496&pid=892732680"
-  }
- ],
- "_neowing_vc_comment": "NEOWING（VC プログラム 2052956、報酬 購入 1.1%）。推しアニメランキング（サイト ID 3785496）で 2026-10-28 提携済み。テキスト広告 2856596 で発行した pid に vc_url で作品名の検索ページを付ける",
- "neowing_vc": {
-  "sid": "3785496",
-  "pid": "892735093"
- }
 }
