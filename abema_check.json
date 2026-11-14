@@ -1,6 +1,101 @@
 {
- "checked": "2026-11-13",
+ "checked": "2026-11-14",
  "items": [
+  {
+   "url": "https://abema.tv/video/title/199-61",
+   "names": [
+    "とある暗部の少女共棲"
+   ],
+   "episodes": 6,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/25-254",
+   "names": [
+    "佐々木とピーちゃん",
+    "佐々木とピーちゃん シーズン２"
+   ],
+   "episodes": 12,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/210-21",
+   "names": [
+    "追放されたチート付与魔術師は気ままなセカンドライフを謳歌する。",
+    "追放されたチート付与魔術師は気ままなセカンドライフを謳歌する。　～俺は武器だけじゃなく、あらゆるものに『強化ポイント』を付与できるし、俺の意思でいつでも効果を解除できるけど、残った人たち大丈夫？～"
+   ],
+   "episodes": 6,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/194-30",
+   "names": [
+    "冰剣の魔術師が世界を統べる",
+    "冰剣の魔術師が世界を統べるⅡ"
+   ],
+   "episodes": 12,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/189-92",
+   "names": [
+    "世界最強の魔女、始めました"
+   ],
+   "episodes": 6,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/13-216",
+   "names": [
+    "転生貴族、鑑定スキルで成り上がる",
+    "転生貴族、鑑定スキルで成り上がる 第3期"
+   ],
+   "episodes": 12,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/593-18",
+   "names": [
+    "凶乱令嬢ニア・リストン",
+    "凶乱令嬢ニア・リストン 病弱令嬢に転生した神殺しの武人の華麗なる無双録"
+   ],
+   "episodes": 6,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/11-46",
+   "names": [
+    "転生したら剣でした",
+    "転生したら剣でした 第2期"
+   ],
+   "episodes": 12,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/210-18",
+   "names": [
+    "追放された転生重騎士はゲーム知識で無双する"
+   ],
+   "episodes": 20,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/149-35",
+   "names": [
+    "転生ゴブリンだけど質問ある？"
+   ],
+   "episodes": 1,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/25-297",
+   "names": [
+    "オーバーロード 聖王国編",
+    "劇場版 「オーバーロード」 聖王国編"
+   ],
+   "episodes": 1,
+   "ok": true
+  },
   {
    "url": "https://abema.tv/video/title/25-208",
    "names": [
@@ -50,15 +145,7 @@
     "薬屋のひとりごと",
     "薬屋のひとりごと 第3期"
    ],
-   "episodes": 20,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/199-61",
-   "names": [
-    "とある暗部の少女共棲"
-   ],
-   "episodes": 7,
+   "episodes": 21,
    "ok": true
   },
   {
@@ -83,7 +170,7 @@
    "names": [
     "弱気MAX令嬢なのに、辣腕婚約者様の賭けに乗ってしまった"
    ],
-   "episodes": 5,
+   "episodes": 7,
    "ok": true
   },
   {
@@ -112,89 +199,11 @@
    "ok": true
   },
   {
-   "url": "https://abema.tv/video/title/210-18",
-   "names": [
-    "追放された転生重騎士はゲーム知識で無双する"
-   ],
-   "episodes": 21,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/11-46",
-   "names": [
-    "転生したら剣でした",
-    "転生したら剣でした 第2期"
-   ],
-   "episodes": 13,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/13-216",
-   "names": [
-    "転生貴族、鑑定スキルで成り上がる",
-    "転生貴族、鑑定スキルで成り上がる 第3期"
-   ],
-   "episodes": 13,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/189-92",
-   "names": [
-    "世界最強の魔女、始めました"
-   ],
-   "episodes": 7,
-   "ok": true
-  },
-  {
    "url": "https://abema.tv/video/title/420-78",
    "names": [
     "マリッジトキシン"
    ],
    "episodes": 13,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/25-254",
-   "names": [
-    "佐々木とピーちゃん",
-    "佐々木とピーちゃん シーズン２"
-   ],
-   "episodes": 13,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/593-18",
-   "names": [
-    "凶乱令嬢ニア・リストン",
-    "凶乱令嬢ニア・リストン 病弱令嬢に転生した神殺しの武人の華麗なる無双録"
-   ],
-   "episodes": 7,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/210-21",
-   "names": [
-    "追放されたチート付与魔術師は気ままなセカンドライフを謳歌する。",
-    "追放されたチート付与魔術師は気ままなセカンドライフを謳歌する。　～俺は武器だけじゃなく、あらゆるものに『強化ポイント』を付与できるし、俺の意思でいつでも効果を解除できるけど、残った人たち大丈夫？～"
-   ],
-   "episodes": 7,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/194-30",
-   "names": [
-    "冰剣の魔術師が世界を統べる",
-    "冰剣の魔術師が世界を統べるⅡ"
-   ],
-   "episodes": 13,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/149-35",
-   "names": [
-    "転生ゴブリンだけど質問ある？"
-   ],
-   "episodes": 7,
    "ok": true
   },
   {
