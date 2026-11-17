@@ -1,6 +1,22 @@
 {
- "checked": "2026-11-16",
+ "checked": "2026-11-17",
  "items": [
+  {
+   "url": "https://abema.tv/video/title/149-36",
+   "names": [
+    "転生した大聖女は、聖女であることをひた隠す"
+   ],
+   "episodes": 8,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/210-22",
+   "names": [
+    "塩対応の佐藤さんが俺にだけ甘い"
+   ],
+   "episodes": 6,
+   "ok": true
+  },
   {
    "url": "https://abema.tv/video/title/19-174",
    "names": [
@@ -32,7 +48,7 @@
     "佐々木とピーちゃん",
     "佐々木とピーちゃん シーズン２"
    ],
-   "episodes": 12,
+   "episodes": 13,
    "ok": true
   },
   {
@@ -101,7 +117,7 @@
    "names": [
     "転生ゴブリンだけど質問ある？"
    ],
-   "episodes": 8,
+   "episodes": 9,
    "ok": true
   },
   {
@@ -149,28 +165,12 @@
    "ok": true
   },
   {
-   "url": "https://abema.tv/video/title/210-22",
-   "names": [
-    "塩対応の佐藤さんが俺にだけ甘い"
-   ],
-   "episodes": 6,
-   "ok": true
-  },
-  {
    "url": "https://abema.tv/video/title/26-272",
    "names": [
     "マジカル★エクスプローラー",
     "マジカル★エクスプローラー　エロゲの友人キャラに転生したけど、ゲーム知識使って自由に生きる"
    ],
-   "episodes": 1,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/149-36",
-   "names": [
-    "転生した大聖女は、聖女であることをひた隠す"
-   ],
-   "episodes": 8,
+   "episodes": 9,
    "ok": true
   },
   {
@@ -187,7 +187,7 @@
     "野生のラスボスが現れた！",
     "野生のラスボスが現れた！ 第2期"
    ],
-   "episodes": 1,
+   "episodes": 13,
    "ok": true
   },
   {
@@ -274,7 +274,7 @@
    "names": [
     "PSYREN -サイレン-"
    ],
-   "episodes": 5,
+   "episodes": 6,
    "ok": true
   }
  ]
