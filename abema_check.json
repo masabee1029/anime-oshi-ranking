@@ -1,6 +1,90 @@
 {
- "checked": "2026-11-23",
+ "checked": "2026-11-24",
  "items": [
+  {
+   "url": "https://abema.tv/video/title/19-302",
+   "names": [
+    "総集編 薬屋のひとりごと",
+    "薬屋のひとりごと"
+   ],
+   "episodes": 2,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/19-174",
+   "names": [
+    "薬屋のひとりごと",
+    "薬屋のひとりごと 第3期"
+   ],
+   "episodes": 20,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/149-36",
+   "names": [
+    "転生した大聖女は、聖女であることをひた隠す"
+   ],
+   "episodes": 9,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/11-76",
+   "names": [
+    "野生のラスボスが現れた！",
+    "野生のラスボスが現れた！ 第2期"
+   ],
+   "episodes": 12,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/26-272",
+   "names": [
+    "マジカル★エクスプローラー",
+    "マジカル★エクスプローラー　エロゲの友人キャラに転生したけど、ゲーム知識使って自由に生きる"
+   ],
+   "episodes": 9,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/149-37",
+   "names": [
+    "信者ゼロの女神サマと始める異世界攻略"
+   ],
+   "episodes": 6,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/12-32",
+   "names": [
+    "貸した魔力は【リボ払い】で強制徴収"
+   ],
+   "episodes": 8,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/210-22",
+   "names": [
+    "塩対応の佐藤さんが俺にだけ甘い"
+   ],
+   "episodes": 7,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/54-126",
+   "names": [
+    "弱気MAX令嬢なのに、辣腕婚約者様の賭けに乗ってしまった"
+   ],
+   "episodes": 7,
+   "ok": true
+  },
+  {
+   "url": "https://abema.tv/video/title/210-18",
+   "names": [
+    "追放された転生重騎士はゲーム知識で無双する"
+   ],
+   "episodes": 20,
+   "ok": true
+  },
   {
    "url": "https://abema.tv/video/title/199-61",
    "names": [
@@ -15,32 +99,7 @@
     "佐々木とピーちゃん",
     "佐々木とピーちゃん シーズン２"
    ],
-   "episodes": 12,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/149-37",
-   "names": [
-    "信者ゼロの女神サマと始める異世界攻略"
-   ],
-   "episodes": 6,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/26-272",
-   "names": [
-    "マジカル★エクスプローラー",
-    "マジカル★エクスプローラー　エロゲの友人キャラに転生したけど、ゲーム知識使って自由に生きる"
-   ],
-   "episodes": 9,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/12-32",
-   "names": [
-    "貸した魔力は【リボ払い】で強制徴収"
-   ],
-   "episodes": 8,
+   "episodes": 13,
    "ok": true
   },
   {
@@ -48,7 +107,7 @@
    "names": [
     "転生ゴブリンだけど質問ある？"
    ],
-   "episodes": 8,
+   "episodes": 10,
    "ok": true
   },
   {
@@ -96,62 +155,12 @@
    "ok": true
   },
   {
-   "url": "https://abema.tv/video/title/11-76",
-   "names": [
-    "野生のラスボスが現れた！",
-    "野生のラスボスが現れた！ 第2期"
-   ],
-   "episodes": 12,
-   "ok": true
-  },
-  {
    "url": "https://abema.tv/video/title/13-216",
    "names": [
     "転生貴族、鑑定スキルで成り上がる",
     "転生貴族、鑑定スキルで成り上がる 第3期"
    ],
    "episodes": 12,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/149-36",
-   "names": [
-    "転生した大聖女は、聖女であることをひた隠す"
-   ],
-   "episodes": 9,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/210-22",
-   "names": [
-    "塩対応の佐藤さんが俺にだけ甘い"
-   ],
-   "episodes": 7,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/19-174",
-   "names": [
-    "薬屋のひとりごと",
-    "薬屋のひとりごと 第3期"
-   ],
-   "episodes": 20,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/54-126",
-   "names": [
-    "弱気MAX令嬢なのに、辣腕婚約者様の賭けに乗ってしまった"
-   ],
-   "episodes": 7,
-   "ok": true
-  },
-  {
-   "url": "https://abema.tv/video/title/210-18",
-   "names": [
-    "追放された転生重騎士はゲーム知識で無双する"
-   ],
-   "episodes": 20,
    "ok": true
   },
   {
